@@ -39,7 +39,8 @@ cannot assign a value to final variable IDADE
 ```
 
 <Callout title="Nota">
-A palavra-chave `final` é frequentemente usada para definir constantes em Java, que são tipicamente nomeadas em letras maiúsculas.
+  A palavra-chave `final` é frequentemente usada para definir constantes em
+  Java, que são tipicamente nomeadas em letras maiúsculas.
 </Callout>
 
 ### Tipos de Variáveis Final
@@ -51,20 +52,20 @@ public class ExemploFinal {
     // Variável de instância final
     private final String nome;
     private final int idade;
-    
+
     public ExemploFinal(String nome, int idade) {
         this.nome = nome; // Deve ser inicializada no construtor
         this.idade = idade;
     }
-    
+
     public String getNome() {
         return nome;
     }
-    
+
     public int getIdade() {
         return idade;
     }
-    
+
     // ERRO: Não pode alterar variável final
     // public void setNome(String nome) {
     //     this.nome = nome;
@@ -80,14 +81,14 @@ public class Constantes {
     public static final double PI = 3.14159;
     public static final String NOME_APLICACAO = "Minha Aplicação";
     public static final int MAX_TENTATIVAS = 3;
-    
+
     // Array final (o array não pode ser reatribuído, mas os elementos podem ser alterados)
     public static final String[] CORES = {"Vermelho", "Verde", "Azul"};
-    
+
     public static void main(String[] args) {
         System.out.println("PI: " + PI);
         System.out.println("Nome: " + NOME_APLICACAO);
-        
+
         // CORES = new String[]{"Amarelo", "Roxo"}; // ERRO!
         CORES[0] = "Amarelo"; // OK - alterando elemento do array
         System.out.println("Primeira cor: " + CORES[0]);
@@ -102,10 +103,10 @@ public class MetodoFinal {
     public void processarDados(final String nome, final int idade) {
         // nome = "Novo Nome"; // ERRO! Parâmetro final não pode ser alterado
         // idade = 25; // ERRO! Parâmetro final não pode ser alterado
-        
+
         System.out.println("Processando dados para: " + nome + ", idade: " + idade);
     }
-    
+
     public void calcularArea(final double raio) {
         final double PI = 3.14159; // Constante local
         double area = PI * raio * raio;
@@ -124,7 +125,7 @@ public class FinalDemo {
     public final void exibir() {
         System.out.println("Este é um método final.");
     }
-    
+
     public void metodoNormal() {
         System.out.println("Este é um método normal.");
     }
@@ -135,7 +136,7 @@ public class Main extends FinalDemo {
     // public final void exibir() { // ERRO! Método final não pode ser sobrescrito
     //     System.out.println("O método final foi sobrescrito.");
     // }
-    
+
     // OK - sobrescrevendo método normal
     @Override
     public void metodoNormal() {
@@ -165,32 +166,32 @@ exibir() in Main cannot override exibir() in FinalDemo
 public class ContaBancaria {
     private final String numeroConta;
     private double saldo;
-    
+
     public ContaBancaria(String numeroConta, double saldoInicial) {
         this.numeroConta = numeroConta;
         this.saldo = saldoInicial;
     }
-    
+
     // Método final - não pode ser sobrescrito
     public final String getNumeroConta() {
         return numeroConta;
     }
-    
+
     // Método final para validação - não pode ser sobrescrito
     public final boolean validarConta() {
         return numeroConta != null && !numeroConta.trim().isEmpty();
     }
-    
+
     public double getSaldo() {
         return saldo;
     }
-    
+
     public void depositar(double valor) {
         if (valor > 0) {
             saldo += valor;
         }
     }
-    
+
     public boolean sacar(double valor) {
         if (valor > 0 && valor <= saldo) {
             saldo -= valor;
@@ -203,18 +204,18 @@ public class ContaBancaria {
 // Subclasse que herda de ContaBancaria
 public class ContaCorrente extends ContaBancaria {
     private double limiteChequeEspecial;
-    
+
     public ContaCorrente(String numeroConta, double saldoInicial, double limite) {
         super(numeroConta, saldoInicial);
         this.limiteChequeEspecial = limite;
     }
-    
+
     // ERRO: Não pode sobrescrever método final
     // @Override
     // public final String getNumeroConta() {
     //     return "CC-" + super.getNumeroConta();
     // }
-    
+
     // OK - sobrescrevendo método não-final
     @Override
     public boolean sacar(double valor) {
@@ -269,15 +270,15 @@ class Main extends ClasseFinal {
 public final class UtilitariosMatematicos {
     // Construtor privado para evitar instanciação
     private UtilitariosMatematicos() {}
-    
+
     public static double calcularAreaCirculo(double raio) {
         return Math.PI * raio * raio;
     }
-    
+
     public static double calcularPerimetroCirculo(double raio) {
         return 2 * Math.PI * raio;
     }
-    
+
     public static boolean ehPrimo(int numero) {
         if (numero <= 1) return false;
         for (int i = 2; i <= Math.sqrt(numero); i++) {
@@ -292,17 +293,17 @@ public final class ConfiguracaoAplicacao {
     private static final String NOME_APLICACAO = "Sistema de Gestão";
     private static final String VERSAO = "1.0.0";
     private static final int PORTA_PADRAO = 8080;
-    
+
     private ConfiguracaoAplicacao() {} // Construtor privado
-    
+
     public static String getNomeAplicacao() {
         return NOME_APLICACAO;
     }
-    
+
     public static String getVersao() {
         return VERSAO;
     }
-    
+
     public static int getPortaPadrao() {
         return PORTA_PADRAO;
     }
@@ -312,6 +313,7 @@ public final class ConfiguracaoAplicacao {
 ## Exercícios Práticos
 
 ### Exercício 1: Constantes Matemáticas
+
 **Objetivo**: Criar uma classe com constantes matemáticas usando final.
 
 **Enunciado**: Crie uma classe `ConstantesMatematicas` com constantes para PI, E, raiz de 2, etc.
@@ -326,19 +328,19 @@ public final class ConstantesMatematicas {
     public static final double RAIZ_DE_2 = 1.4142135623730951;
     public static final double RAIZ_DE_3 = 1.7320508075688772;
     public static final double PHI = 1.618033988749895; // Número áureo
-    
+
     // Constantes de conversão
     public static final double GRAUS_PARA_RADIANOS = PI / 180.0;
     public static final double RADIANOS_PARA_GRAUS = 180.0 / PI;
-    
+
     // Construtor privado para evitar instanciação
     private ConstantesMatematicas() {}
-    
+
     // Métodos utilitários
     public static double grausParaRadianos(double graus) {
         return graus * GRAUS_PARA_RADIANOS;
     }
-    
+
     public static double radianosParaGraus(double radianos) {
         return radianos * RADIANOS_PARA_GRAUS;
     }
@@ -350,7 +352,7 @@ public class Main {
         System.out.println("PI: " + ConstantesMatematicas.PI);
         System.out.println("E: " + ConstantesMatematicas.E);
         System.out.println("Raiz de 2: " + ConstantesMatematicas.RAIZ_DE_2);
-        
+
         double anguloGraus = 45.0;
         double anguloRadianos = ConstantesMatematicas.grausParaRadianos(anguloGraus);
         System.out.println(anguloGraus + " graus = " + anguloRadianos + " radianos");
@@ -359,6 +361,7 @@ public class Main {
 ```
 
 ### Exercício 2: Classe Final para Validação
+
 **Objetivo**: Criar uma classe final com métodos final para validação.
 
 **Enunciado**: Crie uma classe `Validador` com métodos final para validar CPF, email e telefone.
@@ -369,26 +372,26 @@ public class Main {
 public final class Validador {
     // Construtor privado
     private Validador() {}
-    
+
     // Método final para validar CPF
     public static final boolean validarCPF(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {
             return false;
         }
-        
+
         // Remove caracteres não numéricos
         cpf = cpf.replaceAll("[^0-9]", "");
-        
+
         // Verifica se tem 11 dígitos
         if (cpf.length() != 11) {
             return false;
         }
-        
+
         // Verifica se todos os dígitos são iguais
         if (cpf.matches("(\\d)\\1{10}")) {
             return false;
         }
-        
+
         // Validação dos dígitos verificadores
         try {
             int soma = 0;
@@ -397,40 +400,40 @@ public final class Validador {
             }
             int resto = 11 - (soma % 11);
             int digito1 = (resto == 10 || resto == 11) ? 0 : resto;
-            
+
             soma = 0;
             for (int i = 0; i < 10; i++) {
                 soma += Integer.parseInt(cpf.substring(i, i + 1)) * (11 - i);
             }
             resto = 11 - (soma % 11);
             int digito2 = (resto == 10 || resto == 11) ? 0 : resto;
-            
+
             return cpf.substring(9, 11).equals(digito1 + "" + digito2);
         } catch (NumberFormatException e) {
             return false;
         }
     }
-    
+
     // Método final para validar email
     public static final boolean validarEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
             return false;
         }
-        
+
         // Regex básica para validação de email
         String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         return email.matches(regex);
     }
-    
+
     // Método final para validar telefone
     public static final boolean validarTelefone(String telefone) {
         if (telefone == null || telefone.trim().isEmpty()) {
             return false;
         }
-        
+
         // Remove caracteres não numéricos
         telefone = telefone.replaceAll("[^0-9]", "");
-        
+
         // Verifica se tem entre 10 e 11 dígitos
         return telefone.length() >= 10 && telefone.length() <= 11;
     }
@@ -442,11 +445,11 @@ public class Main {
         // Teste CPF
         System.out.println("CPF válido: " + Validador.validarCPF("123.456.789-09"));
         System.out.println("CPF inválido: " + Validador.validarCPF("111.111.111-11"));
-        
+
         // Teste Email
         System.out.println("Email válido: " + Validador.validarEmail("usuario@exemplo.com"));
         System.out.println("Email inválido: " + Validador.validarEmail("email.invalido"));
-        
+
         // Teste Telefone
         System.out.println("Telefone válido: " + Validador.validarTelefone("(11) 99999-9999"));
         System.out.println("Telefone inválido: " + Validador.validarTelefone("123"));
@@ -455,6 +458,7 @@ public class Main {
 ```
 
 ### Exercício 3: Classe Final com Métodos Final
+
 **Objetivo**: Criar uma classe final que não pode ser herdada com métodos final.
 
 **Enunciado**: Crie uma classe `Calculadora` final com métodos final para operações básicas.
@@ -466,45 +470,45 @@ public final class Calculadora {
     // Constantes
     public static final double PI = 3.141592653589793;
     public static final double E = 2.718281828459045;
-    
+
     // Construtor privado
     private Calculadora() {}
-    
+
     // Métodos final para operações básicas
     public static final double somar(double a, double b) {
         return a + b;
     }
-    
+
     public static final double subtrair(double a, double b) {
         return a - b;
     }
-    
+
     public static final double multiplicar(double a, double b) {
         return a * b;
     }
-    
+
     public static final double dividir(double a, double b) {
         if (b == 0) {
             throw new ArithmeticException("Divisão por zero!");
         }
         return a / b;
     }
-    
+
     public static final double potencia(double base, double expoente) {
         return Math.pow(base, expoente);
     }
-    
+
     public static final double raizQuadrada(double numero) {
         if (numero < 0) {
             throw new IllegalArgumentException("Não existe raiz quadrada de número negativo!");
         }
         return Math.sqrt(numero);
     }
-    
+
     public static final double calcularAreaCirculo(double raio) {
         return PI * raio * raio;
     }
-    
+
     public static final double calcularPerimetroCirculo(double raio) {
         return 2 * PI * raio;
     }
@@ -542,6 +546,7 @@ A palavra-chave `final` é fundamental em Java para:
 - **Otimizar performance**: Compilador pode fazer otimizações
 
 **Casos de uso comuns**:
+
 - Constantes matemáticas e de configuração
 - Métodos de validação que não devem ser alterados
 - Classes utilitárias que não devem ser herdadas
