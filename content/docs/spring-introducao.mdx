@@ -45,16 +45,19 @@ Spring Framework
 #### 1. Spring Core Container
 
 **Spring Core**: Funcionalidades fundamentais do framework
+
 - IoC Container
 - Gerenciamento de beans
 - Configuração de aplicação
 
 **Spring Beans**: Implementação do padrão Factory
+
 - Definição de beans
 - Ciclo de vida dos beans
 - Escopo dos beans
 
 **Spring Context**: Construído sobre Core e Beans
+
 - ApplicationContext
 - Internacionalização
 - Eventos e listeners
@@ -62,32 +65,38 @@ Spring Framework
 #### 2. Spring Web
 
 **Spring MVC**: Framework web tradicional
+
 - Controllers
 - Views
 - Model binding
 
 **Spring WebFlux**: Framework web reativo
+
 - Programação reativa
 - Non-blocking I/O
 - Backpressure
 
 **Spring WebSocket**: Suporte a WebSockets
+
 - Comunicação bidirecional
 - Real-time updates
 
 #### 3. Spring Data Access
 
 **Spring JDBC**: Abstração sobre JDBC
+
 - JdbcTemplate
 - NamedParameterJdbcTemplate
 - Batch operations
 
 **Spring ORM**: Integração com frameworks ORM
+
 - Hibernate
 - JPA
 - MyBatis
 
 **Spring Transaction**: Gerenciamento de transações
+
 - Declarative transactions
 - Programmatic transactions
 - Transaction propagation
@@ -107,7 +116,7 @@ public class ServicoEmail {
     public ServicoEmail() {
         this.repositorio = new RepositorioUsuarioImpl(); // Acoplamento forte
     }
-    
+
     public void enviarEmail(String email) {
         // Lógica de envio
     }
@@ -115,6 +124,7 @@ public class ServicoEmail {
 ```
 
 **Problemas do código tradicional**:
+
 - Acoplamento forte entre classes
 - Difícil de testar
 - Difícil de modificar implementações
@@ -131,7 +141,7 @@ public class ServicoEmail {
     public ServicoEmail(RepositorioUsuario repositorio) {
         this.repositorio = repositorio; // Injeção de dependência
     }
-    
+
     public void enviarEmail(String email) {
         // Lógica de envio
     }
@@ -139,6 +149,7 @@ public class ServicoEmail {
 ```
 
 **Vantagens do IoC**:
+
 - Acoplamento frouxo
 - Fácil de testar
 - Fácil de modificar implementações
@@ -162,7 +173,7 @@ public class ServicoUsuario {
         this.repositorio = repositorio;
         this.servicoEmail = servicoEmail;
     }
-    
+
     public void criarUsuario(Usuario usuario) {
         repositorio.salvar(usuario);
         servicoEmail.enviarEmailBoasVindas(usuario.getEmail());
@@ -171,6 +182,7 @@ public class ServicoUsuario {
 ```
 
 **Vantagens**:
+
 - Dependências obrigatórias são garantidas
 - Imutabilidade (final)
 - Fácil de testar
@@ -187,7 +199,7 @@ public class ServicoUsuario {
     public void setRepositorio(RepositorioUsuario repositorio) {
         this.repositorio = repositorio;
     }
-    
+
     public void criarUsuario(Usuario usuario) {
         repositorio.salvar(usuario);
     }
@@ -195,6 +207,7 @@ public class ServicoUsuario {
 ```
 
 **Use quando**:
+
 - Dependências são opcionais
 - Precisa alterar dependências em runtime
 
@@ -205,7 +218,7 @@ public class ServicoUsuario {
 public class ServicoUsuario {
     @Autowired
     private RepositorioUsuario repositorio;
-    
+
     public void criarUsuario(Usuario usuario) {
         repositorio.salvar(usuario);
     }
@@ -213,6 +226,7 @@ public class ServicoUsuario {
 ```
 
 **Desvantagens**:
+
 - Difícil de testar
 - Dependências não são explícitas
 - Não funciona com campos final
@@ -236,7 +250,7 @@ public class ConfiguracaoApp {
     public ServicoEmail servicoEmail() {
         return new ServicoEmailImpl();
     }
-    
+
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
@@ -337,19 +351,19 @@ public class Usuario {
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    
+
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
-    
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    
+
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
-    
+
     public LocalDateTime getDataCriacao() { return dataCriacao; }
     public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
-    
+
     public boolean isAtivo() { return ativo; }
     public void setAtivo(boolean ativo) { this.ativo = ativo; }
 }
@@ -374,7 +388,7 @@ public interface RepositorioUsuario {
 ```java
 @Repository
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
-    
+
     private final Map<Long, Usuario> usuarios = new HashMap<>();
     private Long proximoId = 1L;
 
@@ -429,19 +443,19 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 ```java
 @Service
 public class ServicoEmail {
-    
+
     private final Logger logger = LoggerFactory.getLogger(ServicoEmail.class);
-    
+
     public void enviarEmailBoasVindas(String email) {
         logger.info("Enviando email de boas-vindas para: {}", email);
         // Implementação real de envio de email
     }
-    
+
     public void enviarEmailRecuperacaoSenha(String email) {
         logger.info("Enviando email de recuperação de senha para: {}", email);
         // Implementação real de envio de email
     }
-    
+
     public void enviarEmailConfirmacao(String email) {
         logger.info("Enviando email de confirmação para: {}", email);
         // Implementação real de envio de email
@@ -455,11 +469,11 @@ public class ServicoEmail {
 @Service
 @Transactional
 public class ServicoUsuario {
-    
+
     private final RepositorioUsuario repositorio;
     private final ServicoEmail servicoEmail;
     private final PasswordEncoder passwordEncoder;
-    
+
     @Autowired
     public ServicoUsuario(RepositorioUsuario repositorio,
                          ServicoEmail servicoEmail,
@@ -468,35 +482,35 @@ public class ServicoUsuario {
         this.servicoEmail = servicoEmail;
         this.passwordEncoder = passwordEncoder;
     }
-    
+
     public Usuario criarUsuario(Usuario usuario) {
         // Validações
         if (usuario.getNome() == null || usuario.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório");
         }
-        
+
         if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("Email é obrigatório");
         }
-        
+
         if (repositorio.existePorEmail(usuario.getEmail())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
-        
+
         // Criptografar senha
         if (usuario.getSenha() != null) {
             usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         }
-        
+
         // Salvar usuário
         repositorio.salvar(usuario);
-        
+
         // Enviar email de boas-vindas
         servicoEmail.enviarEmailBoasVindas(usuario.getEmail());
-        
+
         return usuario;
     }
-    
+
     public Usuario buscarPorId(Long id) {
         Usuario usuario = repositorio.buscarPorId(id);
         if (usuario == null) {
@@ -504,18 +518,18 @@ public class ServicoUsuario {
         }
         return usuario;
     }
-    
+
     public List<Usuario> buscarTodos() {
         return repositorio.buscarTodos();
     }
-    
+
     public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
         Usuario usuarioExistente = buscarPorId(id);
-        
+
         if (usuarioAtualizado.getNome() != null) {
             usuarioExistente.setNome(usuarioAtualizado.getNome());
         }
-        
+
         if (usuarioAtualizado.getEmail() != null) {
             // Verificar se email já existe em outro usuário
             Usuario usuarioComEmail = repositorio.buscarPorEmail(usuarioAtualizado.getEmail());
@@ -524,26 +538,26 @@ public class ServicoUsuario {
             }
             usuarioExistente.setEmail(usuarioAtualizado.getEmail());
         }
-        
+
         if (usuarioAtualizado.getSenha() != null) {
             usuarioExistente.setSenha(passwordEncoder.encode(usuarioAtualizado.getSenha()));
         }
-        
+
         repositorio.atualizar(usuarioExistente);
         return usuarioExistente;
     }
-    
+
     public void deletarUsuario(Long id) {
         Usuario usuario = buscarPorId(id);
         repositorio.deletar(id);
     }
-    
+
     public void ativarUsuario(Long id) {
         Usuario usuario = buscarPorId(id);
         usuario.setAtivo(true);
         repositorio.atualizar(usuario);
     }
-    
+
     public void desativarUsuario(Long id) {
         Usuario usuario = buscarPorId(id);
         usuario.setAtivo(false);
@@ -558,14 +572,14 @@ public class ServicoUsuario {
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
-    
+
     private final ServicoUsuario servicoUsuario;
-    
+
     @Autowired
     public UsuarioController(ServicoUsuario servicoUsuario) {
         this.servicoUsuario = servicoUsuario;
     }
-    
+
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid Usuario usuario) {
         try {
@@ -575,7 +589,7 @@ public class UsuarioController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
         try {
@@ -585,13 +599,13 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @GetMapping
     public ResponseEntity<List<Usuario>> buscarTodos() {
         List<Usuario> usuarios = servicoUsuario.buscarTodos();
         return ResponseEntity.ok(usuarios);
     }
-    
+
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id,
                                                    @RequestBody @Valid Usuario usuario) {
@@ -602,7 +616,7 @@ public class UsuarioController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         try {
@@ -612,7 +626,7 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @PatchMapping("/{id}/ativar")
     public ResponseEntity<Void> ativarUsuario(@PathVariable Long id) {
         try {
@@ -622,7 +636,7 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @PatchMapping("/{id}/desativar")
     public ResponseEntity<Void> desativarUsuario(@PathVariable Long id) {
         try {
@@ -641,44 +655,44 @@ public class UsuarioController {
 @Service
 @Transactional
 public class ServicoTransacao {
-    
+
     private final RepositorioConta repositorioConta;
     private final RepositorioTransacao repositorioTransacao;
-    
+
     @Autowired
     public ServicoTransacao(RepositorioConta repositorioConta,
                            RepositorioTransacao repositorioTransacao) {
         this.repositorioConta = repositorioConta;
         this.repositorioTransacao = repositorioTransacao;
     }
-    
+
     @Transactional
     public void transferir(Long contaOrigem, Long contaDestino, BigDecimal valor) {
         // Buscar contas
         Conta origem = repositorioConta.buscarPorId(contaOrigem);
         Conta destino = repositorioConta.buscarPorId(contaDestino);
-        
+
         if (origem == null || destino == null) {
             throw new IllegalArgumentException("Conta não encontrada");
         }
-        
+
         if (origem.getSaldo().compareTo(valor) < 0) {
             throw new IllegalArgumentException("Saldo insuficiente");
         }
-        
+
         // Debitar da conta origem
         origem.setSaldo(origem.getSaldo().subtract(valor));
         repositorioConta.atualizar(origem);
-        
+
         // Creditar na conta destino
         destino.setSaldo(destino.getSaldo().add(valor));
         repositorioConta.atualizar(destino);
-        
+
         // Registrar transação
         Transacao transacao = new Transacao(origem.getId(), destino.getId(), valor);
         repositorioTransacao.salvar(transacao);
     }
-    
+
     @Transactional(readOnly = true)
     public BigDecimal consultarSaldo(Long contaId) {
         Conta conta = repositorioConta.buscarPorId(contaId);
@@ -687,7 +701,7 @@ public class ServicoTransacao {
         }
         return conta.getSaldo();
     }
-    
+
     @Transactional(readOnly = true)
     public List<Transacao> buscarTransacoes(Long contaId) {
         return repositorioTransacao.buscarPorConta(contaId);
@@ -701,23 +715,23 @@ public class ServicoTransacao {
 @Aspect
 @Component
 public class LoggingAspect {
-    
+
     private final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
-    
+
     @Before("execution(* com.exemplo.*.ServicoUsuario.*(..))")
     public void logAntesDoMetodo(JoinPoint joinPoint) {
         String metodo = joinPoint.getSignature().getName();
         String classe = joinPoint.getTarget().getClass().getSimpleName();
         logger.info("Executando método: {}.{}", classe, metodo);
     }
-    
+
     @AfterReturning(pointcut = "execution(* com.exemplo.*.ServicoUsuario.*(..))",
                     returning = "resultado")
     public void logAposSucesso(JoinPoint joinPoint, Object resultado) {
         String metodo = joinPoint.getSignature().getName();
         logger.info("Método {} executado com sucesso", metodo);
     }
-    
+
     @AfterThrowing(pointcut = "execution(* com.exemplo.*.*(..))",
                    throwing = "erro")
     public void logErro(JoinPoint joinPoint, Throwable erro) {
@@ -725,20 +739,20 @@ public class LoggingAspect {
         String classe = joinPoint.getTarget().getClass().getSimpleName();
         logger.error("Erro no método {}.{}: {}", classe, metodo, erro.getMessage());
     }
-    
+
     @Around("execution(* com.exemplo.*.ServicoUsuario.*(..))")
     public Object medirTempoExecucao(ProceedingJoinPoint joinPoint) throws Throwable {
         long inicio = System.currentTimeMillis();
-        
+
         try {
             Object resultado = joinPoint.proceed();
             long tempo = System.currentTimeMillis() - inicio;
-            logger.info("Método {} executado em {}ms", 
+            logger.info("Método {} executado em {}ms",
                        joinPoint.getSignature().getName(), tempo);
             return resultado;
         } catch (Throwable e) {
             long tempo = System.currentTimeMillis() - inicio;
-            logger.error("Método {} falhou após {}ms", 
+            logger.error("Método {} falhou após {}ms",
                         joinPoint.getSignature().getName(), tempo);
             throw e;
         }
@@ -751,26 +765,26 @@ public class LoggingAspect {
 ```java
 @SpringBootTest
 class ServicoUsuarioTest {
-    
+
     @Autowired
     private ServicoUsuario servicoUsuario;
-    
+
     @MockBean
     private RepositorioUsuario repositorioUsuario;
-    
+
     @MockBean
     private ServicoEmail servicoEmail;
-    
+
     @MockBean
     private PasswordEncoder passwordEncoder;
-    
+
     @Test
     void deveCriarUsuarioComSucesso() {
         // Given
         Usuario usuario = new Usuario("João", "joao@email.com", "senha123");
         Usuario usuarioSalvo = new Usuario("João", "joao@email.com", "senha123");
         usuarioSalvo.setId(1L);
-        
+
         when(repositorioUsuario.existePorEmail("joao@email.com")).thenReturn(false);
         when(passwordEncoder.encode("senha123")).thenReturn("senhaCriptografada");
         when(repositorioUsuario.salvar(any(Usuario.class))).thenAnswer(invocation -> {
@@ -778,55 +792,55 @@ class ServicoUsuarioTest {
             u.setId(1L);
             return u;
         });
-        
+
         // When
         Usuario resultado = servicoUsuario.criarUsuario(usuario);
-        
+
         // Then
         assertThat(resultado.getId()).isEqualTo(1L);
         assertThat(resultado.getNome()).isEqualTo("João");
         assertThat(resultado.getEmail()).isEqualTo("joao@email.com");
         assertThat(resultado.getSenha()).isEqualTo("senhaCriptografada");
         assertThat(resultado.isAtivo()).isTrue();
-        
+
         verify(repositorioUsuario).existePorEmail("joao@email.com");
         verify(passwordEncoder).encode("senha123");
         verify(repositorioUsuario).salvar(any(Usuario.class));
         verify(servicoEmail).enviarEmailBoasVindas("joao@email.com");
     }
-    
+
     @Test
     void deveFalharQuandoEmailJaExiste() {
         // Given
         Usuario usuario = new Usuario("João", "joao@email.com", "senha123");
         when(repositorioUsuario.existePorEmail("joao@email.com")).thenReturn(true);
-        
+
         // When & Then
         assertThatThrownBy(() -> servicoUsuario.criarUsuario(usuario))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Email já cadastrado");
-        
+
         verify(repositorioUsuario).existePorEmail("joao@email.com");
         verify(repositorioUsuario, never()).salvar(any());
         verify(servicoEmail, never()).enviarEmailBoasVindas(any());
     }
-    
+
     @Test
     void deveFalharQuandoNomeEstaVazio() {
         // Given
         Usuario usuario = new Usuario("", "joao@email.com", "senha123");
-        
+
         // When & Then
         assertThatThrownBy(() -> servicoUsuario.criarUsuario(usuario))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("Nome é obrigatório");
     }
-    
+
     @Test
     void deveFalharQuandoEmailEstaVazio() {
         // Given
         Usuario usuario = new Usuario("João", "", "senha123");
-        
+
         // When & Then
         assertThatThrownBy(() -> servicoUsuario.criarUsuario(usuario))
             .isInstanceOf(IllegalArgumentException.class)
@@ -885,7 +899,9 @@ O Spring Framework revolucionou o desenvolvimento Java enterprise. Sua arquitetu
 ### Nível Básico
 
 #### Exercício 1: Configuração Básica
+
 Crie uma aplicação Spring simples que tenha:
+
 - Uma classe `Produto` com id, nome, preço e categoria
 - Um repositório para gerenciar produtos
 - Um serviço que implementa lógica de negócio
@@ -900,7 +916,7 @@ public class Produto {
     private String nome;
     private BigDecimal preco;
     private String categoria;
-    
+
     // Construtores, getters, setters...
 }
 
@@ -909,17 +925,17 @@ public class Produto {
 public class RepositorioProdutoImpl implements RepositorioProduto {
     private final Map<Long, Produto> produtos = new HashMap<>();
     private Long proximoId = 1L;
-    
+
     @Override
     public Produto buscarPorId(Long id) {
         return produtos.get(id);
     }
-    
+
     @Override
     public List<Produto> buscarTodos() {
         return new ArrayList<>(produtos.values());
     }
-    
+
     @Override
     public void salvar(Produto produto) {
         if (produto.getId() == null) {
@@ -927,7 +943,7 @@ public class RepositorioProdutoImpl implements RepositorioProduto {
         }
         produtos.put(produto.getId(), produto);
     }
-    
+
     @Override
     public void deletar(Long id) {
         produtos.remove(id);
@@ -938,12 +954,12 @@ public class RepositorioProdutoImpl implements RepositorioProduto {
 @Service
 public class ServicoProduto {
     private final RepositorioProduto repositorio;
-    
+
     @Autowired
     public ServicoProduto(RepositorioProduto repositorio) {
         this.repositorio = repositorio;
     }
-    
+
     public Produto criarProduto(Produto produto) {
         if (produto.getNome() == null || produto.getNome().trim().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório");
@@ -951,11 +967,11 @@ public class ServicoProduto {
         if (produto.getPreco() == null || produto.getPreco().compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Preço deve ser maior que zero");
         }
-        
+
         repositorio.salvar(produto);
         return produto;
     }
-    
+
     public Produto buscarPorId(Long id) {
         Produto produto = repositorio.buscarPorId(id);
         if (produto == null) {
@@ -963,11 +979,11 @@ public class ServicoProduto {
         }
         return produto;
     }
-    
+
     public List<Produto> buscarTodos() {
         return repositorio.buscarTodos();
     }
-    
+
     public void deletarProduto(Long id) {
         buscarPorId(id); // Valida se existe
         repositorio.deletar(id);
@@ -979,12 +995,12 @@ public class ServicoProduto {
 @RequestMapping("/api/produtos")
 public class ProdutoController {
     private final ServicoProduto servicoProduto;
-    
+
     @Autowired
     public ProdutoController(ServicoProduto servicoProduto) {
         this.servicoProduto = servicoProduto;
     }
-    
+
     @PostMapping
     public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {
         try {
@@ -994,7 +1010,7 @@ public class ProdutoController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Produto> buscarProduto(@PathVariable Long id) {
         try {
@@ -1004,13 +1020,13 @@ public class ProdutoController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @GetMapping
     public ResponseEntity<List<Produto>> buscarTodos() {
         List<Produto> produtos = servicoProduto.buscarTodos();
         return ResponseEntity.ok(produtos);
     }
-    
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
         try {
@@ -1024,6 +1040,7 @@ public class ProdutoController {
 ```
 
 #### Exercício 2: Injeção de Dependência
+
 Crie um sistema de notificações com diferentes tipos de notificação (email, SMS, push). Use injeção de dependência para escolher o tipo de notificação.
 
 **Resolução**:
@@ -1065,7 +1082,7 @@ public class ServicoNotificacao {
     private final NotificacaoService emailService;
     private final NotificacaoService smsService;
     private final NotificacaoService pushService;
-    
+
     @Autowired
     public ServicoNotificacao(@Qualifier("emailNotificacaoService") NotificacaoService emailService,
                              @Qualifier("smsNotificacaoService") NotificacaoService smsService,
@@ -1074,7 +1091,7 @@ public class ServicoNotificacao {
         this.smsService = smsService;
         this.pushService = pushService;
     }
-    
+
     public void enviarNotificacao(String destinatario, String mensagem, String tipo) {
         switch (tipo.toLowerCase()) {
             case "email":
@@ -1096,6 +1113,7 @@ public class ServicoNotificacao {
 ### Nível Intermediário
 
 #### Exercício 3: Transações
+
 Implemente um sistema de transferência bancária com controle de transações. A transferência deve ser atômica (ou tudo ou nada).
 
 **Resolução**:
@@ -1106,11 +1124,11 @@ public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String numero;
     private BigDecimal saldo;
     private String titular;
-    
+
     // Construtores, getters, setters...
 }
 
@@ -1123,37 +1141,37 @@ public interface RepositorioConta extends JpaRepository<Conta, Long> {
 @Transactional
 public class ServicoTransferencia {
     private final RepositorioConta repositorioConta;
-    
+
     @Autowired
     public ServicoTransferencia(RepositorioConta repositorioConta) {
         this.repositorioConta = repositorioConta;
     }
-    
+
     @Transactional
     public void transferir(String contaOrigem, String contaDestino, BigDecimal valor) {
         Conta origem = repositorioConta.findByNumero(contaOrigem)
             .orElseThrow(() -> new IllegalArgumentException("Conta origem não encontrada"));
-        
+
         Conta destino = repositorioConta.findByNumero(contaDestino)
             .orElseThrow(() -> new IllegalArgumentException("Conta destino não encontrada"));
-        
+
         if (origem.getSaldo().compareTo(valor) < 0) {
             throw new IllegalArgumentException("Saldo insuficiente");
         }
-        
+
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Valor deve ser maior que zero");
         }
-        
+
         // Debitar da conta origem
         origem.setSaldo(origem.getSaldo().subtract(valor));
         repositorioConta.save(origem);
-        
+
         // Creditar na conta destino
         destino.setSaldo(destino.getSaldo().add(valor));
         repositorioConta.save(destino);
     }
-    
+
     @Transactional(readOnly = true)
     public BigDecimal consultarSaldo(String numeroConta) {
         Conta conta = repositorioConta.findByNumero(numeroConta)
@@ -1164,6 +1182,7 @@ public class ServicoTransferencia {
 ```
 
 #### Exercício 4: AOP
+
 Crie um aspecto que registre o tempo de execução de todos os métodos de serviço e logue erros.
 
 **Resolução**:
@@ -1173,13 +1192,13 @@ Crie um aspecto que registre o tempo de execução de todos os métodos de servi
 @Component
 public class LoggingAspect {
     private final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
-    
+
     @Around("execution(* com.exemplo.*.Servico.*(..))")
     public Object medirTempoExecucao(ProceedingJoinPoint joinPoint) throws Throwable {
         long inicio = System.currentTimeMillis();
         String metodo = joinPoint.getSignature().getName();
         String classe = joinPoint.getTarget().getClass().getSimpleName();
-        
+
         try {
             Object resultado = joinPoint.proceed();
             long tempo = System.currentTimeMillis() - inicio;
@@ -1187,12 +1206,12 @@ public class LoggingAspect {
             return resultado;
         } catch (Throwable e) {
             long tempo = System.currentTimeMillis() - inicio;
-            logger.error("Método {}.{} falhou após {}ms com erro: {}", 
+            logger.error("Método {}.{} falhou após {}ms com erro: {}",
                         classe, metodo, tempo, e.getMessage());
             throw e;
         }
     }
-    
+
     @AfterThrowing(pointcut = "execution(* com.exemplo.*.*(..))", throwing = "erro")
     public void logErro(JoinPoint joinPoint, Throwable erro) {
         String metodo = joinPoint.getSignature().getName();
@@ -1205,6 +1224,7 @@ public class LoggingAspect {
 ### Nível Avançado
 
 #### Exercício 5: Configuração Condicional
+
 Crie uma aplicação que use diferentes configurações baseadas no perfil (dev, prod, test).
 
 **Resolução**:
@@ -1213,7 +1233,7 @@ Crie uma aplicação que use diferentes configurações baseadas no perfil (dev,
 @Configuration
 @Profile("dev")
 public class ConfiguracaoDev {
-    
+
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
@@ -1222,7 +1242,7 @@ public class ConfiguracaoDev {
             .password("")
             .build();
     }
-    
+
     @Bean
     public NotificacaoService notificacaoService() {
         return new EmailNotificacaoService();
@@ -1232,13 +1252,13 @@ public class ConfiguracaoDev {
 @Configuration
 @Profile("prod")
 public class ConfiguracaoProd {
-    
+
     @Bean
     @ConfigurationProperties("spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
     }
-    
+
     @Bean
     public NotificacaoService notificacaoService() {
         return new SmsNotificacaoService();
@@ -1248,7 +1268,7 @@ public class ConfiguracaoProd {
 @Configuration
 @Profile("test")
 public class ConfiguracaoTest {
-    
+
     @Bean
     public DataSource dataSource() {
         return DataSourceBuilder.create()
@@ -1257,7 +1277,7 @@ public class ConfiguracaoTest {
             .password("")
             .build();
     }
-    
+
     @Bean
     public NotificacaoService notificacaoService() {
         return new MockNotificacaoService();
@@ -1266,6 +1286,7 @@ public class ConfiguracaoTest {
 ```
 
 #### Exercício 6: Eventos Customizados
+
 Implemente um sistema de eventos para notificar quando um usuário é criado ou atualizado.
 
 **Resolução**:
@@ -1274,12 +1295,12 @@ Implemente um sistema de eventos para notificar quando um usuário é criado ou 
 // Eventos
 public class UsuarioCriadoEvent extends ApplicationEvent {
     private final Usuario usuario;
-    
+
     public UsuarioCriadoEvent(Object source, Usuario usuario) {
         super(source);
         this.usuario = usuario;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -1287,12 +1308,12 @@ public class UsuarioCriadoEvent extends ApplicationEvent {
 
 public class UsuarioAtualizadoEvent extends ApplicationEvent {
     private final Usuario usuario;
-    
+
     public UsuarioAtualizadoEvent(Object source, Usuario usuario) {
         super(source);
         this.usuario = usuario;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -1303,19 +1324,19 @@ public class UsuarioAtualizadoEvent extends ApplicationEvent {
 public class UsuarioEventListener {
     private final Logger logger = LoggerFactory.getLogger(UsuarioEventListener.class);
     private final ServicoEmail servicoEmail;
-    
+
     @Autowired
     public UsuarioEventListener(ServicoEmail servicoEmail) {
         this.servicoEmail = servicoEmail;
     }
-    
+
     @EventListener
     public void handleUsuarioCriado(UsuarioCriadoEvent event) {
         Usuario usuario = event.getUsuario();
         logger.info("Usuário criado: {}", usuario.getEmail());
         servicoEmail.enviarEmailBoasVindas(usuario.getEmail());
     }
-    
+
     @EventListener
     public void handleUsuarioAtualizado(UsuarioAtualizadoEvent event) {
         Usuario usuario = event.getUsuario();
@@ -1329,31 +1350,31 @@ public class UsuarioEventListener {
 public class ServicoUsuario {
     private final RepositorioUsuario repositorio;
     private final ApplicationEventPublisher eventPublisher;
-    
+
     @Autowired
     public ServicoUsuario(RepositorioUsuario repositorio,
                          ApplicationEventPublisher eventPublisher) {
         this.repositorio = repositorio;
         this.eventPublisher = eventPublisher;
     }
-    
+
     public Usuario criarUsuario(Usuario usuario) {
         // Validações...
         repositorio.salvar(usuario);
-        
+
         // Publicar evento
         eventPublisher.publishEvent(new UsuarioCriadoEvent(this, usuario));
-        
+
         return usuario;
     }
-    
+
     public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
         // Lógica de atualização...
         repositorio.atualizar(usuarioAtualizado);
-        
+
         // Publicar evento
         eventPublisher.publishEvent(new UsuarioAtualizadoEvent(this, usuarioAtualizado));
-        
+
         return usuarioAtualizado;
     }
 }

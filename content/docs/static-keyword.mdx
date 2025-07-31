@@ -1,36 +1,478 @@
 ---
-title: Java static keyword
-description: In this tutorial, we will learn how to use the Java static keyword.
+title: "Palavra-chave static em Java"
+description: "Aprenda como usar a palavra-chave static em Java - membros estáticos, métodos estáticos e variáveis estáticas com exemplos práticos"
+difficulty: "Intermediário"
+category: "Programação Orientada a Objetos"
 ---
 
-## What is a `static` keyword in Java?
+## O que é a palavra-chave `static` em Java?
 
-In Java, if we want to access class members, we must first create an instance of the class. But there will be situations where we want to access class members without creating any variables.
-In those situations, we can use the `static` keyword in Java. If we want to access class members without creating an instance of the class, we need to declare the class members static.
-The `Math` class in Java has almost all of its members static. So, we can access its members without creating instances of the Math class.
+Em Java, se queremos acessar membros de uma classe, normalmente precisamos primeiro criar uma instância da classe. Mas existem situações onde queremos acessar membros da classe sem criar nenhuma instância.
 
-### Example 1
+Nessas situações, podemos usar a palavra-chave `static` em Java. Se queremos acessar membros da classe sem criar uma instância, precisamos declarar esses membros como estáticos.
+
+A classe `Math` em Java tem quase todos os seus membros como estáticos. Assim, podemos acessar seus membros sem criar instâncias da classe Math.
+
+### Características dos Membros Estáticos
+
+- **Pertencem à classe, não à instância**: Membros estáticos são compartilhados por todas as instâncias
+- **Podem ser acessados sem instância**: Usando o nome da classe diretamente
+- **São inicializados uma vez**: Quando a classe é carregada
+- **Não podem acessar membros não-estáticos**: Diretamente
+
+### Exemplo 1: Usando a Classe Math
 
 ```java
 public class Main {
-    public static void main( String[] args ) {
-
-        // accessing the methods of the Math class
-        System.out.println("Absolute value of -12 =  " + Math.abs(-12));
-        System.out.println("Value of PI = " + Math.PI);
-        System.out.println("Value of E = " + Math.E);
-        System.out.println("2^2 = " + Math.pow(2,2));
+    public static void main(String[] args) {
+        // Acessando métodos da classe Math
+        System.out.println("Valor absoluto de -12 = " + Math.abs(-12));
+        System.out.println("Valor de PI = " + Math.PI);
+        System.out.println("Valor de E = " + Math.E);
+        System.out.println("2^2 = " + Math.pow(2, 2));
     }
 }
 ```
-### Output:
+
+**Saída**:
 
 ```bash
-Absolute value of -12 = 12
-Value of PI = 3.141592653589793
-Value of E = 2.718281828459045
+Valor absoluto de -12 = 12
+Valor de PI = 3.141592653589793
+Valor de E = 2.718281828459045
 2^2 = 4.0
 ```
-In the above example, we have not created any instances of the Math class. But we are able to access its methods: `abs()` and `pow()` and variables: `PI` and `E`.
 
-It is possible because the methods and variables of the Math class are static.
+No exemplo acima, não criamos nenhuma instância da classe Math. Mas conseguimos acessar seus métodos: `abs()` e `pow()` e variáveis: `PI` e `E`.
+
+Isso é possível porque os métodos e variáveis da classe Math são estáticos.
+
+## Tipos de Membros Estáticos
+
+### 1. Variáveis Estáticas
+
+```java
+public class Contador {
+    // Variável estática compartilhada por todas as instâncias
+    public static int contadorGlobal = 0;
+    
+    private String nome;
+    
+    public Contador(String nome) {
+        this.nome = nome;
+        contadorGlobal++; // Incrementa o contador global
+    }
+    
+    public void mostrarInfo() {
+        System.out.println(nome + " - Contador global: " + contadorGlobal);
+    }
+}
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        Contador c1 = new Contador("Primeiro");
+        Contador c2 = new Contador("Segundo");
+        Contador c3 = new Contador("Terceiro");
+        
+        c1.mostrarInfo(); // Primeiro - Contador global: 3
+        c2.mostrarInfo(); // Segundo - Contador global: 3
+        c3.mostrarInfo(); // Terceiro - Contador global: 3
+        
+        // Acessando variável estática sem instância
+        System.out.println("Total de contadores criados: " + Contador.contadorGlobal);
+    }
+}
+```
+
+### 2. Métodos Estáticos
+
+```java
+public class Utilitarios {
+    // Método estático para calcular área do círculo
+    public static double calcularAreaCirculo(double raio) {
+        return Math.PI * raio * raio;
+    }
+    
+    // Método estático para verificar se número é par
+    public static boolean ehPar(int numero) {
+        return numero % 2 == 0;
+    }
+    
+    // Método estático para gerar número aleatório
+    public static int gerarNumeroAleatorio(int min, int max) {
+        return (int) (Math.random() * (max - min + 1)) + min;
+    }
+}
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        double area = Utilitarios.calcularAreaCirculo(5.0);
+        System.out.println("Área do círculo: " + area);
+        
+        boolean par = Utilitarios.ehPar(10);
+        System.out.println("10 é par? " + par);
+        
+        int aleatorio = Utilitarios.gerarNumeroAleatorio(1, 100);
+        System.out.println("Número aleatório: " + aleatorio);
+    }
+}
+```
+
+### 3. Blocos Estáticos
+
+```java
+public class Configuracao {
+    // Variáveis estáticas
+    public static String nomeAplicacao;
+    public static String versao;
+    public static boolean modoDebug;
+    
+    // Bloco estático - executado quando a classe é carregada
+    static {
+        nomeAplicacao = "Minha Aplicação";
+        versao = "1.0.0";
+        modoDebug = true;
+        
+        System.out.println("Configuração inicializada!");
+    }
+    
+    // Método estático para mostrar configuração
+    public static void mostrarConfiguracao() {
+        System.out.println("Nome: " + nomeAplicacao);
+        System.out.println("Versão: " + versao);
+        System.out.println("Debug: " + modoDebug);
+    }
+}
+```
+
+### 4. Classes Estáticas Aninhadas
+
+```java
+public class ClasseExterna {
+    private String nome;
+    
+    public ClasseExterna(String nome) {
+        this.nome = nome;
+    }
+    
+    // Classe estática aninhada
+    public static class ClasseInterna {
+        private String mensagem;
+        
+        public ClasseInterna(String mensagem) {
+            this.mensagem = mensagem;
+        }
+        
+        public void mostrarMensagem() {
+            System.out.println("Mensagem: " + mensagem);
+        }
+    }
+}
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        // Criando instância da classe interna sem instância da externa
+        ClasseExterna.ClasseInterna interna = new ClasseExterna.ClasseInterna("Olá!");
+        interna.mostrarMensagem();
+    }
+}
+```
+
+## Regras Importantes
+
+### 1. Acesso a Membros Não-Estáticos
+
+```java
+public class Exemplo {
+    private String nome = "Exemplo";
+    private static String nomeEstatico = "Exemplo Estático";
+    
+    public void metodoNaoEstatico() {
+        System.out.println("Método não-estático");
+        System.out.println("Nome: " + nome); // OK
+        System.out.println("Nome estático: " + nomeEstatico); // OK
+    }
+    
+    public static void metodoEstatico() {
+        System.out.println("Método estático");
+        // System.out.println("Nome: " + nome); // ERRO! Não pode acessar membro não-estático
+        System.out.println("Nome estático: " + nomeEstatico); // OK
+    }
+}
+```
+
+### 2. Inicialização de Variáveis Estáticas
+
+```java
+public class Inicializacao {
+    // Inicialização direta
+    public static int contador = 0;
+    
+    // Inicialização em bloco estático
+    public static String[] cores;
+    
+    static {
+        cores = new String[]{"Vermelho", "Verde", "Azul"};
+    }
+    
+    // Inicialização lazy (preguiçosa)
+    private static List<String> lista;
+    
+    public static List<String> getLista() {
+        if (lista == null) {
+            lista = new ArrayList<>();
+            lista.add("Item 1");
+            lista.add("Item 2");
+        }
+        return lista;
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora Estática
+**Objetivo**: Criar uma classe com métodos estáticos para operações matemáticas.
+
+**Enunciado**: Crie uma classe `Calculadora` com métodos estáticos para soma, subtração, multiplicação e divisão.
+
+**Resolução**:
+
+```java
+public class Calculadora {
+    public static double somar(double a, double b) {
+        return a + b;
+    }
+    
+    public static double subtrair(double a, double b) {
+        return a - b;
+    }
+    
+    public static double multiplicar(double a, double b) {
+        return a * b;
+    }
+    
+    public static double dividir(double a, double b) {
+        if (b == 0) {
+            throw new ArithmeticException("Divisão por zero!");
+        }
+        return a / b;
+    }
+    
+    public static double potencia(double base, double expoente) {
+        return Math.pow(base, expoente);
+    }
+    
+    public static double raizQuadrada(double numero) {
+        if (numero < 0) {
+            throw new IllegalArgumentException("Não existe raiz quadrada de número negativo!");
+        }
+        return Math.sqrt(numero);
+    }
+}
+
+// Teste
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Soma: " + Calculadora.somar(10, 5));
+        System.out.println("Subtração: " + Calculadora.subtrair(10, 5));
+        System.out.println("Multiplicação: " + Calculadora.multiplicar(10, 5));
+        System.out.println("Divisão: " + Calculadora.dividir(10, 5));
+        System.out.println("Potência: " + Calculadora.potencia(2, 3));
+        System.out.println("Raiz quadrada: " + Calculadora.raizQuadrada(16));
+    }
+}
+```
+
+### Exercício 2: Singleton com Static
+**Objetivo**: Implementar o padrão Singleton usando membros estáticos.
+
+**Enunciado**: Crie uma classe `ConfiguracaoAplicacao` que implementa o padrão Singleton.
+
+**Resolução**:
+
+```java
+public class ConfiguracaoAplicacao {
+    // Instância única (Singleton)
+    private static ConfiguracaoAplicacao instancia;
+    
+    // Configurações
+    private String nomeAplicacao;
+    private String versao;
+    private boolean modoDebug;
+    
+    // Construtor privado
+    private ConfiguracaoAplicacao() {
+        this.nomeAplicacao = "Aplicação Java";
+        this.versao = "1.0.0";
+        this.modoDebug = false;
+    }
+    
+    // Método estático para obter instância
+    public static ConfiguracaoAplicacao getInstancia() {
+        if (instancia == null) {
+            instancia = new ConfiguracaoAplicacao();
+        }
+        return instancia;
+    }
+    
+    // Getters e Setters
+    public String getNomeAplicacao() { return nomeAplicacao; }
+    public void setNomeAplicacao(String nomeAplicacao) { this.nomeAplicacao = nomeAplicacao; }
+    
+    public String getVersao() { return versao; }
+    public void setVersao(String versao) { this.versao = versao; }
+    
+    public boolean isModoDebug() { return modoDebug; }
+    public void setModoDebug(boolean modoDebug) { this.modoDebug = modoDebug; }
+    
+    public void mostrarConfiguracao() {
+        System.out.println("Nome: " + nomeAplicacao);
+        System.out.println("Versão: " + versao);
+        System.out.println("Debug: " + modoDebug);
+    }
+}
+
+// Teste
+public class Main {
+    public static void main(String[] args) {
+        ConfiguracaoAplicacao config1 = ConfiguracaoAplicacao.getInstancia();
+        ConfiguracaoAplicacao config2 = ConfiguracaoAplicacao.getInstancia();
+        
+        // Verificar se é a mesma instância
+        System.out.println("Mesma instância? " + (config1 == config2));
+        
+        config1.mostrarConfiguracao();
+        config1.setModoDebug(true);
+        config2.mostrarConfiguracao(); // Mostra as mudanças feitas em config1
+    }
+}
+```
+
+### Exercício 3: Factory Method Estático
+**Objetivo**: Criar uma fábrica de objetos usando métodos estáticos.
+
+**Enunciado**: Crie uma classe `FormaFactory` com métodos estáticos para criar diferentes tipos de formas geométricas.
+
+**Resolução**:
+
+```java
+// Interface para formas
+public interface Forma {
+    double calcularArea();
+    double calcularPerimetro();
+}
+
+// Implementações
+public class Circulo implements Forma {
+    private double raio;
+    
+    public Circulo(double raio) {
+        this.raio = raio;
+    }
+    
+    @Override
+    public double calcularArea() {
+        return Math.PI * raio * raio;
+    }
+    
+    @Override
+    public double calcularPerimetro() {
+        return 2 * Math.PI * raio;
+    }
+}
+
+public class Retangulo implements Forma {
+    private double largura;
+    private double altura;
+    
+    public Retangulo(double largura, double altura) {
+        this.largura = largura;
+        this.altura = altura;
+    }
+    
+    @Override
+    public double calcularArea() {
+        return largura * altura;
+    }
+    
+    @Override
+    public double calcularPerimetro() {
+        return 2 * (largura + altura);
+    }
+}
+
+public class Triangulo implements Forma {
+    private double lado1, lado2, lado3;
+    
+    public Triangulo(double lado1, double lado2, double lado3) {
+        this.lado1 = lado1;
+        this.lado2 = lado2;
+        this.lado3 = lado3;
+    }
+    
+    @Override
+    public double calcularArea() {
+        // Fórmula de Heron
+        double s = (lado1 + lado2 + lado3) / 2;
+        return Math.sqrt(s * (s - lado1) * (s - lado2) * (s - lado3));
+    }
+    
+    @Override
+    public double calcularPerimetro() {
+        return lado1 + lado2 + lado3;
+    }
+}
+
+// Factory com métodos estáticos
+public class FormaFactory {
+    public static Forma criarCirculo(double raio) {
+        return new Circulo(raio);
+    }
+    
+    public static Forma criarRetangulo(double largura, double altura) {
+        return new Retangulo(largura, altura);
+    }
+    
+    public static Forma criarTriangulo(double lado1, double lado2, double lado3) {
+        return new Triangulo(lado1, lado2, lado3);
+    }
+    
+    public static Forma criarQuadrado(double lado) {
+        return new Retangulo(lado, lado);
+    }
+}
+
+// Teste
+public class Main {
+    public static void main(String[] args) {
+        Forma circulo = FormaFactory.criarCirculo(5);
+        Forma retangulo = FormaFactory.criarRetangulo(4, 6);
+        Forma triangulo = FormaFactory.criarTriangulo(3, 4, 5);
+        Forma quadrado = FormaFactory.criarQuadrado(4);
+        
+        System.out.println("Círculo - Área: " + circulo.calcularArea() + ", Perímetro: " + circulo.calcularPerimetro());
+        System.out.println("Retângulo - Área: " + retangulo.calcularArea() + ", Perímetro: " + retangulo.calcularPerimetro());
+        System.out.println("Triângulo - Área: " + triangulo.calcularArea() + ", Perímetro: " + triangulo.calcularPerimetro());
+        System.out.println("Quadrado - Área: " + quadrado.calcularArea() + ", Perímetro: " + quadrado.calcularPerimetro());
+    }
+}
+```
+
+## Conclusão
+
+A palavra-chave `static` é fundamental em Java para:
+
+- **Compartilhar dados entre instâncias**: Variáveis estáticas
+- **Organizar utilitários**: Métodos estáticos
+- **Inicializar recursos**: Blocos estáticos
+- **Implementar padrões de projeto**: Singleton, Factory Method
+- **Melhorar performance**: Evitar criação desnecessária de objetos
+
+Lembre-se das regras importantes:
+- Membros estáticos pertencem à classe, não à instância
+- Métodos estáticos não podem acessar membros não-estáticos diretamente
+- Use `static` quando o comportamento não depende do estado da instância

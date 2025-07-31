@@ -1,59 +1,384 @@
 ---
-title: Java break Statement
-description: In this tutorial, we will learn how to use the Java break statement to terminate a loop or switch statement.
+title: "Instrução break em Java"
+description: "Aprenda como usar a instrução break em Java para terminar loops e statements switch com exemplos práticos e exercícios"
+difficulty: "Básico"
+category: "Controle de Fluxo"
 ---
 
-While working with loops, it is sometimes desirable to skip some statements inside the loop or terminate the loop immediately without checking the test expression.
+## Instrução break em Java
 
-In such cases, `break` and `continue` statements are used. You will learn about the Java continue statement in the next tutorial.
+Ao trabalhar com loops, às vezes é desejável pular algumas instruções dentro do loop ou terminar o loop imediatamente sem verificar a expressão de teste.
 
-The break statement in Java terminates the loop immediately, and the control of the program moves to the next statement following the loop.
+Nesses casos, as instruções `break` e `continue` são usadas. Você aprenderá sobre a instrução continue do Java no próximo tutorial.
 
-It is almost always used with decision-making statements (Java if...else Statement).
+A instrução `break` em Java termina o loop imediatamente, e o controle do programa passa para a próxima instrução após o loop.
 
-Here is the syntax of the break statement in Java:
+Ela é quase sempre usada com instruções de tomada de decisão (instrução Java if...else).
+
+Aqui está a sintaxe da instrução break em Java:
 
 ```java
 break;
 ```
 
-## Example 1: Java break statement
-
-Java while loop is used to run a specific code until a certain condition is met. The syntax of the while loop is:
+## Exemplo 1: Instrução break em loop for
 
 ```java
-class Test {
+public class TesteBreak {
     public static void main(String[] args) {
-
-        // for loop
+        // Loop for
         for (int i = 1; i <= 10; ++i) {
-
-            // if the value of i is 5 the loop terminates
+            // Se o valor de i for 5, o loop termina
             if (i == 5) {
                 break;
             }
             System.out.println(i);
         }
+        System.out.println("Loop terminado!");
     }
 }
 ```
-#### Output
+
+**Saída**:
 
 ```plaintext
 1
 2
 3
 4
+Loop terminado!
 ```
 
-In the above program, we are using the `for` loop to print the value of i in each iteration. To know how for loop works, visit the Java `for` loop. Here, notice the statement,
+No programa acima, estamos usando o loop `for` para imprimir o valor de i em cada iteração. Observe a instrução:
 
 ```java
 if (i == 5) {
     break;
 }
 ```
-This means when the value of `i` is equal to 5, the loop terminates. Hence we get the output with values less than 5 only.
+
+Isso significa que quando o valor de `i` for igual a 5, o loop termina. Por isso obtemos a saída apenas com valores menores que 5.
+
+## Tipos de break
+
+### 1. break simples (não rotulado)
+
+```java
+public class ExemploBreak {
+    public static void main(String[] args) {
+        // Exemplo 1: break em for
+        System.out.println("Exemplo 1 - break em for:");
+        for (int i = 1; i <= 10; i++) {
+            if (i == 6) {
+                break;
+            }
+            System.out.print(i + " ");
+        }
+        System.out.println("\n");
+        
+        // Exemplo 2: break em while
+        System.out.println("Exemplo 2 - break em while:");
+        int j = 1;
+        while (j <= 10) {
+            if (j == 6) {
+                break;
+            }
+            System.out.print(j + " ");
+            j++;
+        }
+        System.out.println("\n");
+        
+        // Exemplo 3: break em do-while
+        System.out.println("Exemplo 3 - break em do-while:");
+        int k = 1;
+        do {
+            if (k == 6) {
+                break;
+            }
+            System.out.print(k + " ");
+            k++;
+        } while (k <= 10);
+        System.out.println("\n");
+    }
+}
+```
+
+### 2. break rotulado (labeled break)
+
+```java
+public class BreakRotulado {
+    public static void main(String[] args) {
+        // Loop externo
+        externo: for (int i = 1; i <= 3; i++) {
+            System.out.println("Iteração externa: " + i);
+            
+            // Loop interno
+            for (int j = 1; j <= 5; j++) {
+                System.out.println("  Iteração interna: " + j);
+                
+                if (i == 2 && j == 3) {
+                    System.out.println("  Saindo do loop externo!");
+                    break externo; // Sai do loop externo
+                }
+            }
+        }
+        System.out.println("Programa terminado!");
+    }
+}
+```
+
+### 3. break em switch
+
+```java
+public class BreakSwitch {
+    public static void main(String[] args) {
+        int dia = 3;
+        
+        switch (dia) {
+            case 1:
+                System.out.println("Segunda-feira");
+                break;
+            case 2:
+                System.out.println("Terça-feira");
+                break;
+            case 3:
+                System.out.println("Quarta-feira");
+                break;
+            case 4:
+                System.out.println("Quinta-feira");
+                break;
+            case 5:
+                System.out.println("Sexta-feira");
+                break;
+            case 6:
+                System.out.println("Sábado");
+                break;
+            case 7:
+                System.out.println("Domingo");
+                break;
+            default:
+                System.out.println("Dia inválido");
+                break;
+        }
+    }
+}
+```
+
+## Exemplos Práticos
+
+### Exemplo 1: Busca em Array
+
+```java
+public class BuscaArray {
+    public static void main(String[] args) {
+        int[] numeros = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+        int numeroProcurado = 50;
+        boolean encontrado = false;
+        
+        for (int i = 0; i < numeros.length; i++) {
+            if (numeros[i] == numeroProcurado) {
+                System.out.println("Número " + numeroProcurado + " encontrado na posição " + i);
+                encontrado = true;
+                break; // Para a busca assim que encontrar
+            }
+        }
+        
+        if (!encontrado) {
+            System.out.println("Número " + numeroProcurado + " não encontrado!");
+        }
+    }
+}
+```
+
+### Exemplo 2: Validação de Senha
+
+```java
+public class ValidacaoSenha {
+    public static void main(String[] args) {
+        String senha = "abc123";
+        boolean senhaValida = true;
+        
+        // Verificar se tem pelo menos 6 caracteres
+        if (senha.length() < 6) {
+            System.out.println("Senha deve ter pelo menos 6 caracteres!");
+            senhaValida = false;
+        }
+        
+        // Verificar se tem pelo menos um número
+        boolean temNumero = false;
+        for (char c : senha.toCharArray()) {
+            if (Character.isDigit(c)) {
+                temNumero = true;
+                break; // Para assim que encontrar um número
+            }
+        }
+        
+        if (!temNumero) {
+            System.out.println("Senha deve conter pelo menos um número!");
+            senhaValida = false;
+        }
+        
+        if (senhaValida) {
+            System.out.println("Senha válida!");
+        }
+    }
+}
+```
+
+### Exemplo 3: Menu de Opções
+
+```java
+import java.util.Scanner;
+
+public class MenuOpcoes {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            System.out.println("\n=== MENU ===");
+            System.out.println("1. Opção 1");
+            System.out.println("2. Opção 2");
+            System.out.println("3. Opção 3");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+            
+            int opcao = scanner.nextInt();
+            
+            switch (opcao) {
+                case 1:
+                    System.out.println("Você escolheu a opção 1");
+                    break;
+                case 2:
+                    System.out.println("Você escolheu a opção 2");
+                    break;
+                case 3:
+                    System.out.println("Você escolheu a opção 3");
+                    break;
+                case 0:
+                    System.out.println("Saindo do programa...");
+                    scanner.close();
+                    return; // Sai do método main
+                default:
+                    System.out.println("Opção inválida!");
+                    break;
+            }
+        }
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Números Primos
+**Objetivo**: Encontrar o primeiro número primo em um intervalo.
+
+**Enunciado**: Crie um programa que encontre o primeiro número primo entre 1 e 100.
+
+**Resolução**:
+
+```java
+public class PrimeiroPrimo {
+    public static void main(String[] args) {
+        System.out.println("Procurando o primeiro número primo entre 1 e 100...");
+        
+        for (int i = 2; i <= 100; i++) {
+            boolean ehPrimo = true;
+            
+            // Verificar se i é primo
+            for (int j = 2; j <= Math.sqrt(i); j++) {
+                if (i % j == 0) {
+                    ehPrimo = false;
+                    break; // Não é primo, para a verificação
+                }
+            }
+            
+            if (ehPrimo) {
+                System.out.println("Primeiro número primo encontrado: " + i);
+                break; // Para a busca assim que encontrar o primeiro primo
+            }
+        }
+    }
+}
+```
+
+### Exercício 2: Soma até Limite
+**Objetivo**: Somar números até atingir um limite.
+
+**Enunciado**: Crie um programa que some números de 1 até que a soma ultrapasse 100.
+
+**Resolução**:
+
+```java
+public class SomaAteLimite {
+    public static void main(String[] args) {
+        int soma = 0;
+        int numero = 1;
+        
+        while (true) {
+            soma += numero;
+            
+            if (soma > 100) {
+                System.out.println("Soma ultrapassou 100: " + soma);
+                System.out.println("Último número adicionado: " + numero);
+                break;
+            }
+            
+            numero++;
+        }
+        
+        System.out.println("Números somados: 1 até " + (numero - 1));
+    }
+}
+```
+
+### Exercício 3: Break Rotulado Avançado
+**Objetivo**: Usar break rotulado para sair de loops aninhados.
+
+**Enunciado**: Crie um programa que encontre a primeira ocorrência de um número em uma matriz.
+
+**Resolução**:
+
+```java
+public class BuscaMatriz {
+    public static void main(String[] args) {
+        int[][] matriz = {
+            {1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {9, 10, 11, 12},
+            {13, 14, 15, 16}
+        };
+        
+        int numeroProcurado = 11;
+        boolean encontrado = false;
+        
+        busca: for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[i].length; j++) {
+                if (matriz[i][j] == numeroProcurado) {
+                    System.out.println("Número " + numeroProcurado + 
+                                     " encontrado na posição [" + i + "][" + j + "]");
+                    encontrado = true;
+                    break busca; // Sai de ambos os loops
+                }
+            }
+        }
+        
+        if (!encontrado) {
+            System.out.println("Número " + numeroProcurado + " não encontrado na matriz!");
+        }
+    }
+}
+```
+
+## Conclusão
+
+A instrução `break` é uma ferramenta poderosa para controlar o fluxo de execução em Java:
+
+- **break simples**: Termina o loop mais interno
+- **break rotulado**: Termina um loop específico em loops aninhados
+- **break em switch**: Evita fall-through entre cases
+- **Uso eficiente**: Melhora a performance evitando iterações desnecessárias
+
+Lembre-se de usar `break` com moderação e sempre com uma condição clara para manter o código legível e previsível.
 
 
 

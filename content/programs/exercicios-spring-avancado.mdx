@@ -1,0 +1,1076 @@
+---
+title: "Exercícios Avançados - Spring Framework"
+description: "Exercícios práticos para aprender Spring Framework - Nível Avançado"
+difficulty: "Avançado"
+category: "Spring Framework"
+---
+
+## Exercícios Avançados - Spring Framework
+
+### Área: Spring Security Avançado
+
+#### Exercício 1: Sistema de Autenticação Multi-Fator
+**Objetivo**: Implementar um sistema de autenticação multi-fator com JWT e códigos TOTP.
+
+**Enunciado**: Crie um sistema de segurança que combine autenticação por senha, JWT e códigos TOTP (Time-based One-Time Password) para autenticação multi-fator.
+
+**Resolução**:
+
+```java
+// Configuração de Segurança
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class ConfiguracaoSeguranca {
+    
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthFilter;
+    
+    @Autowired
+    private TOTPAuthenticationFilter totpAuthFilter;
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(totpAuthFilter, JwtAuthenticationFilter.class)
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint())
+                .accessDeniedHandler(jwtAccessDeniedHandler())
+            );
+
+        return http.build();
+    }
+    
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+    
+    @Bean
+    public AuthenticationEntryPoint jwtAuthenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
+    }
+    
+    @Bean
+    public AccessDeniedHandler jwtAccessDeniedHandler() {
+        return new JwtAccessDeniedHandler();
+    }
+}
+
+// Modelo de Usuário com MFA
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(unique = true, nullable = false)
+    private String username;
+    
+    @Column(nullable = false)
+    private String password;
+    
+    @Column(nullable = false)
+    private String email;
+    
+    @Column(nullable = false)
+    private boolean mfaEnabled;
+    
+    @Column
+    private String mfaSecret;
+    
+    @Column(nullable = false)
+    private boolean accountNonExpired = true;
+    
+    @Column(nullable = false)
+    private boolean accountNonLocked = true;
+    
+    @Column(nullable = false)
+    private boolean credentialsNonExpired = true;
+    
+    @Column(nullable = false)
+    private boolean enabled = true;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
+    
+    // Construtores, getters, setters...
+}
+
+// Serviço TOTP
+@Service
+public class TOTPService {
+    
+    private static final String ALGORITHM = "HmacSHA1";
+    private static final int DIGITS = 6;
+    private static final int PERIOD = 30;
+    
+    public String gerarCodigoTOTP(String secret) {
+        long time = System.currentTimeMillis() / 1000 / PERIOD;
+        return gerarTOTP(secret, time);
+    }
+    
+    public boolean validarCodigoTOTP(String secret, String codigo) {
+        long time = System.currentTimeMillis() / 1000 / PERIOD;
+        
+        // Validar código atual e códigos adjacentes (janela de 1 minuto)
+        for (int i = -1; i <= 1; i++) {
+            String expectedCode = gerarTOTP(secret, time + i);
+            if (expectedCode.equals(codigo)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public String gerarSecret() {
+        byte[] secret = new byte[20];
+        new SecureRandom().nextBytes(secret);
+        return Base32.encode(secret);
+    }
+    
+    private String gerarTOTP(String secret, long time) {
+        try {
+            byte[] secretBytes = Base32.decode(secret);
+            byte[] timeBytes = ByteBuffer.allocate(8).putLong(time).array();
+            
+            Mac mac = Mac.getInstance(ALGORITHM);
+            SecretKeySpec keySpec = new SecretKeySpec(secretBytes, ALGORITHM);
+            mac.init(keySpec);
+            
+            byte[] hash = mac.doFinal(timeBytes);
+            int offset = hash[hash.length - 1] & 0xf;
+            
+            int binary = ((hash[offset] & 0x7f) << 24) |
+                        ((hash[offset + 1] & 0xff) << 16) |
+                        ((hash[offset + 2] & 0xff) << 8) |
+                        (hash[offset + 3] & 0xff);
+            
+            int otp = binary % (int) Math.pow(10, DIGITS);
+            return String.format("%0" + DIGITS + "d", otp);
+            
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar TOTP", e);
+        }
+    }
+}
+
+// Filtro TOTP
+@Component
+public class TOTPAuthenticationFilter extends OncePerRequestFilter {
+    
+    @Autowired
+    private TOTPService totpService;
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
+    
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
+            throws ServletException, IOException {
+        
+        String totpHeader = request.getHeader("X-TOTP");
+        
+        if (totpHeader != null && SecurityContextHolder.getContext().getAuthentication() != null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+            
+            // Buscar usuário para verificar se MFA está habilitado
+            Usuario usuario = (Usuario) userDetails;
+            
+            if (usuario.isMfaEnabled() && usuario.getMfaSecret() != null) {
+                if (!totpService.validarCodigoTOTP(usuario.getMfaSecret(), totpHeader)) {
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                    response.getWriter().write("Código TOTP inválido");
+                    return;
+                }
+            }
+        }
+        
+        filterChain.doFilter(request, response);
+    }
+}
+
+// Controlador de Autenticação
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+    
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    
+    @Autowired
+    private TOTPService totpService;
+    
+    @Autowired
+    private ServicoUsuario servicoUsuario;
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    loginRequest.getUsername(), 
+                    loginRequest.getPassword()
+                )
+            );
+            
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            
+            Usuario usuario = servicoUsuario.buscarPorUsername(loginRequest.getUsername());
+            
+            if (usuario.isMfaEnabled()) {
+                return ResponseEntity.ok(new MFARequiredResponse(usuario.getUsername()));
+            } else {
+                String jwt = jwtTokenProvider.generateToken(authentication);
+                return ResponseEntity.ok(new AuthResponse(jwt, "Bearer"));
+            }
+            
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse("Credenciais inválidas"));
+        }
+    }
+    
+    @PostMapping("/mfa")
+    public ResponseEntity<?> validarMFA(@RequestBody MFARequest mfaRequest) {
+        try {
+            Usuario usuario = servicoUsuario.buscarPorUsername(mfaRequest.getUsername());
+            
+            if (!usuario.isMfaEnabled()) {
+                return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("MFA não está habilitado para este usuário"));
+            }
+            
+            if (totpService.validarCodigoTOTP(usuario.getMfaSecret(), mfaRequest.getCodigo())) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    usuario, null, usuario.getAuthorities()
+                );
+                
+                String jwt = jwtTokenProvider.generateToken(authentication);
+                return ResponseEntity.ok(new AuthResponse(jwt, "Bearer"));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Código TOTP inválido"));
+            }
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(new ErrorResponse("Erro ao validar MFA"));
+        }
+    }
+    
+    @PostMapping("/mfa/enable")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> habilitarMFA(@RequestBody MFAEnableRequest request) {
+        try {
+            Usuario usuario = (Usuario) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+            
+            if (totpService.validarCodigoTOTP(usuario.getMfaSecret(), request.getCodigo())) {
+                servicoUsuario.habilitarMFA(usuario.getId());
+                return ResponseEntity.ok(new MessageResponse("MFA habilitado com sucesso"));
+            } else {
+                return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Código TOTP inválido"));
+            }
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(new ErrorResponse("Erro ao habilitar MFA"));
+        }
+    }
+    
+    @PostMapping("/mfa/setup")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> configurarMFA() {
+        try {
+            Usuario usuario = (Usuario) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+            
+            String secret = totpService.gerarSecret();
+            servicoUsuario.configurarMFASecret(usuario.getId(), secret);
+            
+            String qrCodeUrl = gerarQRCodeUrl(usuario.getUsername(), secret);
+            
+            return ResponseEntity.ok(new MFASetupResponse(secret, qrCodeUrl));
+            
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(new ErrorResponse("Erro ao configurar MFA"));
+        }
+    }
+    
+    private String gerarQRCodeUrl(String username, String secret) {
+        return String.format("otpauth://totp/%s?secret=%s&issuer=MinhaApp", username, secret);
+    }
+}
+
+// DTOs
+public class LoginRequest {
+    private String username;
+    private String password;
+    // getters, setters...
+}
+
+public class MFARequest {
+    private String username;
+    private String codigo;
+    // getters, setters...
+}
+
+public class MFAEnableRequest {
+    private String codigo;
+    // getters, setters...
+}
+
+public class AuthResponse {
+    private String token;
+    private String type;
+    // constructor, getters, setters...
+}
+
+public class MFARequiredResponse {
+    private String username;
+    private boolean mfaRequired = true;
+    // constructor, getters, setters...
+}
+
+public class MFASetupResponse {
+    private String secret;
+    private String qrCodeUrl;
+    // constructor, getters, setters...
+}
+```
+
+### Área: Spring Data JPA Avançado
+
+#### Exercício 2: Sistema de Auditoria com Spring Data JPA
+**Objetivo**: Implementar um sistema de auditoria completo usando Spring Data JPA.
+
+**Enunciado**: Crie um sistema que registre automaticamente todas as mudanças em entidades, incluindo quem fez a mudança, quando e o que foi alterado.
+
+**Resolução**:
+
+```java
+// Entidade base com auditoria
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class EntidadeAuditavel {
+    
+    @CreatedDate
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataCriacao;
+    
+    @LastModifiedDate
+    @Column(name = "data_modificacao")
+    private LocalDateTime dataModificacao;
+    
+    @CreatedBy
+    @Column(name = "criado_por", updatable = false)
+    private String criadoPor;
+    
+    @LastModifiedBy
+    @Column(name = "modificado_por")
+    private String modificadoPor;
+    
+    @Version
+    @Column(name = "versao")
+    private Long versao;
+    
+    // Getters e Setters
+    public LocalDateTime getDataCriacao() { return dataCriacao; }
+    public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
+    
+    public LocalDateTime getDataModificacao() { return dataModificacao; }
+    public void setDataModificacao(LocalDateTime dataModificacao) { this.dataModificacao = dataModificacao; }
+    
+    public String getCriadoPor() { return criadoPor; }
+    public void setCriadoPor(String criadoPor) { this.criadoPor = criadoPor; }
+    
+    public String getModificadoPor() { return modificadoPor; }
+    public void setModificadoPor(String modificadoPor) { this.modificadoPor = modificadoPor; }
+    
+    public Long getVersao() { return versao; }
+    public void setVersao(Long versao) { this.versao = versao; }
+}
+
+// Entidade de Auditoria
+@Entity
+@Table(name = "auditoria")
+public class Auditoria {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private String entidade;
+    
+    @Column(nullable = false)
+    private Long entidadeId;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoAuditoria tipo;
+    
+    @Column(nullable = false)
+    private String usuario;
+    
+    @Column(nullable = false)
+    private LocalDateTime dataHora;
+    
+    @Column(columnDefinition = "TEXT")
+    private String dadosAnteriores;
+    
+    @Column(columnDefinition = "TEXT")
+    private String dadosNovos;
+    
+    @Column
+    private String campoAlterado;
+    
+    @Column
+    private String valorAnterior;
+    
+    @Column
+    private String valorNovo;
+    
+    // Construtores
+    public Auditoria() {}
+    
+    public Auditoria(String entidade, Long entidadeId, TipoAuditoria tipo, 
+                     String usuario, String dadosAnteriores, String dadosNovos) {
+        this.entidade = entidade;
+        this.entidadeId = entidadeId;
+        this.tipo = tipo;
+        this.usuario = usuario;
+        this.dataHora = LocalDateTime.now();
+        this.dadosAnteriores = dadosAnteriores;
+        this.dadosNovos = dadosNovos;
+    }
+    
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public String getEntidade() { return entidade; }
+    public void setEntidade(String entidade) { this.entidade = entidade; }
+    
+    public Long getEntidadeId() { return entidadeId; }
+    public void setEntidadeId(Long entidadeId) { this.entidadeId = entidadeId; }
+    
+    public TipoAuditoria getTipo() { return tipo; }
+    public void setTipo(TipoAuditoria tipo) { this.tipo = tipo; }
+    
+    public String getUsuario() { return usuario; }
+    public void setUsuario(String usuario) { this.usuario = usuario; }
+    
+    public LocalDateTime getDataHora() { return dataHora; }
+    public void setDataHora(LocalDateTime dataHora) { this.dataHora = dataHora; }
+    
+    public String getDadosAnteriores() { return dadosAnteriores; }
+    public void setDadosAnteriores(String dadosAnteriores) { this.dadosAnteriores = dadosAnteriores; }
+    
+    public String getDadosNovos() { return dadosNovos; }
+    public void setDadosNovos(String dadosNovos) { this.dadosNovos = dadosNovos; }
+    
+    public String getCampoAlterado() { return campoAlterado; }
+    public void setCampoAlterado(String campoAlterado) { this.campoAlterado = campoAlterado; }
+    
+    public String getValorAnterior() { return valorAnterior; }
+    public void setValorAnterior(String valorAnterior) { this.valorAnterior = valorAnterior; }
+    
+    public String getValorNovo() { return valorNovo; }
+    public void setValorNovo(String valorNovo) { this.valorNovo = valorNovo; }
+}
+
+// Enum de tipos de auditoria
+public enum TipoAuditoria {
+    CRIACAO, MODIFICACAO, EXCLUSAO
+}
+
+// Repositório de Auditoria
+@Repository
+public interface RepositorioAuditoria extends JpaRepository<Auditoria, Long> {
+    
+    List<Auditoria> findByEntidadeAndEntidadeIdOrderByDataHoraDesc(String entidade, Long entidadeId);
+    
+    List<Auditoria> findByUsuarioOrderByDataHoraDesc(String usuario);
+    
+    List<Auditoria> findByTipoAndDataHoraBetween(TipoAuditoria tipo, LocalDateTime inicio, LocalDateTime fim);
+    
+    @Query("SELECT a FROM Auditoria a WHERE a.entidade = :entidade AND a.entidadeId = :entidadeId " +
+           "AND a.campoAlterado = :campo ORDER BY a.dataHora DESC")
+    List<Auditoria> findByEntidadeAndCampo(String entidade, Long entidadeId, String campo);
+}
+
+// Serviço de Auditoria
+@Service
+@Transactional
+public class ServicoAuditoria {
+    
+    private final RepositorioAuditoria repositorioAuditoria;
+    private final ObjectMapper objectMapper;
+    private final Logger logger = LoggerFactory.getLogger(ServicoAuditoria.class);
+    
+    @Autowired
+    public ServicoAuditoria(RepositorioAuditoria repositorioAuditoria, ObjectMapper objectMapper) {
+        this.repositorioAuditoria = repositorioAuditoria;
+        this.objectMapper = objectMapper;
+    }
+    
+    public void registrarCriacao(Object entidade, Long entidadeId) {
+        try {
+            String dadosJson = objectMapper.writeValueAsString(entidade);
+            String usuario = obterUsuarioAtual();
+            
+            Auditoria auditoria = new Auditoria(
+                entidade.getClass().getSimpleName(),
+                entidadeId,
+                TipoAuditoria.CRIACAO,
+                usuario,
+                null,
+                dadosJson
+            );
+            
+            repositorioAuditoria.save(auditoria);
+            logger.info("Auditoria de criação registrada: {} - ID: {}", 
+                       entidade.getClass().getSimpleName(), entidadeId);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao registrar auditoria de criação", e);
+        }
+    }
+    
+    public void registrarModificacao(Object entidadeAntiga, Object entidadeNova, Long entidadeId) {
+        try {
+            String dadosAntigos = objectMapper.writeValueAsString(entidadeAntiga);
+            String dadosNovos = objectMapper.writeValueAsString(entidadeNova);
+            String usuario = obterUsuarioAtual();
+            
+            Auditoria auditoria = new Auditoria(
+                entidadeNova.getClass().getSimpleName(),
+                entidadeId,
+                TipoAuditoria.MODIFICACAO,
+                usuario,
+                dadosAntigos,
+                dadosNovos
+            );
+            
+            // Detectar campos alterados
+            Map<String, Object> mudancas = detectarMudancas(entidadeAntiga, entidadeNova);
+            if (!mudancas.isEmpty()) {
+                Map.Entry<String, Object> primeiraMudanca = mudancas.entrySet().iterator().next();
+                auditoria.setCampoAlterado(primeiraMudanca.getKey());
+                auditoria.setValorAnterior(String.valueOf(primeiraMudanca.getValue()));
+                auditoria.setValorNovo(String.valueOf(mudancas.get(primeiraMudanca.getKey())));
+            }
+            
+            repositorioAuditoria.save(auditoria);
+            logger.info("Auditoria de modificação registrada: {} - ID: {}", 
+                       entidadeNova.getClass().getSimpleName(), entidadeId);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao registrar auditoria de modificação", e);
+        }
+    }
+    
+    public void registrarExclusao(Object entidade, Long entidadeId) {
+        try {
+            String dadosJson = objectMapper.writeValueAsString(entidade);
+            String usuario = obterUsuarioAtual();
+            
+            Auditoria auditoria = new Auditoria(
+                entidade.getClass().getSimpleName(),
+                entidadeId,
+                TipoAuditoria.EXCLUSAO,
+                usuario,
+                dadosJson,
+                null
+            );
+            
+            repositorioAuditoria.save(auditoria);
+            logger.info("Auditoria de exclusão registrada: {} - ID: {}", 
+                       entidade.getClass().getSimpleName(), entidadeId);
+            
+        } catch (Exception e) {
+            logger.error("Erro ao registrar auditoria de exclusão", e);
+        }
+    }
+    
+    public List<Auditoria> buscarHistorico(String entidade, Long entidadeId) {
+        return repositorioAuditoria.findByEntidadeAndEntidadeIdOrderByDataHoraDesc(entidade, entidadeId);
+    }
+    
+    public List<Auditoria> buscarHistoricoUsuario(String usuario) {
+        return repositorioAuditoria.findByUsuarioOrderByDataHoraDesc(usuario);
+    }
+    
+    public List<Auditoria> buscarPorPeriodo(TipoAuditoria tipo, LocalDateTime inicio, LocalDateTime fim) {
+        return repositorioAuditoria.findByTipoAndDataHoraBetween(tipo, inicio, fim);
+    }
+    
+    private String obterUsuarioAtual() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return "SISTEMA";
+    }
+    
+    private Map<String, Object> detectarMudancas(Object objetoAntigo, Object objetoNovo) {
+        Map<String, Object> mudancas = new HashMap<>();
+        
+        try {
+            Field[] campos = objetoAntigo.getClass().getDeclaredFields();
+            
+            for (Field campo : campos) {
+                campo.setAccessible(true);
+                
+                Object valorAntigo = campo.get(objetoAntigo);
+                Object valorNovo = campo.get(objetoNovo);
+                
+                if (!Objects.equals(valorAntigo, valorNovo)) {
+                    mudancas.put(campo.getName(), valorNovo);
+                }
+            }
+            
+        } catch (Exception e) {
+            logger.error("Erro ao detectar mudanças", e);
+        }
+        
+        return mudancas;
+    }
+}
+
+// Aspecto para auditoria automática
+@Aspect
+@Component
+public class AuditoriaAspect {
+    
+    @Autowired
+    private ServicoAuditoria servicoAuditoria;
+    
+    @Autowired
+    private RepositorioUsuario repositorioUsuario;
+    
+    @AfterReturning("execution(* com.exemplo.*.ServicoUsuario.criarUsuario(..))")
+    public void auditarCriacao(JoinPoint joinPoint) {
+        Object resultado = ((MethodSignature) joinPoint.getSignature()).getReturnType();
+        if (resultado instanceof Usuario) {
+            Usuario usuario = (Usuario) resultado;
+            servicoAuditoria.registrarCriacao(usuario, usuario.getId());
+        }
+    }
+    
+    @AfterReturning("execution(* com.exemplo.*.ServicoUsuario.atualizarUsuario(..))")
+    public void auditarModificacao(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        if (args.length >= 2 && args[0] instanceof Long && args[1] instanceof Usuario) {
+            Long id = (Long) args[0];
+            Usuario usuarioNovo = (Usuario) args[1];
+            
+            // Buscar usuário anterior
+            Usuario usuarioAntigo = repositorioUsuario.buscarPorId(id);
+            if (usuarioAntigo != null) {
+                servicoAuditoria.registrarModificacao(usuarioAntigo, usuarioNovo, id);
+            }
+        }
+    }
+    
+    @AfterReturning("execution(* com.exemplo.*.ServicoUsuario.deletarUsuario(..))")
+    public void auditarExclusao(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        if (args.length > 0 && args[0] instanceof Long) {
+            Long id = (Long) args[0];
+            
+            // Buscar usuário antes da exclusão
+            Usuario usuario = repositorioUsuario.buscarPorId(id);
+            if (usuario != null) {
+                servicoAuditoria.registrarExclusao(usuario, id);
+            }
+        }
+    }
+}
+
+// Configuração de Auditoria
+@Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
+public class ConfiguracaoAuditoria {
+    
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        return () -> {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated()) {
+                return Optional.of(authentication.getName());
+            }
+            return Optional.of("SISTEMA");
+        };
+    }
+}
+```
+
+### Área: Spring WebFlux
+
+#### Exercício 3: API Reativa com WebFlux
+**Objetivo**: Implementar uma API reativa usando Spring WebFlux e MongoDB.
+
+**Enunciado**: Crie uma API reativa para gerenciamento de produtos com operações CRUD, busca por filtros e streaming de dados.
+
+**Resolução**:
+
+```java
+// Configuração do MongoDB
+@Configuration
+@EnableReactiveMongoRepositories
+public class ConfiguracaoMongoDB {
+    
+    @Bean
+    public MongoClient mongoClient() {
+        return MongoClients.create("mongodb://localhost:27017");
+    }
+    
+    @Bean
+    public ReactiveMongoTemplate reactiveMongoTemplate() {
+        return new ReactiveMongoTemplate(mongoClient(), "produtos_db");
+    }
+}
+
+// Modelo de Produto
+@Document(collection = "produtos")
+public class Produto {
+    
+    @Id
+    private String id;
+    
+    @Indexed(unique = true)
+    private String codigo;
+    
+    private String nome;
+    private String descricao;
+    private BigDecimal preco;
+    private String categoria;
+    private int estoque;
+    private boolean ativo;
+    
+    @CreatedDate
+    private LocalDateTime dataCriacao;
+    
+    @LastModifiedDate
+    private LocalDateTime dataModificacao;
+    
+    // Construtores
+    public Produto() {}
+    
+    public Produto(String codigo, String nome, String descricao, 
+                   BigDecimal preco, String categoria, int estoque) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.preco = preco;
+        this.categoria = categoria;
+        this.estoque = estoque;
+        this.ativo = true;
+    }
+    
+    // Getters e Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    
+    public String getCodigo() { return codigo; }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
+    
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
+    
+    public BigDecimal getPreco() { return preco; }
+    public void setPreco(BigDecimal preco) { this.preco = preco; }
+    
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+    
+    public int getEstoque() { return estoque; }
+    public void setEstoque(int estoque) { this.estoque = estoque; }
+    
+    public boolean isAtivo() { return ativo; }
+    public void setAtivo(boolean ativo) { this.ativo = ativo; }
+    
+    public LocalDateTime getDataCriacao() { return dataCriacao; }
+    public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
+    
+    public LocalDateTime getDataModificacao() { return dataModificacao; }
+    public void setDataModificacao(LocalDateTime dataModificacao) { this.dataModificacao = dataModificacao; }
+}
+
+// Repositório Reativo
+@Repository
+public interface RepositorioProdutoReativo extends ReactiveMongoRepository<Produto, String> {
+    
+    Flux<Produto> findByCategoria(String categoria);
+    
+    Flux<Produto> findByAtivoTrue();
+    
+    Flux<Produto> findByPrecoBetween(BigDecimal precoMin, BigDecimal precoMax);
+    
+    Flux<Produto> findByNomeContainingIgnoreCase(String nome);
+    
+    Mono<Produto> findByCodigo(String codigo);
+    
+    Flux<Produto> findByEstoqueLessThan(int estoqueMinimo);
+    
+    @Query("{'$or': [{'nome': {$regex: ?0, $options: 'i'}}, {'descricao': {$regex: ?0, $options: 'i'}}]}")
+    Flux<Produto> buscarPorTexto(String texto);
+}
+
+// Serviço Reativo
+@Service
+public class ServicoProdutoReativo {
+    
+    private final RepositorioProdutoReativo repositorio;
+    private final Logger logger = LoggerFactory.getLogger(ServicoProdutoReativo.class);
+    
+    @Autowired
+    public ServicoProdutoReativo(RepositorioProdutoReativo repositorio) {
+        this.repositorio = repositorio;
+    }
+    
+    public Mono<Produto> criarProduto(Produto produto) {
+        return Mono.just(produto)
+            .filter(p -> p.getCodigo() != null && !p.getCodigo().trim().isEmpty())
+            .filter(p -> p.getNome() != null && !p.getNome().trim().isEmpty())
+            .filter(p -> p.getPreco() != null && p.getPreco().compareTo(BigDecimal.ZERO) > 0)
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Dados do produto inválidos")))
+            .flatMap(p -> repositorio.findByCodigo(p.getCodigo())
+                .flatMap(existing -> Mono.error(new IllegalArgumentException("Código já existe")))
+                .switchIfEmpty(repositorio.save(p)))
+            .doOnSuccess(p -> logger.info("Produto criado: {}", p.getCodigo()))
+            .doOnError(e -> logger.error("Erro ao criar produto: {}", e.getMessage()));
+    }
+    
+    public Mono<Produto> buscarPorId(String id) {
+        return repositorio.findById(id)
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Produto não encontrado")));
+    }
+    
+    public Mono<Produto> buscarPorCodigo(String codigo) {
+        return repositorio.findByCodigo(codigo)
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Produto não encontrado")));
+    }
+    
+    public Flux<Produto> buscarTodos() {
+        return repositorio.findAll()
+            .doOnNext(p -> logger.debug("Produto encontrado: {}", p.getCodigo()));
+    }
+    
+    public Flux<Produto> buscarPorCategoria(String categoria) {
+        return repositorio.findByCategoria(categoria);
+    }
+    
+    public Flux<Produto> buscarAtivos() {
+        return repositorio.findByAtivoTrue();
+    }
+    
+    public Flux<Produto> buscarPorFaixaPreco(BigDecimal precoMin, BigDecimal precoMax) {
+        return repositorio.findByPrecoBetween(precoMin, precoMax);
+    }
+    
+    public Flux<Produto> buscarPorNome(String nome) {
+        return repositorio.findByNomeContainingIgnoreCase(nome);
+    }
+    
+    public Flux<Produto> buscarPorTexto(String texto) {
+        return repositorio.buscarPorTexto(texto);
+    }
+    
+    public Flux<Produto> buscarEstoqueBaixo(int estoqueMinimo) {
+        return repositorio.findByEstoqueLessThan(estoqueMinimo);
+    }
+    
+    public Mono<Produto> atualizarProduto(String id, Produto produtoAtualizado) {
+        return repositorio.findById(id)
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Produto não encontrado")))
+            .flatMap(produtoExistente -> {
+                if (produtoAtualizado.getNome() != null) {
+                    produtoExistente.setNome(produtoAtualizado.getNome());
+                }
+                if (produtoAtualizado.getDescricao() != null) {
+                    produtoExistente.setDescricao(produtoAtualizado.getDescricao());
+                }
+                if (produtoAtualizado.getPreco() != null) {
+                    produtoExistente.setPreco(produtoAtualizado.getPreco());
+                }
+                if (produtoAtualizado.getCategoria() != null) {
+                    produtoExistente.setCategoria(produtoAtualizado.getCategoria());
+                }
+                produtoExistente.setEstoque(produtoAtualizado.getEstoque());
+                produtoExistente.setAtivo(produtoAtualizado.isAtivo());
+                
+                return repositorio.save(produtoExistente);
+            })
+            .doOnSuccess(p -> logger.info("Produto atualizado: {}", p.getCodigo()))
+            .doOnError(e -> logger.error("Erro ao atualizar produto: {}", e.getMessage()));
+    }
+    
+    public Mono<Void> deletarProduto(String id) {
+        return repositorio.findById(id)
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Produto não encontrado")))
+            .flatMap(produto -> repositorio.delete(produto))
+            .doOnSuccess(v -> logger.info("Produto deletado: {}", id))
+            .doOnError(e -> logger.error("Erro ao deletar produto: {}", e.getMessage()));
+    }
+    
+    public Mono<Produto> ajustarEstoque(String id, int quantidade) {
+        return repositorio.findById(id)
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("Produto não encontrado")))
+            .flatMap(produto -> {
+                int novoEstoque = produto.getEstoque() + quantidade;
+                if (novoEstoque < 0) {
+                    return Mono.error(new IllegalArgumentException("Estoque insuficiente"));
+                }
+                produto.setEstoque(novoEstoque);
+                return repositorio.save(produto);
+            });
+    }
+    
+    public Flux<Produto> streamProdutos() {
+        return repositorio.findAll()
+            .delayElements(Duration.ofMillis(100)) // Simular processamento
+            .doOnNext(p -> logger.info("Streaming produto: {}", p.getCodigo()));
+    }
+}
+
+// Controlador Reativo
+@RestController
+@RequestMapping("/api/produtos")
+public class ProdutoReativoController {
+    
+    private final ServicoProdutoReativo servicoProduto;
+    
+    @Autowired
+    public ProdutoReativoController(ServicoProdutoReativo servicoProduto) {
+        this.servicoProduto = servicoProduto;
+    }
+    
+    @PostMapping
+    public Mono<ResponseEntity<Produto>> criarProduto(@RequestBody Produto produto) {
+        return servicoProduto.criarProduto(produto)
+            .map(p -> ResponseEntity.status(HttpStatus.CREATED).body(p))
+            .onErrorReturn(ResponseEntity.badRequest().build());
+    }
+    
+    @GetMapping("/{id}")
+    public Mono<ResponseEntity<Produto>> buscarPorId(@PathVariable String id) {
+        return servicoProduto.buscarPorId(id)
+            .map(ResponseEntity::ok)
+            .onErrorReturn(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping("/codigo/{codigo}")
+    public Mono<ResponseEntity<Produto>> buscarPorCodigo(@PathVariable String codigo) {
+        return servicoProduto.buscarPorCodigo(codigo)
+            .map(ResponseEntity::ok)
+            .onErrorReturn(ResponseEntity.notFound().build());
+    }
+    
+    @GetMapping
+    public Flux<Produto> buscarTodos() {
+        return servicoProduto.buscarTodos();
+    }
+    
+    @GetMapping("/categoria/{categoria}")
+    public Flux<Produto> buscarPorCategoria(@PathVariable String categoria) {
+        return servicoProduto.buscarPorCategoria(categoria);
+    }
+    
+    @GetMapping("/ativos")
+    public Flux<Produto> buscarAtivos() {
+        return servicoProduto.buscarAtivos();
+    }
+    
+    @GetMapping("/preco")
+    public Flux<Produto> buscarPorFaixaPreco(
+            @RequestParam BigDecimal precoMin,
+            @RequestParam BigDecimal precoMax) {
+        return servicoProduto.buscarPorFaixaPreco(precoMin, precoMax);
+    }
+    
+    @GetMapping("/busca")
+    public Flux<Produto> buscarPorTexto(@RequestParam String texto) {
+        return servicoProduto.buscarPorTexto(texto);
+    }
+    
+    @GetMapping("/estoque-baixo")
+    public Flux<Produto> buscarEstoqueBaixo(@RequestParam(defaultValue = "10") int estoqueMinimo) {
+        return servicoProduto.buscarEstoqueBaixo(estoqueMinimo);
+    }
+    
+    @PutMapping("/{id}")
+    public Mono<ResponseEntity<Produto>> atualizarProduto(
+            @PathVariable String id,
+            @RequestBody Produto produto) {
+        return servicoProduto.atualizarProduto(id, produto)
+            .map(ResponseEntity::ok)
+            .onErrorReturn(ResponseEntity.badRequest().build());
+    }
+    
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Void>> deletarProduto(@PathVariable String id) {
+        return servicoProduto.deletarProduto(id)
+            .then(Mono.just(ResponseEntity.noContent().<Void>build()))
+            .onErrorReturn(ResponseEntity.notFound().build());
+    }
+    
+    @PatchMapping("/{id}/estoque")
+    public Mono<ResponseEntity<Produto>> ajustarEstoque(
+            @PathVariable String id,
+            @RequestParam int quantidade) {
+        return servicoProduto.ajustarEstoque(id, quantidade)
+            .map(ResponseEntity::ok)
+            .onErrorReturn(ResponseEntity.badRequest().build());
+    }
+    
+    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ServerSentEvent<Produto>> streamProdutos() {
+        return servicoProduto.streamProdutos()
+            .map(produto -> ServerSentEvent.<Produto>builder()
+                .id(produto.getId())
+                .event("produto")
+                .data(produto)
+                .build());
+    }
+}
+```
+
+### Conclusão
+
+Estes exercícios avançados cobrem conceitos complexos do Spring Framework:
+- Autenticação multi-fator com TOTP
+- Sistema de auditoria completo
+- APIs reativas com WebFlux
+- Programação reativa e não-bloqueante
+- Integração com MongoDB
+
+Para praticar mais, tente implementar variações destes exercícios e explore outros recursos avançados do Spring Framework. 
