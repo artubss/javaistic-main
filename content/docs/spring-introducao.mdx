@@ -63,10 +63,11 @@ Spring Framework
 O IoC é o princípio fundamental do Spring. Em vez de objetos criarem suas dependências, o Spring cria e injeta as dependências.
 
 **Sem IoC (Tradicional)**:
+
 ```java
 public class ServicoEmail {
     private RepositorioUsuario repositorio;
-    
+
     public ServicoEmail() {
         this.repositorio = new RepositorioUsuarioImpl(); // Acoplamento forte
     }
@@ -74,11 +75,12 @@ public class ServicoEmail {
 ```
 
 **Com IoC (Spring)**:
+
 ```java
 @Component
 public class ServicoEmail {
     private RepositorioUsuario repositorio;
-    
+
     @Autowired
     public ServicoEmail(RepositorioUsuario repositorio) {
         this.repositorio = repositorio; // Injeção de dependência
@@ -97,9 +99,9 @@ O Spring oferece três tipos de injeção de dependência:
 public class ServicoUsuario {
     private final RepositorioUsuario repositorio;
     private final ServicoEmail servicoEmail;
-    
+
     @Autowired
-    public ServicoUsuario(RepositorioUsuario repositorio, 
+    public ServicoUsuario(RepositorioUsuario repositorio,
                          ServicoEmail servicoEmail) {
         this.repositorio = repositorio;
         this.servicoEmail = servicoEmail;
@@ -113,7 +115,7 @@ public class ServicoUsuario {
 @Service
 public class ServicoUsuario {
     private RepositorioUsuario repositorio;
-    
+
     @Autowired
     public void setRepositorio(RepositorioUsuario repositorio) {
         this.repositorio = repositorio;
@@ -139,12 +141,12 @@ public class ServicoUsuario {
 @Configuration
 @ComponentScan("com.exemplo")
 public class ConfiguracaoApp {
-    
+
     @Bean
     public RepositorioUsuario repositorioUsuario() {
         return new RepositorioUsuarioImpl();
     }
-    
+
     @Bean
     public ServicoEmail servicoEmail() {
         return new ServicoEmailImpl();
@@ -161,13 +163,13 @@ public class ConfiguracaoApp {
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="repositorioUsuario" 
+    <bean id="repositorioUsuario"
           class="com.exemplo.RepositorioUsuarioImpl" />
-    
-    <bean id="servicoEmail" 
+
+    <bean id="servicoEmail"
           class="com.exemplo.ServicoEmailImpl" />
-    
-    <bean id="servicoUsuario" 
+
+    <bean id="servicoUsuario"
           class="com.exemplo.ServicoUsuario">
         <constructor-arg ref="repositorioUsuario" />
         <constructor-arg ref="servicoEmail" />
@@ -212,20 +214,20 @@ public class Usuario {
     private Long id;
     private String nome;
     private String email;
-    
+
     // Construtores, getters, setters...
 }
 
 // Repositório
 @Repository
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
-    
+
     @Override
     public Usuario buscarPorId(Long id) {
         // Implementação...
         return new Usuario(id, "João", "joao@email.com");
     }
-    
+
     @Override
     public void salvar(Usuario usuario) {
         // Implementação...
@@ -235,17 +237,17 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 // Serviço
 @Service
 public class ServicoUsuario {
-    
+
     private final RepositorioUsuario repositorio;
     private final ServicoEmail servicoEmail;
-    
+
     @Autowired
-    public ServicoUsuario(RepositorioUsuario repositorio, 
+    public ServicoUsuario(RepositorioUsuario repositorio,
                          ServicoEmail servicoEmail) {
         this.repositorio = repositorio;
         this.servicoEmail = servicoEmail;
     }
-    
+
     @Transactional
     public void criarUsuario(Usuario usuario) {
         repositorio.salvar(usuario);
@@ -257,20 +259,20 @@ public class ServicoUsuario {
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    
+
     private final ServicoUsuario servicoUsuario;
-    
+
     @Autowired
     public UsuarioController(ServicoUsuario servicoUsuario) {
         this.servicoUsuario = servicoUsuario;
     }
-    
+
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
         servicoUsuario.criarUsuario(usuario);
         return ResponseEntity.ok(usuario);
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
         Usuario usuario = servicoUsuario.buscarPorId(id);
@@ -284,13 +286,13 @@ public class UsuarioController {
 ```java
 @Service
 public class ServicoTransacao {
-    
+
     @Transactional
     public void transferir(Long contaOrigem, Long contaDestino, BigDecimal valor) {
         // Lógica de transferência
         // Se algo der errado, toda a transação é revertida
     }
-    
+
     @Transactional(readOnly = true)
     public BigDecimal consultarSaldo(Long contaId) {
         // Consulta otimizada para leitura
@@ -305,13 +307,13 @@ public class ServicoTransacao {
 @Aspect
 @Component
 public class LoggingAspect {
-    
+
     @Before("execution(* com.exemplo.*.ServicoUsuario.*(..))")
     public void logAntesDoMetodo(JoinPoint joinPoint) {
         System.out.println("Executando: " + joinPoint.getSignature().getName());
     }
-    
-    @AfterThrowing(pointcut = "execution(* com.exemplo.*.*(..))", 
+
+    @AfterThrowing(pointcut = "execution(* com.exemplo.*.*(..))",
                    throwing = "erro")
     public void logErro(JoinPoint joinPoint, Throwable erro) {
         System.out.println("Erro em: " + joinPoint.getSignature().getName());
@@ -325,21 +327,21 @@ public class LoggingAspect {
 ```java
 @SpringBootTest
 class ServicoUsuarioTest {
-    
+
     @Autowired
     private ServicoUsuario servicoUsuario;
-    
+
     @MockBean
     private RepositorioUsuario repositorioUsuario;
-    
+
     @Test
     void deveCriarUsuario() {
         // Given
         Usuario usuario = new Usuario(null, "João", "joao@email.com");
-        
+
         // When
         servicoUsuario.criarUsuario(usuario);
-        
+
         // Then
         verify(repositorioUsuario).salvar(usuario);
     }
@@ -356,4 +358,4 @@ class ServicoUsuarioTest {
 
 ### Conclusão
 
-O Spring Framework revolucionou o desenvolvimento Java enterprise. Sua arquitetura baseada em IoC e DI torna o código mais limpo, testável e manutenível. Com sua vasta gama de módulos e anotações, o Spring simplifica o desenvolvimento de aplicações complexas. 
+O Spring Framework revolucionou o desenvolvimento Java enterprise. Sua arquitetura baseada em IoC e DI torna o código mais limpo, testável e manutenível. Com sua vasta gama de módulos e anotações, o Spring simplifica o desenvolvimento de aplicações complexas.

@@ -1,110 +1,182 @@
-<div align=center>
+# Javaistic - Aprenda Java do Básico ao Avançado
 
-<br>
+Um site educacional completo para aprender Java, desde conceitos básicos até frameworks avançados como Spring Boot, Spring Security e muito mais.
 
-<img height=70 src="https://raw.githubusercontent.com/javaistic/.github/main/profile/img/logo-light.svg#gh-dark-mode-only">
-<img height=70 src="https://raw.githubusercontent.com/javaistic/.github/main/profile/img/logo-dark.svg#gh-light-mode-only">
+## 🚀 Recursos
 
-<br>
+### 📚 Conteúdo em Português
 
-### [![Stars](https://badgen.net/github/stars/javaistic/javaistic)](https://github.com/javaistic/javaistic/stargazers) [![Release](https://badgen.net/github/release/javaistic/javaistic)](https://github.com/javaistic/javaistic/releases) [![CodeQL](https://github.com/javaistic/javaistic/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/javaistic/javaistic/actions/workflows/codeql-analysis.yml) [![License](https://badgen.net/github/license/javaistic/javaistic)](LICENSE) [![Better Uptime Badge](https://betteruptime.com/status-badges/v1/monitor/8a3u.svg)](https://javaistic.betteruptime.com/?utm_source=status_badge)
+- **Tutoriais traduzidos**: Todo o conteúdo foi traduzido para português brasileiro
+- **Exemplos práticos**: Código real e funcional em todos os tutoriais
+- **Progressão estruturada**: Do básico ao avançado
 
-</div>
+### 🎯 Seções Disponíveis
 
-<div align="center">
+#### Fundamentos Java
 
-### [Visit Javaistic Site](https://javaistic.vercel.app/) • [View Changelog](https://javaistic.vercel.app/changelog) • [Check Status](https://javaistic.vercel.app/status)
+- **Começando**: Instalação, JVM/JRE/JDK, Hello World
+- **Fundamentos**: Variáveis, tipos de dados, operadores, entrada/saída
+- **Controle de Fluxo**: If/else, switch, loops (for, while, do-while)
+- **Arrays**: Arrays unidimensionais e multidimensionais
 
-</div>
+#### Programação Orientada a Objetos
 
-<div align="center">
+- **POO Básica**: Classes, objetos, métodos, construtores
+- **Conceitos Avançados**: Herança, polimorfismo, encapsulamento, abstração
+- **Interfaces e Classes Abstratas**: Programação para interfaces
 
-[![javaistic](.github/img/javaistic-readme.png)](https://javaistic.vercel.app/?utm_source=github&utm_medium=readme-image&utm_campaign=javaistic)
+#### Recursos Avançados
 
-### Explore Javaistic ⟶ [javaistic.vercel.app](https://javaistic.vercel.app/?utm_source=github&utm_medium=readme-link&utm_campaign=javaistic)
+- **Generics**: Type safety, classes e métodos genéricos, wildcards
+- **Collections Framework**: List, Set, Map, Queue e suas implementações
+- **Streams e Lambda**: Programação funcional em Java
 
-</div>
+#### Frameworks Spring
 
-## 📄 Description
+- **Spring Framework**: IoC, DI, configuração, anotações
+- **Spring Boot**: Auto-configuração, starters, actuator
+- **Spring REST API**: Controllers, request mapping, response entity
+- **Spring Security**: Autenticação, autorização, JWT, CSRF protection
 
-Javaistic is a comprehensive website for learning Java programming, packed with detailed information and programs covering everything from basics to advanced topics, including arrays, strings, 2D arrays, recursion, matrices, and more.
+#### Banco de Dados
 
-## 🔥 Features
+- **JDBC Básico**: Conexão, statements, result sets
+- **Spring Data JPA**: Repositories, entities, queries
+- **Hibernate**: ORM, mapeamento, relacionamentos
 
-- **Beautiful Design:** Enjoy a visually appealing and optimized learning experience.
-- **Comprehensive Content:** Easily understandable Java docs and programs for learners at all levels.
-- **Open Source:** Everything is free and open source, encouraging a collaborative learning environment.
-- **Ad Free:** Study without distractions - Javaistic is ad-free for an uninterrupted learning experience.
+#### Testes
 
-## 🪴 Project Activity
+- **JUnit Básico**: Anotações, assertivas, testes parametrizados
+- **Spring Test**: Testes de integração, @SpringBootTest
+- **Mockito**: Mocking, stubbing, verification
 
-![Repobeats Analytics](https://repobeats.axiom.co/api/embed/3df6f52cbd6d58e6c248f9457081834adf6459e5.svg "Repobeats analytics image")
+## 🛠️ Tecnologias Utilizadas
 
-## 🧑‍💻 Contributing
+- **Next.js**: Framework React para o frontend
+- **MDX**: Markdown com componentes React
+- **TypeScript**: Tipagem estática
+- **Tailwind CSS**: Estilização
+- **Java**: Linguagem principal dos exemplos
+- **Spring Boot**: Framework para exemplos avançados
 
-Interested in contributing to Javaistic Documentation? Please read our [contributing guidelines](CONTRIBUTING.md) before submitting a pull request.
+## 📖 Como Usar
 
-### Running Locally
+1. **Navegue pelas seções**: Comece pelos fundamentos e progrida gradualmente
+2. **Pratique os exemplos**: Execute o código fornecido nos tutoriais
+3. **Complete os exercícios**: Aplique o conhecimento em projetos práticos
+4. **Explore frameworks**: Aprenda Spring Boot, Security e outros
 
-To develop locally, follow these steps:
+## 🎯 Público-Alvo
 
-1. **Clone this repo:**
+- **Iniciantes**: Programadores que estão começando com Java
+- **Intermediários**: Desenvolvedores que querem aprofundar conhecimentos
+- **Avançados**: Profissionais que buscam aprender frameworks modernos
 
-   ```sh
-   git clone https://github.com/javaistic/javaistic.git
-   ```
+## 📚 Estrutura do Conteúdo
 
-2. **Navigate to the project root directory:**
+```
+content/
+├── docs/
+│   ├── Começando/
+│   │   ├── introduction.mdx
+│   │   ├── installation.mdx
+│   │   └── hello-world.mdx
+│   ├── Fundamentos Java/
+│   │   ├── variables-and-literals.mdx
+│   │   ├── operators.mdx
+│   │   └── arrays.mdx
+│   ├── Programação Orientada a Objetos/
+│   │   ├── class-objects.mdx
+│   │   ├── heranca.mdx
+│   │   └── interfaces.mdx
+│   ├── Generics/
+│   │   ├── generics-introducao.mdx
+│   │   └── generic-classes.mdx
+│   ├── Collections Framework/
+│   │   ├── collections-overview.mdx
+│   │   └── list-interface.mdx
+│   ├── Spring Framework/
+│   │   ├── spring-introducao.mdx
+│   │   └── spring-boot-introducao.mdx
+│   ├── Spring Security/
+│   │   └── spring-security-introducao.mdx
+│   ├── REST API/
+│   │   └── rest-api-conceitos.mdx
+│   └── Testes/
+│       └── junit-basico.mdx
+```
 
-   ```sh
-   cd javaistic
-   ```
+## 🚀 Próximos Passos
 
-3. **Install dependencies:**
+### Conteúdo Planejado
 
-   ```sh
-   bun i
-   ```
+#### Conceitos Avançados de POO
 
-4. **Start the development server:**
+- [ ] Polimorfismo
+- [ ] Encapsulamento
+- [ ] Abstração
+- [ ] Interfaces
+- [ ] Classes Abstratas
 
-   ```sh
-   bun run dev
-   ```
+#### Collections Framework Detalhado
 
-## 🤝 Community
+- [ ] ArrayList vs LinkedList
+- [ ] HashSet vs TreeSet
+- [ ] HashMap vs TreeMap
+- [ ] Queue Interface
 
-Join the Javaistic community on [GitHub Discussions](https://github.com/javaistic/javaistic/discussions) to ask questions, share ideas, and showcase your projects.
+#### Spring Framework Avançado
 
-<!--
-For real-time communication, you can also join the [Javaistic Discord Server](https://javaistic.vercel.app/discord).
--->
+- [ ] Dependency Injection
+- [ ] Spring Beans
+- [ ] AOP (Aspect-Oriented Programming)
+- [ ] Spring Data JPA
 
-Please review our [Code of Conduct](CODE_OF_CONDUCT.md) for all community interactions.
+#### Spring Boot Avançado
 
-## Author
+- [ ] Spring Boot Starters
+- [ ] Spring Boot Configuration
+- [ ] Spring Boot Actuator
 
-- Arghya Ghosh [(@uiuxarghya)](https://twitter.com/uiuxarghya)
+#### Spring Security Avançado
 
-## Contributors
+- [ ] Authentication
+- [ ] Authorization
+- [ ] JWT Tokens
+- [ ] OAuth2
 
-[![](https://contrib.rocks/image?repo=javaistic/javaistic)](https://github.com/javaistic/javaistic/graphs/contributors)
+#### Banco de Dados
 
-## 📝 License
+- [ ] JDBC Básico
+- [ ] Spring Data JPA
+- [ ] Hibernate Básico
+- [ ] Spring Data REST
 
-This project uses a **dual license**.
-Please refer to the main [`LICENSE.md`](./LICENSE.md) file for complete details.
+#### Testes Avançados
 
-- Code is licensed under the **GNU AGPL v3**.
-- Documentation and content are licensed under the **CC BY-NC-SA 4.0**.
+- [ ] Spring Test
+- [ ] Mockito
+- [ ] Testes de Integração
 
-## 💖 Acknowledgements
+## 🤝 Contribuição
 
-Special thanks to the following companies for their support in building Javaistic:
+Contribuições são bem-vindas! Se você quiser:
 
-[![Powered by Vercel](.github/img/powered-by-vercel.svg)](https://vercel.com/?utm_source=javaistic&utm_campaign=oss)
-[![Search by Algolia](.github/img/search-by-algolia.svg)](https://algolia.com/?utm_source=javaistic&utm_campaign=oss)
-[![JetBrains](.github/img/jetbrains.svg)](https://jetbrains.com/?utm_source=javaistic&utm_campaign=oss)
-[![Forms by Formspree](.github/img/forms-by-formspree.svg)](https://formspree.io/?utm_source=javaistic&utm_campaign=oss)
+1. **Traduzir conteúdo**: Ajude a traduzir tutoriais para português
+2. **Adicionar exemplos**: Crie exemplos práticos e úteis
+3. **Corrigir erros**: Reporte bugs ou problemas encontrados
+4. **Melhorar documentação**: Sugira melhorias na estrutura
 
-**Made with ❤️ in India by [Arghya Ghosh](https://github.com/uiuxarghya)**
+## 📄 Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE.md](LICENSE.md) para detalhes.
+
+## 🙏 Agradecimentos
+
+- Comunidade Java brasileira
+- Contribuidores do projeto original
+- Todos que ajudaram na tradução e melhoria do conteúdo
+
+---
+
+**Aprenda Java de forma prática e eficiente com Javaistic!** ☕

@@ -1,0 +1,429 @@
+---
+title: Introdução ao Spring Boot
+description: Aprenda sobre Spring Boot - o framework que simplifica o desenvolvimento de aplicações Spring
+---
+
+## Introdução ao Spring Boot
+
+**Spring Boot** é um framework que simplifica o desenvolvimento de aplicações Spring. Ele elimina a necessidade de configuração manual e fornece uma abordagem "convention over configuration" (convenção sobre configuração).
+
+### Por que usar Spring Boot?
+
+1. **Auto-configuração**: Configura automaticamente beans baseado no classpath
+2. **Starters**: Dependências pré-configuradas para diferentes cenários
+3. **Embedded Servers**: Servidores web embutidos (Tomcat, Jetty, Undertow)
+4. **Actuator**: Monitoramento e métricas prontas para uso
+5. **DevTools**: Ferramentas de desenvolvimento para hot reload
+
+### Arquitetura do Spring Boot
+
+```
+Spring Boot Application
+├── Spring Boot Starter
+├── Auto-configuration
+├── Embedded Server
+├── Spring Boot Actuator
+└── Spring Boot DevTools
+```
+
+### Criando uma Aplicação Spring Boot
+
+#### 1. Usando Spring Initializr
+
+Acesse [start.spring.io](https://start.spring.io) e configure:
+
+- **Project**: Maven ou Gradle
+- **Language**: Java
+- **Spring Boot**: Versão mais recente
+- **Packaging**: Jar
+- **Java**: Versão 11 ou superior
+
+#### 2. Dependências Iniciais
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+```
+
+### Classe Principal da Aplicação
+
+```java
+@SpringBootApplication
+public class MinhaAplicacaoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MinhaAplicacaoApplication.class, args);
+    }
+}
+```
+
+A anotação `@SpringBootApplication` é equivalente a:
+
+- `@Configuration`: Marca a classe como fonte de definições de beans
+- `@EnableAutoConfiguration`: Habilita auto-configuração
+- `@ComponentScan`: Habilita scan de componentes
+
+### Starters Principais
+
+#### Spring Boot Starter Web
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+Inclui:
+
+- Spring MVC
+- Tomcat (servidor embutido)
+- Jackson (serialização JSON)
+- Validation
+
+#### Spring Boot Starter Data JPA
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+```
+
+Inclui:
+
+- Spring Data JPA
+- Hibernate
+- H2 (banco em memória)
+
+#### Spring Boot Starter Security
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+Inclui:
+
+- Spring Security
+- Configurações básicas de segurança
+
+### Configuração de Propriedades
+
+#### application.properties
+
+```properties
+# Configurações do servidor
+server.port=8080
+server.servlet.context-path=/api
+
+# Configurações do banco de dados
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# Configurações JPA
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# Configurações de logging
+logging.level.com.exemplo=DEBUG
+logging.level.org.springframework.web=INFO
+```
+
+#### application.yml
+
+```yaml
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.exemplo: DEBUG
+    org.springframework.web: INFO
+```
+
+### Perfis de Configuração
+
+```java
+// application-dev.properties
+spring.datasource.url=jdbc:h2:mem:devdb
+logging.level.com.exemplo=DEBUG
+
+// application-prod.properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/proddb
+logging.level.com.exemplo=WARN
+```
+
+Ativar perfil:
+
+```bash
+java -jar app.jar --spring.profiles.active=prod
+```
+
+### Exemplo de Aplicação Completa
+
+#### Modelo
+
+```java
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    // Construtores, getters, setters...
+}
+```
+
+#### Repositório
+
+```java
+@Repository
+public interface RepositorioUsuario extends JpaRepository<Usuario, Long> {
+
+    Optional<Usuario> findByEmail(String email);
+
+    List<Usuario> findByNomeContainingIgnoreCase(String nome);
+}
+```
+
+#### Serviço
+
+```java
+@Service
+@Transactional
+public class ServicoUsuario {
+
+    private final RepositorioUsuario repositorioUsuario;
+
+    @Autowired
+    public ServicoUsuario(RepositorioUsuario repositorioUsuario) {
+        this.repositorioUsuario = repositorioUsuario;
+    }
+
+    public Usuario criarUsuario(Usuario usuario) {
+        if (repositorioUsuario.findByEmail(usuario.getEmail()).isPresent()) {
+            throw new RuntimeException("Email já cadastrado");
+        }
+        return repositorioUsuario.save(usuario);
+    }
+
+    public List<Usuario> buscarTodos() {
+        return repositorioUsuario.findAll();
+    }
+
+    public Usuario buscarPorId(Long id) {
+        return repositorioUsuario.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    }
+}
+```
+
+#### Controlador
+
+```java
+@RestController
+@RequestMapping("/usuarios")
+@CrossOrigin(origins = "*")
+public class UsuarioController {
+
+    private final ServicoUsuario servicoUsuario;
+
+    @Autowired
+    public UsuarioController(ServicoUsuario servicoUsuario) {
+        this.servicoUsuario = servicoUsuario;
+    }
+
+    @PostMapping
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid Usuario usuario) {
+        Usuario usuarioCriado = servicoUsuario.criarUsuario(usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Usuario>> buscarTodos() {
+        List<Usuario> usuarios = servicoUsuario.buscarTodos();
+        return ResponseEntity.ok(usuarios);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
+        Usuario usuario = servicoUsuario.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizar(@PathVariable Long id,
+                                           @RequestBody Usuario usuario) {
+        // Implementação...
+        return ResponseEntity.ok(usuario);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        // Implementação...
+        return ResponseEntity.noContent().build();
+    }
+}
+```
+
+### Spring Boot Actuator
+
+Adicione a dependência:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+Endpoints disponíveis:
+
+- `/actuator/health`: Status da aplicação
+- `/actuator/info`: Informações da aplicação
+- `/actuator/metrics`: Métricas da aplicação
+- `/actuator/env`: Variáveis de ambiente
+
+### Spring Boot DevTools
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <scope>runtime</scope>
+    <optional>true</optional>
+</dependency>
+```
+
+Recursos:
+
+- Hot reload automático
+- Restart automático quando arquivos mudam
+- Configurações de desenvolvimento
+
+### Testes com Spring Boot
+
+```java
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class ServicoUsuarioTest {
+
+    @Autowired
+    private ServicoUsuario servicoUsuario;
+
+    @Test
+    void deveCriarUsuario() {
+        // Given
+        Usuario usuario = new Usuario(null, "João", "joao@email.com");
+
+        // When
+        Usuario usuarioCriado = servicoUsuario.criarUsuario(usuario);
+
+        // Then
+        assertThat(usuarioCriado.getId()).isNotNull();
+        assertThat(usuarioCriado.getNome()).isEqualTo("João");
+    }
+}
+```
+
+### Testes de Integração
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class UsuarioControllerTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void deveCriarUsuario() {
+        // Given
+        Usuario usuario = new Usuario(null, "João", "joao@email.com");
+
+        // When
+        ResponseEntity<Usuario> response = restTemplate.postForEntity(
+            "/usuarios", usuario, Usuario.class);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getId()).isNotNull();
+    }
+}
+```
+
+### Executando a Aplicação
+
+#### Via IDE
+
+Execute a classe principal com `main` method.
+
+#### Via Maven
+
+```bash
+mvn spring-boot:run
+```
+
+#### Via JAR
+
+```bash
+mvn clean package
+java -jar target/minha-aplicacao-0.0.1-SNAPSHOT.jar
+```
+
+### Vantagens do Spring Boot
+
+1. **Rapidez**: Configuração mínima necessária
+2. **Produtividade**: Menos código boilerplate
+3. **Padronização**: Convenções bem definidas
+4. **Monitoramento**: Actuator integrado
+5. **Flexibilidade**: Configuração customizável
+
+### Conclusão
+
+Spring Boot revolucionou o desenvolvimento Spring ao eliminar a complexidade de configuração. Com sua abordagem "convention over configuration" e starters pré-configurados, você pode focar no desenvolvimento da lógica de negócio em vez de configurações de infraestrutura.

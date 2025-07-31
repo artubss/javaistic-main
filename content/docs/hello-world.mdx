@@ -1,13 +1,13 @@
 ---
 title: Hello World
-description: In this tutorial, you will learn to write "Hello World" program in Java.
+description: Neste tutorial, você aprenderá a escrever o programa "Hello World" em Java.
 ---
 
-A "Hello, World!" is a simple program that outputs `Hello, World!` on the screen. Since it's a very simple program, it's often used to introduce a new programming language to a newbie.
+Um "Hello, World!" é um programa simples que exibe `Hello, World!` na tela. Como é um programa muito simples, é frequentemente usado para introduzir uma nova linguagem de programação para iniciantes.
 
-Let's explore how Java "Hello, World!" program works.
+Vamos explorar como funciona o programa Java "Hello, World!".
 
-## Java "Hello, World!" Program
+## Programa Java "Hello, World!"
 
 ```java title="HelloWorld.java"
 class HelloWorld {
@@ -18,19 +18,19 @@ class HelloWorld {
 
 ```
 
-```bash title="Output"
+```bash title="Saída"
 Hello, World!
 ```
 
-## How Java "Hello, World!" Program Works?
+## Como Funciona o Programa Java "Hello, World!"?
 
-### 1. Your First Program
+### 1. Seu Primeiro Programa
 
-In Java, any line starting with `//` is a comment. Comments are intended for users reading the code to understand the intent and functionality of the program. It is completely ignored by the Java compiler (an application that translates Java program to Java bytecode that computer can execute). To learn more, visit [Java comments](/docs/comments).
+Em Java, qualquer linha que começa com `//` é um comentário. Comentários são destinados aos usuários que leem o código para entender a intenção e funcionalidade do programa. É completamente ignorado pelo compilador Java (uma aplicação que traduz o programa Java para bytecode Java que o computador pode executar). Para saber mais, visite [Comentários Java](/docs/comments).
 
 ### 2. class HelloWorld
 
-In Java, every application begins with a class definition. In the program, HelloWorld is the name of the class, and the class definition is:
+Em Java, toda aplicação começa com uma definição de classe. No programa, HelloWorld é o nome da classe, e a definição da classe é:
 
 ```java
 class HelloWorld {
@@ -39,15 +39,15 @@ class HelloWorld {
 
 ```
 
-For now, just remember that every Java application has a class definition, and the name of the class should match the filename in Java.
+Por enquanto, apenas lembre-se de que toda aplicação Java tem uma definição de classe, e o nome da classe deve corresponder ao nome do arquivo em Java.
 
 ### 3. public static void main(String[] args)
 
-This is the main method. Every application in Java must contain the main method. The Java compiler starts executing the code from the main method.
+Este é o método principal. Toda aplicação em Java deve conter o método main. O compilador Java começa a executar o código a partir do método main.
 
-**How does it work?** Good question. However, we will not discuss it in this article. After all, it's a basic program to introduce Java programming language to a newbie. We will learn the meaning of `public`, `static`, `void`, and how methods work? in later chapters.
+**Como funciona?** Boa pergunta. No entanto, não discutiremos isso neste artigo. Afinal, é um programa básico para introduzir a linguagem de programação Java para iniciantes. Aprenderemos o significado de `public`, `static`, `void`, e como os métodos funcionam? em capítulos posteriores.
 
-For now, just remember that the main function is the entry point of your Java application, and it's mandatory in a Java program. The signature of the main method in Java is:
+Por enquanto, apenas lembre-se de que a função main é o ponto de entrada da sua aplicação Java, e é obrigatória em um programa Java. A assinatura do método main em Java é:
 
 ```java
 public static void main(String[] args) {
@@ -57,26 +57,24 @@ public static void main(String[] args) {
 
 ### 4. System.out.println("Hello, World!");
 
-The code above is a print statement. It prints the text `Hello, World!` to standard output (your screen). The text inside the quotation marks is called String in Java.
+O código acima é uma declaração de impressão. Ele imprime o texto `Hello, World!` na saída padrão (sua tela). O texto dentro das aspas é chamado String em Java.
 
-Notice the print statement is inside the main function, which is inside the class definition.
+Observe que a declaração de impressão está dentro da função main, que está dentro da definição da classe.
 
-## Things to take away
+## Pontos Importantes
 
+- Toda Aplicação Java válida deve ter uma definição de classe (que corresponde ao nome do arquivo)
+- O método main deve estar dentro da definição da classe.
+- O compilador executa os códigos começando da função main.
 
-    - Every valid Java Application must have a class definition (that matches the filename)
-    - The main method must be inside the class definition.
-    - The compiler executes the codes starting from the main function.
-
-
-This is a valid Java program that does nothing.
+Este é um programa Java válido que não faz nada.
 
 ```java
 public class HelloWorld {
     public static void main(String[] args) {
-        // Write your code here
+        // Escreva seu código aqui
     }
 }
 ```
 
-Don't worry if you don't understand the meaning of `class` , `static` , methods, and so on for now. We will discuss it in detail in later chapters.
+Não se preocupe se você não entender o significado de `class`, `static`, métodos, e assim por diante por enquanto. Discutiremos isso em detalhes em capítulos posteriores.

@@ -1,0 +1,406 @@
+---
+title: Herança em Java
+description: Aprenda sobre herança - um dos pilares fundamentais da Programação Orientada a Objetos
+---
+
+## Herança em Java
+
+**Herança** é um dos quatro pilares fundamentais da Programação Orientada a Objetos (POO). Ela permite que uma classe herde características (atributos e métodos) de outra classe, promovendo reutilização de código e estabelecendo relacionamentos hierárquicos.
+
+### Conceitos Fundamentais
+
+- **Classe Pai/Superclasse/Base**: A classe que é herdada
+- **Classe Filha/Subclasse/Derivada**: A classe que herda
+- **Herança Simples**: Java suporta apenas herança simples (uma classe só pode herdar de uma superclasse)
+- **Herança Múltipla**: Não é suportada diretamente, mas pode ser simulada com interfaces
+
+### Sintaxe Básica
+
+```java
+// Classe pai (superclasse)
+public class Animal {
+    protected String nome;
+    protected int idade;
+
+    public Animal(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+
+    public void fazerSom() {
+        System.out.println("Som genérico");
+    }
+
+    public void comer() {
+        System.out.println("Comendo...");
+    }
+}
+
+// Classe filha (subclasse)
+public class Cachorro extends Animal {
+    private String raca;
+
+    public Cachorro(String nome, int idade, String raca) {
+        super(nome, idade); // Chama o construtor da superclasse
+        this.raca = raca;
+    }
+
+    @Override
+    public void fazerSom() {
+        System.out.println("Au au!");
+    }
+
+    public void abanarRabo() {
+        System.out.println("Abanando o rabo...");
+    }
+}
+```
+
+### Palavra-chave `super`
+
+A palavra-chave `super` é usada para acessar membros da superclasse:
+
+```java
+public class Cachorro extends Animal {
+
+    public Cachorro(String nome, int idade, String raca) {
+        super(nome, idade); // Chama construtor da superclasse
+    }
+
+    @Override
+    public void fazerSom() {
+        super.fazerSom(); // Chama método da superclasse
+        System.out.println("Au au!");
+    }
+
+    public void mostrarInfo() {
+        System.out.println("Nome: " + super.nome); // Acesso a atributo da superclasse
+        System.out.println("Idade: " + super.idade);
+    }
+}
+```
+
+### Modificadores de Acesso na Herança
+
+```java
+public class Animal {
+    public String nomePublico;        // Acessível em qualquer lugar
+    protected String nomeProtegido;   // Acessível na mesma classe, subclasses e mesmo pacote
+    String nomePadrao;               // Acessível na mesma classe e mesmo pacote
+    private String nomePrivado;      // Acessível apenas na mesma classe
+}
+
+public class Cachorro extends Animal {
+    public void mostrarNomes() {
+        nomePublico = "Rex";     // OK
+        nomeProtegido = "Rex";   // OK
+        nomePadrao = "Rex";      // OK (se estiver no mesmo pacote)
+        // nomePrivado = "Rex";  // ERRO - não acessível
+    }
+}
+```
+
+### Sobrescrita de Métodos (Override)
+
+```java
+public class Animal {
+    public void fazerSom() {
+        System.out.println("Som genérico");
+    }
+
+    public void comer() {
+        System.out.println("Comendo...");
+    }
+}
+
+public class Cachorro extends Animal {
+    @Override // Anotação recomendada
+    public void fazerSom() {
+        System.out.println("Au au!");
+    }
+
+    // ERRO - não pode reduzir visibilidade
+    // @Override
+    // private void comer() { ... }
+
+    // OK - pode aumentar visibilidade
+    @Override
+    public void comer() {
+        System.out.println("Cachorro comendo...");
+    }
+}
+```
+
+### Construtores na Herança
+
+```java
+public class Animal {
+    private String nome;
+    private int idade;
+
+    public Animal() {
+        System.out.println("Construtor Animal");
+    }
+
+    public Animal(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+        System.out.println("Construtor Animal com parâmetros");
+    }
+}
+
+public class Cachorro extends Animal {
+    private String raca;
+
+    public Cachorro() {
+        super(); // Chama construtor padrão da superclasse
+        System.out.println("Construtor Cachorro");
+    }
+
+    public Cachorro(String nome, int idade, String raca) {
+        super(nome, idade); // Chama construtor com parâmetros
+        this.raca = raca;
+        System.out.println("Construtor Cachorro com parâmetros");
+    }
+}
+```
+
+### Herança Múltipla com Interfaces
+
+```java
+// Interfaces
+public interface Nadador {
+    void nadar();
+}
+
+public interface Corredor {
+    void correr();
+}
+
+// Classe que implementa múltiplas interfaces
+public class Cachorro extends Animal implements Nadador, Corredor {
+
+    @Override
+    public void nadar() {
+        System.out.println("Cachorro nadando...");
+    }
+
+    @Override
+    public void correr() {
+        System.out.println("Cachorro correndo...");
+    }
+}
+```
+
+### Polimorfismo com Herança
+
+```java
+public class TestePolimorfismo {
+    public static void main(String[] args) {
+        // Polimorfismo - referência da superclasse, objeto da subclasse
+        Animal animal1 = new Cachorro("Rex", 3, "Labrador");
+        Animal animal2 = new Gato("Mia", 2);
+
+        // Chama métodos específicos de cada subclasse
+        animal1.fazerSom(); // "Au au!"
+        animal2.fazerSom(); // "Miau!"
+
+        // Array de animais
+        Animal[] animais = {
+            new Cachorro("Rex", 3, "Labrador"),
+            new Gato("Mia", 2),
+            new Cachorro("Buddy", 5, "Golden")
+        };
+
+        // Processamento polimórfico
+        for (Animal animal : animais) {
+            animal.fazerSom();
+        }
+    }
+}
+```
+
+### Classe `Object`
+
+Todas as classes em Java herdam implicitamente da classe `Object`:
+
+```java
+public class MinhaClasse {
+    // Herda implicitamente de Object
+}
+
+// Equivale a:
+public class MinhaClasse extends Object {
+    // Métodos herdados de Object:
+    // toString(), equals(), hashCode(), getClass(), etc.
+}
+```
+
+### Métodos da Classe Object
+
+```java
+public class Pessoa {
+    private String nome;
+    private int idade;
+
+    public Pessoa(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+
+    @Override
+    public String toString() {
+        return "Pessoa{nome='" + nome + "', idade=" + idade + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Pessoa pessoa = (Pessoa) obj;
+        return idade == pessoa.idade && Objects.equals(nome, pessoa.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, idade);
+    }
+}
+```
+
+### Herança vs Composição
+
+**Herança (É-UM)**:
+
+```java
+public class Cachorro extends Animal {
+    // Cachorro É-UM Animal
+}
+```
+
+**Composição (TEM-UM)**:
+
+```java
+public class Cachorro {
+    private Animal animal; // Cachorro TEM-UM Animal
+    private String raca;
+
+    public Cachorro(Animal animal, String raca) {
+        this.animal = animal;
+        this.raca = raca;
+    }
+}
+```
+
+### Exemplo Prático Completo
+
+```java
+// Hierarquia de formas geométricas
+public abstract class Forma {
+    protected String cor;
+
+    public Forma(String cor) {
+        this.cor = cor;
+    }
+
+    public abstract double calcularArea();
+    public abstract double calcularPerimetro();
+
+    public String getCor() {
+        return cor;
+    }
+}
+
+public class Retangulo extends Forma {
+    private double largura;
+    private double altura;
+
+    public Retangulo(String cor, double largura, double altura) {
+        super(cor);
+        this.largura = largura;
+        this.altura = altura;
+    }
+
+    @Override
+    public double calcularArea() {
+        return largura * altura;
+    }
+
+    @Override
+    public double calcularPerimetro() {
+        return 2 * (largura + altura);
+    }
+}
+
+public class Circulo extends Forma {
+    private double raio;
+
+    public Circulo(String cor, double raio) {
+        super(cor);
+        this.raio = raio;
+    }
+
+    @Override
+    public double calcularArea() {
+        return Math.PI * raio * raio;
+    }
+
+    @Override
+    public double calcularPerimetro() {
+        return 2 * Math.PI * raio;
+    }
+}
+
+// Uso
+public class TesteFormas {
+    public static void main(String[] args) {
+        Forma[] formas = {
+            new Retangulo("Vermelho", 5, 3),
+            new Circulo("Azul", 4),
+            new Retangulo("Verde", 2, 8)
+        };
+
+        for (Forma forma : formas) {
+            System.out.println("Forma: " + forma.getClass().getSimpleName());
+            System.out.println("Cor: " + forma.getCor());
+            System.out.println("Área: " + forma.calcularArea());
+            System.out.println("Perímetro: " + forma.calcularPerimetro());
+            System.out.println();
+        }
+    }
+}
+```
+
+### Boas Práticas
+
+1. **Use herança para relacionamentos "É-UM"**:
+
+   ```java
+   public class Cachorro extends Animal { // Cachorro É-UM Animal
+   ```
+
+2. **Evite herança profunda**:
+
+   ```java
+   // Evite: Animal -> Mamifero -> Carnivoro -> Canideo -> Cachorro
+   // Prefira: Animal -> Cachorro
+   ```
+
+3. **Use `final` para prevenir herança quando necessário**:
+
+   ```java
+   public final class String { // Não pode ser herdada
+   ```
+
+4. **Sobrescreva métodos adequadamente**:
+   ```java
+   @Override
+   public boolean equals(Object obj) {
+       // Implementação...
+   }
+   ```
+
+### Conclusão
+
+Herança é um conceito fundamental em POO que permite reutilização de código e estabelece relacionamentos hierárquicos entre classes. Em Java, a herança é simples (uma classe só herda de uma superclasse), mas pode ser combinada com interfaces para simular herança múltipla. Use herança com sabedoria, preferindo composição quando apropriado.

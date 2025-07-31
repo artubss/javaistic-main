@@ -44,13 +44,13 @@ public interface Collection<E> {
     int size();
     boolean isEmpty();
     void clear();
-    
+
     // Operações em massa
     boolean addAll(Collection<? extends E> c);
     boolean removeAll(Collection<?> c);
     boolean retainAll(Collection<?> c);
     boolean containsAll(Collection<?> c);
-    
+
     // Iteração
     Iterator<E> iterator();
 }
@@ -67,11 +67,11 @@ public interface List<E> extends Collection<E> {
     E set(int index, E element);
     void add(int index, E element);
     E remove(int index);
-    
+
     // Busca
     int indexOf(Object o);
     int lastIndexOf(Object o);
-    
+
     // Sublista
     List<E> subList(int fromIndex, int toIndex);
 }
@@ -103,7 +103,7 @@ public interface Map<K, V> {
     int size();
     boolean isEmpty();
     void clear();
-    
+
     // Visualizações
     Set<K> keySet();
     Collection<V> values();
@@ -116,6 +116,7 @@ public interface Map<K, V> {
 #### List Implementations
 
 **ArrayList**:
+
 ```java
 List<String> nomes = new ArrayList<>();
 nomes.add("Ana");
@@ -127,6 +128,7 @@ String nome = nomes.get(1); // "João"
 ```
 
 **LinkedList**:
+
 ```java
 List<String> nomes = new LinkedList<>();
 nomes.add("Ana");
@@ -139,6 +141,7 @@ nomes.add(1, "Maria"); // Insere no meio
 #### Set Implementations
 
 **HashSet**:
+
 ```java
 Set<String> nomes = new HashSet<>();
 nomes.add("Ana");
@@ -152,6 +155,7 @@ for (String nome : nomes) {
 ```
 
 **TreeSet**:
+
 ```java
 Set<String> nomes = new TreeSet<>();
 nomes.add("João");
@@ -167,6 +171,7 @@ for (String nome : nomes) {
 #### Map Implementations
 
 **HashMap**:
+
 ```java
 Map<String, Integer> idades = new HashMap<>();
 idades.put("Ana", 25);
@@ -178,6 +183,7 @@ Integer idade = idades.get("Ana"); // 25
 ```
 
 **TreeMap**:
+
 ```java
 Map<String, Integer> idades = new TreeMap<>();
 idades.put("João", 30);
@@ -244,12 +250,12 @@ String max = Collections.max(nomes);
 class Pessoa {
     private String nome;
     private int idade;
-    
+
     public Pessoa(String nome, int idade) {
         this.nome = nome;
         this.idade = idade;
     }
-    
+
     // getters...
 }
 
@@ -282,6 +288,7 @@ Map<String, Integer> idades = new ConcurrentHashMap<>();
 ### Boas Práticas
 
 1. **Escolha a implementação correta**:
+
    - `ArrayList`: Acesso aleatório frequente
    - `LinkedList`: Inserções/remoções frequentes
    - `HashSet`: Conjuntos sem ordem específica
@@ -290,17 +297,19 @@ Map<String, Integer> idades = new ConcurrentHashMap<>();
    - `TreeMap`: Mapeamentos ordenados
 
 2. **Use interfaces como tipos**:
+
    ```java
    List<String> nomes = new ArrayList<>(); // Não ArrayList<String>
    ```
 
 3. **Evite modificações durante iteração**:
+
    ```java
    // ERRADO
    for (String nome : nomes) {
        nomes.remove(nome); // ConcurrentModificationException
    }
-   
+
    // CORRETO
    Iterator<String> iterator = nomes.iterator();
    while (iterator.hasNext()) {
@@ -313,4 +322,4 @@ Map<String, Integer> idades = new ConcurrentHashMap<>();
 
 ### Conclusão
 
-O Collections Framework é uma parte fundamental do Java. Entender suas interfaces, implementações e algoritmos é essencial para escrever código eficiente e elegante. Escolha a implementação correta baseada nos seus requisitos de performance e funcionalidade. 
+O Collections Framework é uma parte fundamental do Java. Entender suas interfaces, implementações e algoritmos é essencial para escrever código eficiente e elegante. Escolha a implementação correta baseada nos seus requisitos de performance e funcionalidade.

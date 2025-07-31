@@ -1,0 +1,446 @@
+---
+title: Conceitos de REST API
+description: Aprenda sobre REST API - arquitetura para desenvolvimento de APIs web
+---
+
+## Conceitos de REST API
+
+**REST** (Representational State Transfer) é um estilo de arquitetura para sistemas distribuídos, especialmente aplicações web. REST define um conjunto de princípios e convenções para criar APIs web escaláveis e interoperáveis.
+
+### Princípios do REST
+
+#### 1. Stateless (Sem Estado)
+
+Cada requisição deve conter todas as informações necessárias para ser processada:
+
+```java
+// ❌ ERRADO - Depende de estado do servidor
+@GetMapping("/usuario")
+public Usuario getUsuario() {
+    return usuarioLogado; // Depende de sessão
+}
+
+// ✅ CORRETO - Stateless
+@GetMapping("/usuarios/{id}")
+public Usuario getUsuario(@PathVariable Long id) {
+    return servicoUsuario.buscarPorId(id);
+}
+```
+
+#### 2. Client-Server (Cliente-Servidor)
+
+Separação clara entre cliente e servidor:
+
+```java
+// Servidor (API)
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> getUsuario(@PathVariable Long id) {
+        Usuario usuario = servicoUsuario.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
+    }
+}
+
+// Cliente (JavaScript, Mobile App, etc.)
+fetch('/api/usuarios/123')
+    .then(response => response.json())
+    .then(usuario => console.log(usuario));
+```
+
+#### 3. Cacheable (Cacheável)
+
+Respostas devem ser cacheáveis quando apropriado:
+
+```java
+@GetMapping("/usuarios/{id}")
+@Cacheable("usuarios")
+public ResponseEntity<Usuario> getUsuario(@PathVariable Long id) {
+    Usuario usuario = servicoUsuario.buscarPorId(id);
+    return ResponseEntity.ok()
+        .cacheControl(CacheControl.maxAge(Duration.ofMinutes(10)))
+        .body(usuario);
+}
+```
+
+#### 4. Uniform Interface (Interface Uniforme)
+
+Interface consistente para todos os recursos:
+
+```java
+// Recursos identificados por URIs
+GET    /api/usuarios          // Listar usuários
+GET    /api/usuarios/{id}     // Buscar usuário específico
+POST   /api/usuarios          // Criar usuário
+PUT    /api/usuarios/{id}     // Atualizar usuário completo
+PATCH  /api/usuarios/{id}     // Atualizar usuário parcialmente
+DELETE /api/usuarios/{id}     // Deletar usuário
+```
+
+#### 5. Layered System (Sistema em Camadas)
+
+Sistema pode ter múltiplas camadas:
+
+```
+Cliente
+  ↓
+Load Balancer
+  ↓
+API Gateway
+  ↓
+Serviço de Autenticação
+  ↓
+Serviço de Usuários
+  ↓
+Banco de Dados
+```
+
+### Métodos HTTP
+
+#### GET - Recuperar Dados
+
+```java
+@GetMapping("/usuarios")
+public ResponseEntity<List<Usuario>> listarUsuarios() {
+    List<Usuario> usuarios = servicoUsuario.listarTodos();
+    return ResponseEntity.ok(usuarios);
+}
+
+@GetMapping("/usuarios/{id}")
+public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
+    Usuario usuario = servicoUsuario.buscarPorId(id);
+    return ResponseEntity.ok(usuario);
+}
+```
+
+#### POST - Criar Recursos
+
+```java
+@PostMapping("/usuarios")
+public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid Usuario usuario) {
+    Usuario usuarioCriado = servicoUsuario.criar(usuario);
+    return ResponseEntity.status(HttpStatus.CREATED)
+        .body(usuarioCriado);
+}
+```
+
+#### PUT - Atualizar Recurso Completo
+
+```java
+@PutMapping("/usuarios/{id}")
+public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id,
+                                               @RequestBody @Valid Usuario usuario) {
+    Usuario usuarioAtualizado = servicoUsuario.atualizar(id, usuario);
+    return ResponseEntity.ok(usuarioAtualizado);
+}
+```
+
+#### PATCH - Atualizar Recurso Parcialmente
+
+```java
+@PatchMapping("/usuarios/{id}")
+public ResponseEntity<Usuario> atualizarParcialmente(@PathVariable Long id,
+                                                    @RequestBody Map<String, Object> updates) {
+    Usuario usuarioAtualizado = servicoUsuario.atualizarParcialmente(id, updates);
+    return ResponseEntity.ok(usuarioAtualizado);
+}
+```
+
+#### DELETE - Remover Recursos
+
+```java
+@DeleteMapping("/usuarios/{id}")
+public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
+    servicoUsuario.deletar(id);
+    return ResponseEntity.noContent().build();
+}
+```
+
+### Códigos de Status HTTP
+
+#### 2xx - Sucesso
+
+```java
+@PostMapping("/usuarios")
+public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+    Usuario criado = servicoUsuario.criar(usuario);
+    return ResponseEntity.status(HttpStatus.CREATED) // 201
+        .body(criado);
+}
+
+@GetMapping("/usuarios/{id}")
+public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
+    Usuario usuario = servicoUsuario.buscarPorId(id);
+    return ResponseEntity.ok(usuario); // 200
+}
+```
+
+#### 4xx - Erro do Cliente
+
+```java
+@GetMapping("/usuarios/{id}")
+public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
+    try {
+        Usuario usuario = servicoUsuario.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
+    } catch (UsuarioNaoEncontradoException e) {
+        return ResponseEntity.notFound().build(); // 404
+    }
+}
+
+@PostMapping("/usuarios")
+public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid Usuario usuario) {
+    if (servicoUsuario.emailExiste(usuario.getEmail())) {
+        return ResponseEntity.badRequest().build(); // 400
+    }
+    // ...
+}
+```
+
+#### 5xx - Erro do Servidor
+
+```java
+@GetMapping("/usuarios")
+public ResponseEntity<List<Usuario>> listarUsuarios() {
+    try {
+        List<Usuario> usuarios = servicoUsuario.listarTodos();
+        return ResponseEntity.ok(usuarios);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500
+    }
+}
+```
+
+### Estrutura de Resposta
+
+#### Resposta Padrão
+
+```java
+public class RespostaPadrao<T> {
+    private boolean sucesso;
+    private String mensagem;
+    private T dados;
+    private LocalDateTime timestamp;
+
+    // Construtores, getters, setters...
+}
+
+@GetMapping("/usuarios/{id}")
+public ResponseEntity<RespostaPadrao<Usuario>> buscarUsuario(@PathVariable Long id) {
+    try {
+        Usuario usuario = servicoUsuario.buscarPorId(id);
+        RespostaPadrao<Usuario> resposta = new RespostaPadrao<>(
+            true, "Usuário encontrado", usuario, LocalDateTime.now());
+        return ResponseEntity.ok(resposta);
+    } catch (UsuarioNaoEncontradoException e) {
+        RespostaPadrao<Usuario> resposta = new RespostaPadrao<>(
+            false, "Usuário não encontrado", null, LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
+    }
+}
+```
+
+#### Paginação
+
+```java
+@GetMapping("/usuarios")
+public ResponseEntity<Page<Usuario>> listarUsuarios(
+        @RequestParam(defaultValue = "0") int pagina,
+        @RequestParam(defaultValue = "10") int tamanho,
+        @RequestParam(defaultValue = "id") String ordenacao) {
+
+    Pageable pageable = PageRequest.of(pagina, tamanho,
+        Sort.by(ordenacao));
+    Page<Usuario> usuarios = servicoUsuario.listarPaginado(pageable);
+
+    return ResponseEntity.ok(usuarios);
+}
+```
+
+### Versionamento de API
+
+#### Versionamento por URL
+
+```java
+@RestController
+@RequestMapping("/api/v1/usuarios")
+public class UsuarioControllerV1 {
+    // Implementação v1
+}
+
+@RestController
+@RequestMapping("/api/v2/usuarios")
+public class UsuarioControllerV2 {
+    // Implementação v2
+}
+```
+
+#### Versionamento por Header
+
+```java
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarUsuarios(
+            @RequestHeader(value = "API-Version", defaultValue = "1") String version) {
+
+        if ("2".equals(version)) {
+            return ResponseEntity.ok(servicoUsuario.listarV2());
+        }
+        return ResponseEntity.ok(servicoUsuario.listarV1());
+    }
+}
+```
+
+### Documentação com Swagger/OpenAPI
+
+```java
+@Configuration
+@EnableOpenApi
+public class SwaggerConfig {
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("API de Usuários")
+                .version("1.0")
+                .description("API REST para gerenciamento de usuários"));
+    }
+}
+
+@RestController
+@RequestMapping("/api/usuarios")
+@Tag(name = "Usuários", description = "Operações relacionadas a usuários")
+public class UsuarioController {
+
+    @Operation(summary = "Listar usuários", description = "Retorna lista de todos os usuários")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuários encontrados"),
+        @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+    })
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        // Implementação...
+    }
+}
+```
+
+### Validação e Tratamento de Erros
+
+```java
+@RestControllerAdvice
+public class TratamentoErroController {
+
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    public ResponseEntity<ErroResposta> handleUsuarioNaoEncontrado(
+            UsuarioNaoEncontradoException e) {
+        ErroResposta erro = new ErroResposta(
+            "USUARIO_NAO_ENCONTRADO",
+            e.getMessage(),
+            LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErroResposta> handleValidacao(
+            MethodArgumentNotValidException e) {
+        List<String> erros = e.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(FieldError::getDefaultMessage)
+            .collect(Collectors.toList());
+
+        ErroResposta erro = new ErroResposta(
+            "VALIDACAO_FALHOU",
+            "Erros de validação",
+            LocalDateTime.now());
+        erro.setDetalhes(erros);
+
+        return ResponseEntity.badRequest().body(erro);
+    }
+}
+```
+
+### Testes de API
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class UsuarioControllerTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void deveCriarUsuario() {
+        // Given
+        Usuario usuario = new Usuario(null, "João", "joao@email.com");
+
+        // When
+        ResponseEntity<Usuario> response = restTemplate.postForEntity(
+            "/api/usuarios", usuario, Usuario.class);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getId()).isNotNull();
+    }
+
+    @Test
+    void deveRetornar404QuandoUsuarioNaoExiste() {
+        // When
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/api/usuarios/999", String.class);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+}
+```
+
+### Boas Práticas
+
+1. **Use substantivos para recursos**:
+
+   ```java
+   // ✅ CORRETO
+   /api/usuarios
+   /api/produtos
+   /api/pedidos
+
+   // ❌ ERRADO
+   /api/getUsuarios
+   /api/createUsuario
+   ```
+
+2. **Use plural para recursos**:
+
+   ```java
+   // ✅ CORRETO
+   /api/usuarios
+   /api/produtos
+
+   // ❌ ERRADO
+   /api/usuario
+   /api/produto
+   ```
+
+3. **Use hierarquia para relacionamentos**:
+
+   ```java
+   /api/usuarios/{id}/pedidos
+   /api/usuarios/{id}/pedidos/{pedidoId}/itens
+   ```
+
+4. **Use query parameters para filtros**:
+   ```java
+   /api/usuarios?ativo=true&cidade=São Paulo
+   /api/produtos?categoria=eletronicos&preco_min=100
+   ```
+
+### Conclusão
+
+REST API é uma arquitetura poderosa para criar APIs web escaláveis e interoperáveis. Seguindo os princípios REST e as boas práticas, você pode criar APIs que são fáceis de usar, manter e integrar com diferentes sistemas.

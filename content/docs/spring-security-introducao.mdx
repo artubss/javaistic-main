@@ -1,0 +1,484 @@
+---
+title: Introdução ao Spring Security
+description: Aprenda sobre Spring Security - o framework de segurança padrão para aplicações Spring
+---
+
+## Introdução ao Spring Security
+
+**Spring Security** é o framework de segurança padrão para aplicações Spring. Ele fornece autenticação, autorização e proteção contra ataques comuns como CSRF, XSS e SQL Injection.
+
+### Por que usar Spring Security?
+
+1. **Segurança Completa**: Autenticação, autorização e proteção contra ataques
+2. **Integração Perfeita**: Funciona perfeitamente com Spring Boot
+3. **Flexibilidade**: Configurável para diferentes requisitos de segurança
+4. **Padrões de Segurança**: Implementa padrões de segurança comprovados
+5. **Comunidade Ativa**: Suporte da comunidade Spring
+
+### Arquitetura do Spring Security
+
+```
+Spring Security
+├── Authentication (Autenticação)
+├── Authorization (Autorização)
+├── Session Management
+├── CSRF Protection
+├── XSS Protection
+└── Security Headers
+```
+
+### Configuração Básica
+
+#### 1. Dependência Maven
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+#### 2. Configuração Mínima
+
+```java
+@Configuration
+@EnableWebSecurity
+public class ConfiguracaoSeguranca {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/public/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .permitAll()
+            );
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+```
+
+### Autenticação
+
+#### 1. Autenticação em Memória
+
+```java
+@Configuration
+@EnableWebSecurity
+public class ConfiguracaoSeguranca {
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails usuario = User.builder()
+            .username("admin")
+            .password(passwordEncoder().encode("senha123"))
+            .roles("ADMIN")
+            .build();
+
+        return new InMemoryUserDetailsManager(usuario);
+    }
+}
+```
+
+#### 2. Autenticação com Banco de Dados
+
+```java
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "usuario_roles",
+                    joinColumns = @JoinColumn(name = "usuario_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
+
+    // Construtores, getters, setters...
+}
+
+@Service
+public class ServicoUsuario implements UserDetailsService {
+
+    @Autowired
+    private RepositorioUsuario repositorioUsuario;
+
+    @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+
+        Usuario usuario = repositorioUsuario.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        return User.builder()
+            .username(usuario.getUsername())
+            .password(usuario.getPassword())
+            .roles(usuario.getRoles().toArray(new String[0]))
+            .build();
+    }
+}
+```
+
+#### 3. Autenticação JWT
+
+```java
+@Component
+public class JwtTokenProvider {
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.expiration}")
+    private int jwtExpiration;
+
+    public String generateToken(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpiration);
+
+        return Jwts.builder()
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(now)
+            .setExpiration(expiryDate)
+            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .compact();
+    }
+
+    public String getUsernameFromToken(String token) {
+        Claims claims = Jwts.parser()
+            .setSigningKey(jwtSecret)
+            .parseClaimsJws(token)
+            .getBody();
+
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+}
+```
+
+### Autorização
+
+#### 1. Autorização Baseada em Roles
+
+```java
+@RestController
+@RequestMapping("/api")
+public class UsuarioController {
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> areaAdmin() {
+        return ResponseEntity.ok("Área administrativa");
+    }
+
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> areaUsuario() {
+        return ResponseEntity.ok("Área do usuário");
+    }
+
+    @GetMapping("/public")
+    public ResponseEntity<String> areaPublica() {
+        return ResponseEntity.ok("Área pública");
+    }
+}
+```
+
+#### 2. Autorização Baseada em Métodos
+
+```java
+@Service
+public class ServicoUsuario {
+
+    @PreAuthorize("hasRole('ADMIN') or #usuario.username == authentication.name")
+    public Usuario atualizarUsuario(Usuario usuario) {
+        // Lógica de atualização
+        return usuario;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deletarUsuario(Long id) {
+        // Lógica de exclusão
+    }
+}
+```
+
+### Configuração de Segurança Avançada
+
+```java
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class ConfiguracaoSeguranca {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/user/**").hasRole("USER")
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .addFilterBefore(jwtAuthenticationFilter(),
+                           UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint())
+            );
+
+        return http.build();
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint jwtAuthenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
+    }
+}
+```
+
+### Filtros Customizados
+
+```java
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  FilterChain filterChain)
+            throws ServletException, IOException {
+
+        try {
+            String jwt = getJwtFromRequest(request);
+
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                String username = jwtTokenProvider.getUsernameFromToken(jwt);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+                UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (Exception ex) {
+            logger.error("Não foi possível configurar autenticação do usuário", ex);
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
+    private String getJwtFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+}
+```
+
+### Controle de Sessão
+
+```java
+@Configuration
+@EnableWebSecurity
+public class ConfiguracaoSeguranca {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .sessionManagement(session -> session
+                .maximumSessions(1) // Máximo 1 sessão por usuário
+                .expiredUrl("/login?expired")
+                .and()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .invalidSessionUrl("/login?invalid")
+            );
+
+        return http.build();
+    }
+}
+```
+
+### Proteção CSRF
+
+```java
+@Configuration
+@EnableWebSecurity
+public class ConfiguracaoSeguranca {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**") // Ignora APIs
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            );
+
+        return http.build();
+    }
+}
+```
+
+### Headers de Segurança
+
+```java
+@Configuration
+@EnableWebSecurity
+public class ConfiguracaoSeguranca {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .headers(headers -> headers
+                .frameOptions().deny() // Protege contra clickjacking
+                .contentTypeOptions() // Protege contra MIME sniffing
+                .httpStrictTransportSecurity(hsts -> hsts
+                    .maxAgeInSeconds(31536000)
+                    .includeSubdomains(true)
+                )
+            );
+
+        return http.build();
+    }
+}
+```
+
+### Testes de Segurança
+
+```java
+@SpringBootTest
+@AutoConfigureTestDatabase
+class SegurancaTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void devePermitirAcessoPublico() {
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/api/public/teste", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void deveNegarAcessoNaoAutenticado() {
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/api/admin/teste", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void devePermitirAcessoAdmin() {
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/api/admin/teste", String.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+}
+```
+
+### Configuração de Propriedades
+
+```properties
+# JWT Configuration
+jwt.secret=minhaChaveSecretaMuitoLongaEComplexa
+jwt.expiration=86400000
+
+# Security Configuration
+spring.security.user.name=admin
+spring.security.user.password=admin
+spring.security.user.roles=ADMIN
+
+# Session Configuration
+server.servlet.session.timeout=30m
+```
+
+### Boas Práticas
+
+1. **Use HTTPS em produção**:
+
+   ```java
+   @Bean
+   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+       http.requiresChannel(channel -> channel.anyRequest().requiresSecure());
+       return http.build();
+   }
+   ```
+
+2. **Valide entradas do usuário**:
+
+   ```java
+   @Valid
+   @RequestBody Usuario usuario
+   ```
+
+3. **Use senhas fortes**:
+
+   ```java
+   @Bean
+   public PasswordEncoder passwordEncoder() {
+       return new BCryptPasswordEncoder(12); // Strength 12
+   }
+   ```
+
+4. **Log de eventos de segurança**:
+   ```java
+   @EventListener
+   public void handleAuthenticationSuccess(AuthenticationSuccessEvent event) {
+       logger.info("Login bem-sucedido: " + event.getAuthentication().getName());
+   }
+   ```
+
+### Conclusão
+
+Spring Security fornece uma solução completa de segurança para aplicações Spring. Com sua configuração flexível e recursos robustos, você pode implementar autenticação, autorização e proteção contra ataques de forma eficiente e segura.

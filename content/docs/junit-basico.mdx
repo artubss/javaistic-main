@@ -1,0 +1,504 @@
+---
+title: JUnit Básico
+description: Aprenda sobre JUnit - o framework de testes padrão para Java
+---
+
+## JUnit Básico
+
+**JUnit** é o framework de testes padrão para Java. Ele fornece anotações e assertivas para escrever e executar testes unitários de forma eficiente e organizada.
+
+### Por que usar JUnit?
+
+1. **Padrão da Indústria**: Framework de testes mais popular para Java
+2. **Fácil de Usar**: Sintaxe simples e intuitiva
+3. **Integração**: Funciona perfeitamente com IDEs e ferramentas de build
+4. **Comunidade Ativa**: Grande comunidade e documentação
+5. **Extensível**: Suporte a extensões e plugins
+
+### Configuração Básica
+
+#### 1. Dependência Maven
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.9.2</version>
+    <scope>test</scope>
+</dependency>
+```
+
+#### 2. Estrutura de Testes
+
+```java
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CalculadoraTest {
+
+    private Calculadora calculadora;
+
+    @BeforeEach
+    void setUp() {
+        calculadora = new Calculadora();
+    }
+
+    @Test
+    void deveSomarDoisNumeros() {
+        // Given (Arrange)
+        int a = 5;
+        int b = 3;
+
+        // When (Act)
+        int resultado = calculadora.somar(a, b);
+
+        // Then (Assert)
+        assertEquals(8, resultado);
+    }
+
+    @AfterEach
+    void tearDown() {
+        calculadora = null;
+    }
+}
+```
+
+### Anotações Principais
+
+#### @Test
+
+```java
+@Test
+void deveMultiplicarDoisNumeros() {
+    assertEquals(15, calculadora.multiplicar(5, 3));
+}
+
+@Test
+void deveDividirDoisNumeros() {
+    assertEquals(2.5, calculadora.dividir(5, 2));
+}
+```
+
+#### @BeforeEach e @AfterEach
+
+```java
+public class UsuarioServiceTest {
+
+    private UsuarioService usuarioService;
+    private List<Usuario> usuarios;
+
+    @BeforeEach
+    void setUp() {
+        usuarioService = new UsuarioService();
+        usuarios = Arrays.asList(
+            new Usuario("João", "joao@email.com"),
+            new Usuario("Maria", "maria@email.com")
+        );
+    }
+
+    @AfterEach
+    void tearDown() {
+        usuarioService.limpar();
+        usuarios.clear();
+    }
+
+    @Test
+    void deveAdicionarUsuario() {
+        Usuario usuario = new Usuario("Ana", "ana@email.com");
+        usuarioService.adicionar(usuario);
+
+        assertTrue(usuarioService.contem(usuario));
+    }
+}
+```
+
+#### @BeforeAll e @AfterAll
+
+```java
+public class DatabaseTest {
+
+    private static Connection connection;
+
+    @BeforeAll
+    static void setUpDatabase() {
+        connection = DatabaseConnection.getConnection();
+    }
+
+    @AfterAll
+    static void tearDownDatabase() {
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
+    @Test
+    void deveConectarComBanco() {
+        assertNotNull(connection);
+        assertFalse(connection.isClosed());
+    }
+}
+```
+
+### Assertivas
+
+#### Assertivas Básicas
+
+```java
+@Test
+void testarAssertivasBasicas() {
+    String nome = "João";
+    int idade = 25;
+    boolean ativo = true;
+
+    // Verificações de igualdade
+    assertEquals("João", nome);
+    assertEquals(25, idade);
+
+    // Verificações booleanas
+    assertTrue(ativo);
+    assertFalse(!ativo);
+
+    // Verificações de nulo
+    assertNotNull(nome);
+    assertNull(null);
+
+    // Verificações de arrays
+    int[] numeros = {1, 2, 3};
+    assertArrayEquals(new int[]{1, 2, 3}, numeros);
+}
+```
+
+#### Assertivas com Mensagens
+
+```java
+@Test
+void deveCalcularAreaDoRetangulo() {
+    Retangulo retangulo = new Retangulo(5, 3);
+    double area = retangulo.calcularArea();
+
+    assertEquals(15.0, area, 0.001,
+        "A área do retângulo 5x3 deve ser 15");
+}
+
+@Test
+void deveValidarIdade() {
+    Pessoa pessoa = new Pessoa("João", 25);
+
+    assertTrue(pessoa.getIdade() >= 18,
+        "Pessoa deve ser maior de idade");
+}
+```
+
+#### Assertivas de Exceções
+
+```java
+@Test
+void deveLancarExcecaoAoDividirPorZero() {
+    assertThrows(ArithmeticException.class, () -> {
+        calculadora.dividir(10, 0);
+    });
+}
+
+@Test
+void deveLancarExcecaoComMensagem() {
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        calculadora.raizQuadrada(-1);
+    });
+
+    assertTrue(exception.getMessage().contains("número negativo"));
+}
+```
+
+### Testes Parametrizados
+
+```java
+@ParameterizedTest
+@ValueSource(ints = {1, 2, 3, 4, 5})
+void deveCalcularQuadrado(int numero) {
+    int resultado = calculadora.quadrado(numero);
+    assertEquals(numero * numero, resultado);
+}
+
+@ParameterizedTest
+@CsvSource({
+    "2, 3, 5",
+    "0, 5, 5",
+    "-1, 1, 0"
+})
+void deveSomarNumeros(int a, int b, int esperado) {
+    int resultado = calculadora.somar(a, b);
+    assertEquals(esperado, resultado);
+}
+
+@ParameterizedTest
+@MethodSource("fornecerDadosMultiplicacao")
+void deveMultiplicarNumeros(int a, int b, int esperado) {
+    int resultado = calculadora.multiplicar(a, b);
+    assertEquals(esperado, resultado);
+}
+
+static Stream<Arguments> fornecerDadosMultiplicacao() {
+    return Stream.of(
+        Arguments.of(2, 3, 6),
+        Arguments.of(0, 5, 0),
+        Arguments.of(-2, 3, -6)
+    );
+}
+```
+
+### Testes de Performance
+
+```java
+@Test
+@Timeout(value = 1, unit = TimeUnit.SECONDS)
+void deveExecutarRapidamente() {
+    // Teste que deve executar em menos de 1 segundo
+    calculadora.fatorial(10);
+}
+
+@Test
+@RepeatedTest(5)
+void deveSerConsistente() {
+    int resultado = calculadora.somar(2, 3);
+    assertEquals(5, resultado);
+}
+```
+
+### Testes com Mockito
+
+```java
+@ExtendWith(MockitoExtension.class)
+class UsuarioServiceTest {
+
+    @Mock
+    private UsuarioRepository repository;
+
+    @InjectMocks
+    private UsuarioService service;
+
+    @Test
+    void deveBuscarUsuarioPorId() {
+        // Given
+        Long id = 1L;
+        Usuario usuario = new Usuario("João", "joao@email.com");
+        when(repository.findById(id)).thenReturn(Optional.of(usuario));
+
+        // When
+        Optional<Usuario> resultado = service.buscarPorId(id);
+
+        // Then
+        assertTrue(resultado.isPresent());
+        assertEquals("João", resultado.get().getNome());
+        verify(repository).findById(id);
+    }
+
+    @Test
+    void deveSalvarUsuario() {
+        // Given
+        Usuario usuario = new Usuario("Maria", "maria@email.com");
+        when(repository.save(usuario)).thenReturn(usuario);
+
+        // When
+        Usuario salvo = service.salvar(usuario);
+
+        // Then
+        assertNotNull(salvo);
+        verify(repository).save(usuario);
+    }
+}
+```
+
+### Testes de Integração
+
+```java
+@SpringBootTest
+@Transactional
+class UsuarioRepositoryTest {
+
+    @Autowired
+    private UsuarioRepository repository;
+
+    @Test
+    void deveSalvarEbuscarUsuario() {
+        // Given
+        Usuario usuario = new Usuario("João", "joao@email.com");
+
+        // When
+        Usuario salvo = repository.save(usuario);
+        Optional<Usuario> encontrado = repository.findById(salvo.getId());
+
+        // Then
+        assertTrue(encontrado.isPresent());
+        assertEquals("João", encontrado.get().getNome());
+    }
+
+    @Test
+    void deveBuscarPorEmail() {
+        // Given
+        Usuario usuario = new Usuario("Maria", "maria@email.com");
+        repository.save(usuario);
+
+        // When
+        Optional<Usuario> encontrado = repository.findByEmail("maria@email.com");
+
+        // Then
+        assertTrue(encontrado.isPresent());
+        assertEquals("Maria", encontrado.get().getNome());
+    }
+}
+```
+
+### Testes de API
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class UsuarioControllerTest {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    void deveCriarUsuario() {
+        // Given
+        Usuario usuario = new Usuario("João", "joao@email.com");
+
+        // When
+        ResponseEntity<Usuario> response = restTemplate.postForEntity(
+            "/api/usuarios", usuario, Usuario.class);
+
+        // Then
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody().getId());
+    }
+
+    @Test
+    void deveRetornar404QuandoUsuarioNaoExiste() {
+        // When
+        ResponseEntity<String> response = restTemplate.getForEntity(
+            "/api/usuarios/999", String.class);
+
+        // Then
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+}
+```
+
+### Organização de Testes
+
+#### Testes em Grupos
+
+```java
+@Tag("unit")
+class CalculadoraUnitTest {
+    // Testes unitários
+}
+
+@Tag("integration")
+class UsuarioIntegrationTest {
+    // Testes de integração
+}
+
+@Tag("slow")
+class PerformanceTest {
+    // Testes de performance
+}
+```
+
+#### Executar Testes por Tag
+
+```bash
+# Executar apenas testes unitários
+mvn test -Dgroups="unit"
+
+# Executar testes de integração
+mvn test -Dgroups="integration"
+
+# Excluir testes lentos
+mvn test -DexcludedGroups="slow"
+```
+
+### Configuração de Testes
+
+```java
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ConfiguracaoTest {
+
+    @BeforeAll
+    void configurarTestes() {
+        // Configuração global
+    }
+
+    @Test
+    void testeComConfiguracao() {
+        // Teste
+    }
+}
+```
+
+### Relatórios de Testes
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>3.0.0</version>
+    <configuration>
+        <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+    </configuration>
+</plugin>
+```
+
+### Boas Práticas
+
+1. **Nomes descritivos para testes**:
+
+   ```java
+   @Test
+   void deveRetornarUsuarioQuandoIdExiste() { }
+
+   @Test
+   void deveLancarExcecaoQuandoIdNaoExiste() { }
+   ```
+
+2. **Use o padrão AAA (Arrange, Act, Assert)**:
+
+   ```java
+   @Test
+   void deveSomarDoisNumeros() {
+       // Arrange (Given)
+       int a = 5;
+       int b = 3;
+
+       // Act (When)
+       int resultado = calculadora.somar(a, b);
+
+       // Assert (Then)
+       assertEquals(8, resultado);
+   }
+   ```
+
+3. **Teste um comportamento por método**:
+
+   ```java
+   @Test
+   void deveValidarEmailValido() { }
+
+   @Test
+   void deveRejeitarEmailInvalido() { }
+   ```
+
+4. **Use dados de teste realistas**:
+   ```java
+   @Test
+   void deveCalcularSalarioComBonus() {
+       Funcionario funcionario = new Funcionario("João", 5000.0);
+       double salarioComBonus = funcionario.calcularSalarioComBonus(0.1);
+       assertEquals(5500.0, salarioComBonus, 0.01);
+   }
+   ```
+
+### Conclusão
+
+JUnit é uma ferramenta essencial para desenvolvimento Java. Com suas anotações, assertivas e recursos avançados, você pode escrever testes eficientes e organizados que garantem a qualidade do seu código.
