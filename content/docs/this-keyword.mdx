@@ -57,7 +57,7 @@ public class MinhaClasse {
 ```java
 public class Main {
     int idade;
-    
+
     Main(int idade) {
         idade = idade; // Sem `this`, então não há atribuição à variável de instância
     }
@@ -138,68 +138,68 @@ public class Pessoa {
     private String nome;
     private int idade;
     private String email;
-    
+
     // Construtor principal
     public Pessoa(String nome, int idade, String email) {
         this.nome = nome;
         this.idade = idade;
         this.email = email;
     }
-    
+
     // Construtor sobrecarregado
     public Pessoa(String nome, int idade) {
         this(nome, idade, "sem email"); // Chama o construtor principal
     }
-    
+
     // Construtor padrão
     public Pessoa() {
         this("Sem nome", 0, "sem email"); // Chama o construtor principal
     }
-    
+
     // Getters
     public String getNome() {
         return this.nome;
     }
-    
+
     public int getIdade() {
         return this.idade;
     }
-    
+
     public String getEmail() {
         return this.email;
     }
-    
+
     // Setters
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
     public void setIdade(int idade) {
         this.idade = idade;
     }
-    
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     // Método que usa this para chamar outro método
     public void exibirInformacoes() {
         System.out.println("Nome: " + this.getNome());
         System.out.println("Idade: " + this.getIdade());
         System.out.println("Email: " + this.getEmail());
     }
-    
+
     // Método que retorna this para method chaining
     public Pessoa atualizarNome(String nome) {
         this.nome = nome;
         return this; // Retorna a instância atual
     }
-    
+
     public Pessoa atualizarIdade(int idade) {
         this.idade = idade;
         return this; // Retorna a instância atual
     }
-    
+
     public Pessoa atualizarEmail(String email) {
         this.email = email;
         return this; // Retorna a instância atual
@@ -213,55 +213,55 @@ public class Pessoa {
 public class Retangulo {
     private double largura;
     private double altura;
-    
+
     // Construtor principal
     public Retangulo(double largura, double altura) {
         this.largura = largura;
         this.altura = altura;
     }
-    
+
     // Construtor para quadrado
     public Retangulo(double lado) {
         this(lado, lado); // Chama o construtor principal
     }
-    
+
     // Construtor padrão
     public Retangulo() {
         this(1.0, 1.0); // Retângulo padrão 1x1
     }
-    
+
     // Getters
     public double getLargura() {
         return this.largura;
     }
-    
+
     public double getAltura() {
         return this.altura;
     }
-    
+
     // Setters
     public void setLargura(double largura) {
         this.largura = largura;
     }
-    
+
     public void setAltura(double altura) {
         this.altura = altura;
     }
-    
+
     // Métodos de cálculo
     public double calcularArea() {
         return this.largura * this.altura;
     }
-    
+
     public double calcularPerimetro() {
         return 2 * (this.largura + this.altura);
     }
-    
+
     // Método que usa this para comparar objetos
     public boolean temMesmaArea(Retangulo outro) {
         return this.calcularArea() == outro.calcularArea();
     }
-    
+
     // Método que retorna this para method chaining
     public Retangulo redimensionar(double fator) {
         this.largura *= fator;
@@ -279,7 +279,7 @@ public class ContaBancaria {
     private String titular;
     private double saldo;
     private String tipoConta;
-    
+
     // Construtor principal
     public ContaBancaria(String numeroConta, String titular, double saldoInicial, String tipoConta) {
         this.numeroConta = numeroConta;
@@ -287,43 +287,43 @@ public class ContaBancaria {
         this.saldo = saldoInicial;
         this.tipoConta = tipoConta;
     }
-    
+
     // Construtor sobrecarregado
     public ContaBancaria(String numeroConta, String titular, double saldoInicial) {
         this(numeroConta, titular, saldoInicial, "Corrente");
     }
-    
+
     // Construtor padrão
     public ContaBancaria() {
         this("000000", "Sem titular", 0.0, "Corrente");
     }
-    
+
     // Getters
     public String getNumeroConta() {
         return this.numeroConta;
     }
-    
+
     public String getTitular() {
         return this.titular;
     }
-    
+
     public double getSaldo() {
         return this.saldo;
     }
-    
+
     public String getTipoConta() {
         return this.tipoConta;
     }
-    
+
     // Setters
     public void setTitular(String titular) {
         this.titular = titular;
     }
-    
+
     public void setTipoConta(String tipoConta) {
         this.tipoConta = tipoConta;
     }
-    
+
     // Métodos de operação
     public void depositar(double valor) {
         if (valor > 0) {
@@ -333,7 +333,7 @@ public class ContaBancaria {
             System.out.println("Valor inválido para depósito.");
         }
     }
-    
+
     public boolean sacar(double valor) {
         if (valor > 0 && valor <= this.saldo) {
             this.saldo -= valor;
@@ -344,7 +344,7 @@ public class ContaBancaria {
             return false;
         }
     }
-    
+
     // Método que usa this para transferência
     public boolean transferir(ContaBancaria destino, double valor) {
         if (this.sacar(valor)) {
@@ -354,18 +354,18 @@ public class ContaBancaria {
         }
         return false;
     }
-    
+
     // Método que retorna this para method chaining
     public ContaBancaria atualizarTitular(String titular) {
         this.titular = titular;
         return this;
     }
-    
+
     public ContaBancaria alterarTipoConta(String tipoConta) {
         this.tipoConta = tipoConta;
         return this;
     }
-    
+
     // Método que exibe informações
     public void exibirInformacoes() {
         System.out.println("=== Informações da Conta ===");
@@ -386,22 +386,22 @@ public class Builder {
     private String nome;
     private int idade;
     private String email;
-    
+
     public Builder setNome(String nome) {
         this.nome = nome;
         return this; // Retorna a instância atual
     }
-    
+
     public Builder setIdade(int idade) {
         this.idade = idade;
         return this; // Retorna a instância atual
     }
-    
+
     public Builder setEmail(String email) {
         this.email = email;
         return this; // Retorna a instância atual
     }
-    
+
     public Pessoa construir() {
         return new Pessoa(nome, idade, email);
     }
@@ -422,6 +422,7 @@ public class Main {
 ## Exercícios Práticos
 
 ### Exercício 1: Classe Produto
+
 **Objetivo**: Criar uma classe Produto usando this adequadamente.
 
 **Enunciado**: Crie uma classe `Produto` com construtores sobrecarregados e method chaining.
@@ -434,7 +435,7 @@ public class Produto {
     private String nome;
     private double preco;
     private int quantidade;
-    
+
     // Construtor principal
     public Produto(String codigo, String nome, double preco, int quantidade) {
         this.codigo = codigo;
@@ -442,53 +443,53 @@ public class Produto {
         this.preco = preco;
         this.quantidade = quantidade;
     }
-    
+
     // Construtor sobrecarregado
     public Produto(String codigo, String nome, double preco) {
         this(codigo, nome, preco, 0);
     }
-    
+
     // Construtor padrão
     public Produto() {
         this("000000", "Produto sem nome", 0.0, 0);
     }
-    
+
     // Getters
     public String getCodigo() { return this.codigo; }
     public String getNome() { return this.nome; }
     public double getPreco() { return this.preco; }
     public int getQuantidade() { return this.quantidade; }
-    
+
     // Setters com method chaining
     public Produto setCodigo(String codigo) {
         this.codigo = codigo;
         return this;
     }
-    
+
     public Produto setNome(String nome) {
         this.nome = nome;
         return this;
     }
-    
+
     public Produto setPreco(double preco) {
         this.preco = preco;
         return this;
     }
-    
+
     public Produto setQuantidade(int quantidade) {
         this.quantidade = quantidade;
         return this;
     }
-    
+
     // Métodos de negócio
     public double calcularValorTotal() {
         return this.preco * this.quantidade;
     }
-    
+
     public void adicionarEstoque(int quantidade) {
         this.quantidade += quantidade;
     }
-    
+
     public boolean removerEstoque(int quantidade) {
         if (quantidade <= this.quantidade) {
             this.quantidade -= quantidade;
@@ -496,7 +497,7 @@ public class Produto {
         }
         return false;
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("=== Informações do Produto ===");
         System.out.println("Código: " + this.getCodigo());
@@ -514,14 +515,14 @@ public class Main {
         Produto p1 = new Produto("001", "Notebook", 2500.0, 5);
         Produto p2 = new Produto("002", "Mouse", 50.0);
         Produto p3 = new Produto();
-        
+
         // Usando method chaining
         Produto p4 = new Produto()
             .setCodigo("003")
             .setNome("Teclado")
             .setPreco(100.0)
             .setQuantidade(10);
-        
+
         p1.exibirInformacoes();
         p2.exibirInformacoes();
         p3.exibirInformacoes();
@@ -531,6 +532,7 @@ public class Main {
 ```
 
 ### Exercício 2: Classe Aluno
+
 **Objetivo**: Criar uma classe Aluno com construtores sobrecarregados.
 
 **Enunciado**: Crie uma classe `Aluno` com diferentes construtores e métodos que usam this.
@@ -544,7 +546,7 @@ public class Aluno {
     private int idade;
     private String curso;
     private double[] notas;
-    
+
     // Construtor principal
     public Aluno(String matricula, String nome, int idade, String curso, double[] notas) {
         this.matricula = matricula;
@@ -553,62 +555,62 @@ public class Aluno {
         this.curso = curso;
         this.notas = notas;
     }
-    
+
     // Construtor sobrecarregado
     public Aluno(String matricula, String nome, int idade, String curso) {
         this(matricula, nome, idade, curso, new double[4]);
     }
-    
+
     // Construtor padrão
     public Aluno() {
         this("000000", "Sem nome", 0, "Sem curso", new double[4]);
     }
-    
+
     // Getters
     public String getMatricula() { return this.matricula; }
     public String getNome() { return this.nome; }
     public int getIdade() { return this.idade; }
     public String getCurso() { return this.curso; }
     public double[] getNotas() { return this.notas; }
-    
+
     // Setters
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
     public void setIdade(int idade) {
         this.idade = idade;
     }
-    
+
     public void setCurso(String curso) {
         this.curso = curso;
     }
-    
+
     // Métodos de negócio
     public void adicionarNota(int posicao, double nota) {
         if (posicao >= 0 && posicao < this.notas.length) {
             this.notas[posicao] = nota;
         }
     }
-    
+
     public double calcularMedia() {
         double soma = 0;
         int contador = 0;
-        
+
         for (double nota : this.notas) {
             if (nota > 0) {
                 soma += nota;
                 contador++;
             }
         }
-        
+
         return contador > 0 ? soma / contador : 0;
     }
-    
+
     public boolean estaAprovado() {
         return this.calcularMedia() >= 7.0;
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("=== Informações do Aluno ===");
         System.out.println("Matrícula: " + this.getMatricula());
@@ -627,19 +629,19 @@ public class Main {
         Aluno a1 = new Aluno("001", "João", 20, "Engenharia", new double[]{8.5, 7.0, 9.0, 8.0});
         Aluno a2 = new Aluno("002", "Maria", 19, "Medicina");
         Aluno a3 = new Aluno();
-        
+
         // Adicionando notas
         a2.adicionarNota(0, 9.5);
         a2.adicionarNota(1, 8.0);
         a2.adicionarNota(2, 7.5);
         a2.adicionarNota(3, 9.0);
-        
+
         a3.setNome("Pedro");
         a3.setIdade(21);
         a3.setCurso("Direito");
         a3.adicionarNota(0, 6.5);
         a3.adicionarNota(1, 7.0);
-        
+
         // Exibindo informações
         a1.exibirInformacoes();
         System.out.println();
@@ -651,6 +653,7 @@ public class Main {
 ```
 
 ### Exercício 3: Classe Livro com Builder
+
 **Objetivo**: Criar uma classe Livro usando o padrão Builder com this.
 
 **Enunciado**: Crie uma classe `Livro` e uma classe `LivroBuilder` usando method chaining.
@@ -666,9 +669,9 @@ public class Livro {
     private int anoPublicacao;
     private int numeroPaginas;
     private double preco;
-    
+
     // Construtor privado (usado pelo Builder)
-    private Livro(String isbn, String titulo, String autor, String editora, 
+    private Livro(String isbn, String titulo, String autor, String editora,
                   int anoPublicacao, int numeroPaginas, double preco) {
         this.isbn = isbn;
         this.titulo = titulo;
@@ -678,7 +681,7 @@ public class Livro {
         this.numeroPaginas = numeroPaginas;
         this.preco = preco;
     }
-    
+
     // Getters
     public String getIsbn() { return this.isbn; }
     public String getTitulo() { return this.titulo; }
@@ -687,7 +690,7 @@ public class Livro {
     public int getAnoPublicacao() { return this.anoPublicacao; }
     public int getNumeroPaginas() { return this.numeroPaginas; }
     public double getPreco() { return this.preco; }
-    
+
     // Método para exibir informações
     public void exibirInformacoes() {
         System.out.println("=== Informações do Livro ===");
@@ -699,7 +702,7 @@ public class Livro {
         System.out.println("Páginas: " + this.getNumeroPaginas());
         System.out.println("Preço: R$ " + this.getPreco());
     }
-    
+
     // Classe Builder
     public static class LivroBuilder {
         private String isbn;
@@ -709,43 +712,43 @@ public class Livro {
         private int anoPublicacao;
         private int numeroPaginas;
         private double preco;
-        
+
         // Métodos com method chaining
         public LivroBuilder setIsbn(String isbn) {
             this.isbn = isbn;
             return this;
         }
-        
+
         public LivroBuilder setTitulo(String titulo) {
             this.titulo = titulo;
             return this;
         }
-        
+
         public LivroBuilder setAutor(String autor) {
             this.autor = autor;
             return this;
         }
-        
+
         public LivroBuilder setEditora(String editora) {
             this.editora = editora;
             return this;
         }
-        
+
         public LivroBuilder setAnoPublicacao(int anoPublicacao) {
             this.anoPublicacao = anoPublicacao;
             return this;
         }
-        
+
         public LivroBuilder setNumeroPaginas(int numeroPaginas) {
             this.numeroPaginas = numeroPaginas;
             return this;
         }
-        
+
         public LivroBuilder setPreco(double preco) {
             this.preco = preco;
             return this;
         }
-        
+
         // Método para construir o objeto
         public Livro construir() {
             return new Livro(isbn, titulo, autor, editora, anoPublicacao, numeroPaginas, preco);
@@ -766,7 +769,7 @@ public class Main {
             .setNumeroPaginas(1216)
             .setPreco(89.90)
             .construir();
-        
+
         Livro livro2 = new Livro.LivroBuilder()
             .setIsbn("978-85-359-0277-5")
             .setTitulo("1984")
@@ -776,7 +779,7 @@ public class Main {
             .setNumeroPaginas(416)
             .setPreco(45.90)
             .construir();
-        
+
         livro1.exibirInformacoes();
         System.out.println();
         livro2.exibirInformacoes();
@@ -795,6 +798,7 @@ A palavra-chave `this` é fundamental em Java para:
 - **Melhorar legibilidade**: Tornar o código mais claro e expressivo
 
 **Casos de uso comuns**:
+
 - Construtores sobrecarregados
 - Getters e setters
 - Method chaining (Builder pattern)
