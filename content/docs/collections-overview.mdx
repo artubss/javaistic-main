@@ -1,0 +1,316 @@
+---
+title: Collections Framework - Visão Geral
+description: Aprenda sobre o Collections Framework do Java - uma biblioteca poderosa para gerenciar grupos de objetos
+---
+
+## Collections Framework - Visão Geral
+
+O **Collections Framework** do Java é uma arquitetura unificada para representar e manipular coleções. Ele fornece interfaces, implementações e algoritmos para trabalhar com grupos de objetos de forma eficiente e consistente.
+
+### Hierarquia das Collections
+
+```
+Collection (Interface)
+├── List (Interface)
+│   ├── ArrayList
+│   ├── LinkedList
+│   └── Vector
+├── Set (Interface)
+│   ├── HashSet
+│   ├── TreeSet
+│   └── LinkedHashSet
+└── Queue (Interface)
+    ├── PriorityQueue
+    └── LinkedList
+
+Map (Interface)
+├── HashMap
+├── TreeMap
+└── LinkedHashMap
+```
+
+### Principais Interfaces
+
+#### 1. Collection Interface
+
+A interface raiz para todas as coleções (exceto Map):
+
+```java
+public interface Collection<E> {
+    // Operações básicas
+    boolean add(E e);
+    boolean remove(Object o);
+    boolean contains(Object o);
+    int size();
+    boolean isEmpty();
+    void clear();
+    
+    // Operações em massa
+    boolean addAll(Collection<? extends E> c);
+    boolean removeAll(Collection<?> c);
+    boolean retainAll(Collection<?> c);
+    boolean containsAll(Collection<?> c);
+    
+    // Iteração
+    Iterator<E> iterator();
+}
+```
+
+#### 2. List Interface
+
+Coleções ordenadas que permitem elementos duplicados:
+
+```java
+public interface List<E> extends Collection<E> {
+    // Acesso por índice
+    E get(int index);
+    E set(int index, E element);
+    void add(int index, E element);
+    E remove(int index);
+    
+    // Busca
+    int indexOf(Object o);
+    int lastIndexOf(Object o);
+    
+    // Sublista
+    List<E> subList(int fromIndex, int toIndex);
+}
+```
+
+#### 3. Set Interface
+
+Coleções que não permitem elementos duplicados:
+
+```java
+public interface Set<E> extends Collection<E> {
+    // Herda todos os métodos de Collection
+    // Não adiciona novos métodos, mas garante unicidade
+}
+```
+
+#### 4. Map Interface
+
+Mapeia chaves para valores (não é uma Collection):
+
+```java
+public interface Map<K, V> {
+    // Operações básicas
+    V put(K key, V value);
+    V get(Object key);
+    V remove(Object key);
+    boolean containsKey(Object key);
+    boolean containsValue(Object value);
+    int size();
+    boolean isEmpty();
+    void clear();
+    
+    // Visualizações
+    Set<K> keySet();
+    Collection<V> values();
+    Set<Map.Entry<K, V>> entrySet();
+}
+```
+
+### Implementações Principais
+
+#### List Implementations
+
+**ArrayList**:
+```java
+List<String> nomes = new ArrayList<>();
+nomes.add("Ana");
+nomes.add("João");
+nomes.add("Maria");
+
+// Acesso rápido por índice
+String nome = nomes.get(1); // "João"
+```
+
+**LinkedList**:
+```java
+List<String> nomes = new LinkedList<>();
+nomes.add("Ana");
+nomes.add("João");
+
+// Melhor para inserções/remoções frequentes
+nomes.add(1, "Maria"); // Insere no meio
+```
+
+#### Set Implementations
+
+**HashSet**:
+```java
+Set<String> nomes = new HashSet<>();
+nomes.add("Ana");
+nomes.add("João");
+nomes.add("Ana"); // Ignorado (duplicado)
+
+// Ordem não garantida
+for (String nome : nomes) {
+    System.out.println(nome);
+}
+```
+
+**TreeSet**:
+```java
+Set<String> nomes = new TreeSet<>();
+nomes.add("João");
+nomes.add("Ana");
+nomes.add("Maria");
+
+// Ordem natural (alfabética)
+for (String nome : nomes) {
+    System.out.println(nome); // Ana, João, Maria
+}
+```
+
+#### Map Implementations
+
+**HashMap**:
+```java
+Map<String, Integer> idades = new HashMap<>();
+idades.put("Ana", 25);
+idades.put("João", 30);
+idades.put("Maria", 28);
+
+// Acesso rápido
+Integer idade = idades.get("Ana"); // 25
+```
+
+**TreeMap**:
+```java
+Map<String, Integer> idades = new TreeMap<>();
+idades.put("João", 30);
+idades.put("Ana", 25);
+idades.put("Maria", 28);
+
+// Ordenado por chave
+for (Map.Entry<String, Integer> entry : idades.entrySet()) {
+    System.out.println(entry.getKey() + ": " + entry.getValue());
+    // Ana: 25, João: 30, Maria: 28
+}
+```
+
+### Iteradores
+
+```java
+List<String> nomes = Arrays.asList("Ana", "João", "Maria");
+
+// Iterator tradicional
+Iterator<String> iterator = nomes.iterator();
+while (iterator.hasNext()) {
+    String nome = iterator.next();
+    System.out.println(nome);
+}
+
+// Enhanced for loop (recomendado)
+for (String nome : nomes) {
+    System.out.println(nome);
+}
+
+// Stream API (Java 8+)
+nomes.stream().forEach(System.out::println);
+```
+
+### Algoritmos Úteis
+
+```java
+List<String> nomes = new ArrayList<>();
+nomes.add("João");
+nomes.add("Ana");
+nomes.add("Maria");
+
+// Ordenação
+Collections.sort(nomes); // Ordem natural
+Collections.sort(nomes, Collections.reverseOrder()); // Ordem reversa
+
+// Busca
+int index = Collections.binarySearch(nomes, "Ana");
+
+// Embaralhar
+Collections.shuffle(nomes);
+
+// Frequência
+int freq = Collections.frequency(nomes, "Ana");
+
+// Mínimo e Máximo
+String min = Collections.min(nomes);
+String max = Collections.max(nomes);
+```
+
+### Comparadores
+
+```java
+class Pessoa {
+    private String nome;
+    private int idade;
+    
+    public Pessoa(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+    
+    // getters...
+}
+
+List<Pessoa> pessoas = Arrays.asList(
+    new Pessoa("Ana", 25),
+    new Pessoa("João", 30),
+    new Pessoa("Maria", 28)
+);
+
+// Ordenar por idade
+pessoas.sort((p1, p2) -> Integer.compare(p1.getIdade(), p2.getIdade()));
+
+// Ordenar por nome
+pessoas.sort((p1, p2) -> p1.getNome().compareTo(p2.getNome()));
+```
+
+### Collections Thread-Safe
+
+```java
+// Lista thread-safe
+List<String> nomes = Collections.synchronizedList(new ArrayList<>());
+
+// Map thread-safe
+Map<String, Integer> idades = Collections.synchronizedMap(new HashMap<>());
+
+// Ou use ConcurrentHashMap para melhor performance
+Map<String, Integer> idades = new ConcurrentHashMap<>();
+```
+
+### Boas Práticas
+
+1. **Escolha a implementação correta**:
+   - `ArrayList`: Acesso aleatório frequente
+   - `LinkedList`: Inserções/remoções frequentes
+   - `HashSet`: Conjuntos sem ordem específica
+   - `TreeSet`: Conjuntos ordenados
+   - `HashMap`: Mapeamentos sem ordem específica
+   - `TreeMap`: Mapeamentos ordenados
+
+2. **Use interfaces como tipos**:
+   ```java
+   List<String> nomes = new ArrayList<>(); // Não ArrayList<String>
+   ```
+
+3. **Evite modificações durante iteração**:
+   ```java
+   // ERRADO
+   for (String nome : nomes) {
+       nomes.remove(nome); // ConcurrentModificationException
+   }
+   
+   // CORRETO
+   Iterator<String> iterator = nomes.iterator();
+   while (iterator.hasNext()) {
+       String nome = iterator.next();
+       if (nome.equals("João")) {
+           iterator.remove();
+       }
+   }
+   ```
+
+### Conclusão
+
+O Collections Framework é uma parte fundamental do Java. Entender suas interfaces, implementações e algoritmos é essencial para escrever código eficiente e elegante. Escolha a implementação correta baseada nos seus requisitos de performance e funcionalidade. 

@@ -1,0 +1,164 @@
+---
+title: Introdução aos Generics
+description: Aprenda sobre Generics em Java - um recurso poderoso para criar código reutilizável e type-safe
+---
+
+## Introdução aos Generics
+
+**Generics** é um recurso poderoso do Java que permite criar classes, interfaces e métodos que podem trabalhar com diferentes tipos de dados de forma **type-safe**. Introduzido no Java 5, os Generics eliminam a necessidade de casting e fornecem segurança de tipo em tempo de compilação.
+
+### Por que usar Generics?
+
+Antes dos Generics, você tinha que usar `Object` para criar coleções que pudessem armazenar qualquer tipo de dados:
+
+```java
+// Código antigo (pré-Generics)
+List lista = new ArrayList();
+lista.add("String");
+lista.add(123);
+String item = (String) lista.get(0); // Casting necessário
+```
+
+Com Generics:
+
+```java
+// Código moderno com Generics
+List<String> lista = new ArrayList<>();
+lista.add("String");
+// lista.add(123); // Erro de compilação!
+String item = lista.get(0); // Sem casting necessário
+```
+
+### Vantagens dos Generics
+
+1. **Type Safety**: Erros de tipo são detectados em tempo de compilação
+2. **Eliminação de Casting**: Não é necessário fazer cast explícito
+3. **Código Reutilizável**: Uma classe pode trabalhar com diferentes tipos
+4. **Melhor Performance**: Evita boxing/unboxing desnecessário
+
+### Sintaxe Básica
+
+```java
+// Declaração de classe genérica
+class Caixa<T> {
+    private T conteudo;
+    
+    public void setConteudo(T conteudo) {
+        this.conteudo = conteudo;
+    }
+    
+    public T getConteudo() {
+        return conteudo;
+    }
+}
+
+// Uso
+Caixa<String> caixaString = new Caixa<>();
+caixaString.setConteudo("Olá Mundo");
+
+Caixa<Integer> caixaInt = new Caixa<>();
+caixaInt.setConteudo(42);
+```
+
+### Múltiplos Parâmetros de Tipo
+
+```java
+class Par<T, U> {
+    private T primeiro;
+    private U segundo;
+    
+    public Par(T primeiro, U segundo) {
+        this.primeiro = primeiro;
+        this.segundo = segundo;
+    }
+    
+    public T getPrimeiro() { return primeiro; }
+    public U getSegundo() { return segundo; }
+}
+
+// Uso
+Par<String, Integer> par = new Par<>("Idade", 25);
+```
+
+### Generics com Wildcards
+
+```java
+// Lista de qualquer tipo
+List<?> listaQualquer = new ArrayList<>();
+
+// Lista de tipos que estendem Number
+List<? extends Number> listaNumeros = new ArrayList<>();
+
+// Lista de tipos que são superclasse de Integer
+List<? super Integer> listaSuper = new ArrayList<>();
+```
+
+### Exemplo Prático
+
+```java
+public class Utilitarios {
+    
+    // Método genérico para trocar elementos
+    public static <T> void trocar(T[] array, int i, int j) {
+        T temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    
+    // Método genérico para encontrar máximo
+    public static <T extends Comparable<T>> T maximo(T a, T b) {
+        return a.compareTo(b) > 0 ? a : b;
+    }
+}
+
+// Uso
+String[] nomes = {"Ana", "João", "Maria"};
+Utilitarios.trocar(nomes, 0, 2);
+
+Integer max = Utilitarios.maximo(10, 20);
+```
+
+### Limitações dos Generics
+
+1. **Não é possível criar arrays de tipos genéricos**:
+   ```java
+   // Isso não funciona:
+   T[] array = new T[10];
+   
+   // Use ArrayList em vez disso:
+   List<T> lista = new ArrayList<>();
+   ```
+
+2. **Não é possível usar tipos primitivos**:
+   ```java
+   // Use classes wrapper:
+   List<Integer> numeros = new ArrayList<>();
+   ```
+
+3. **Erasure**: Informações de tipo são removidas em tempo de execução
+
+### Boas Práticas
+
+1. **Use nomes descritivos para parâmetros de tipo**:
+   ```java
+   class Caixa<T> // T para Type
+   class Mapa<K, V> // K para Key, V para Value
+   ```
+
+2. **Documente o comportamento esperado**:
+   ```java
+   /**
+    * Classe que representa uma pilha genérica
+    * @param <T> o tipo de elementos na pilha
+    */
+   class Pilha<T> { ... }
+   ```
+
+3. **Use bounded types quando apropriado**:
+   ```java
+   class Calculadora<T extends Number> { ... }
+   ```
+
+### Conclusão
+
+Generics são uma ferramenta essencial no Java moderno. Eles fornecem type safety, eliminam a necessidade de casting e tornam o código mais reutilizável. Dominar Generics é fundamental para escrever código Java robusto e eficiente. 
