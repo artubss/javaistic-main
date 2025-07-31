@@ -1,61 +1,71 @@
 ---
-title: Java while & do...while loop
-description: In this tutorial, we will learn how to use while and do while loop in Java with the help of examples.
+title: "Loop while e do...while em Java"
+description: "Neste tutorial, aprenderemos como usar os loops while e do...while em Java com exemplos práticos"
+difficulty: "Básico"
+category: "Controle de Fluxo"
 ---
 
-In computer programming, loops are used to repeat a block of code. For example, if you want to show a message 100 times, then you can use a loop. It's just a simple example; you can achieve much more with loops.
+## Loops while e do...while em Java
 
-In the previous tutorial, you learned about [Java for loop](./for-loop). Here, you are going to learn about `while` and `do...while` loops.
+Em programação de computadores, loops são usados para repetir um bloco de código. Por exemplo, se você quiser mostrar uma mensagem 100 vezes, você pode usar um loop. É apenas um exemplo simples; você pode conseguir muito mais com loops.
 
+No tutorial anterior, você aprendeu sobre o [loop for em Java](./for-loop). Aqui, você vai aprender sobre os loops `while` e `do...while`.
 
-## Java while loop
+## Loop while em Java
 
-Java while loop is used to run a specific code until a certain condition is met. The syntax of the while loop is:
+O loop while em Java é usado para executar um código específico até que uma certa condição seja atendida. A sintaxe do loop while é:
 
 ```java
-while (testExpression) {
-    // body of loop
+while (expressaoTeste) {
+    // corpo do loop
 }
 ```
-Here,
 
-1. A `while` loop evaluates the **textExpression** inside the parenthesis `()`.
-2. If the **textExpression** evaluates to `true`, the code inside the `while` loop is executed.
-3. The **textExpression** is evaluated again.
-4. This process continues until the **textExpression** is `false`.
-5. When the **textExpression** evaluates to `false`, the loop stops.
+Aqui,
 
-To learn more about the conditions, visit [Java relational](./operators#3-java-relational-operators) and [logical operators](./operators#4-java-logical-operators).
+1. Um loop `while` avalia a **expressaoTeste** dentro dos parênteses `()`.
+2. Se a **expressaoTeste** for avaliada como `true`, o código dentro do loop `while` é executado.
+3. A **expressaoTeste** é avaliada novamente.
+4. Este processo continua até que a **expressaoTeste** seja `false`.
+5. Quando a **expressaoTeste** for avaliada como `false`, o loop para.
 
----
+Para aprender mais sobre condições, visite [operadores relacionais Java](./operators#3-java-relational-operators) e [operadores lógicos](./operators#4-java-logical-operators).
 
-## Flowchart of while loop
-<img src="https://picsum.photos/600x400" alt="Flowchart of Java while loop"/>
+## Fluxograma do loop while
 
----
+O loop while funciona da seguinte forma:
 
-### Example 1: Display Numbers from 1 to 5
+1. **Avaliação**: Verifica a condição
+2. **Execução**: Se true, executa o corpo
+3. **Repetição**: Volta para a avaliação
+4. **Término**: Para quando a condição é false
+
+```
+Condição → True → Corpo → Repetir
+    ↓
+  False → Fim
+```
+
+### Exemplo 1: Exibir Números de 1 a 5
 
 ```java
-// Program to display numbers from 1 to 5
+// Programa para exibir números de 1 a 5
 
-class Main {
-  public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) {
+        // declarar variáveis
+        int i = 1, n = 5;
 
-    // declare variables
-    int i = 1, n = 5;
-
-    // while loop from 1 to 5
-    while(i <= n) {
-      System.out.println(i);
-      i++;
+        // loop while de 1 a 5
+        while (i <= n) {
+            System.out.println(i);
+            i++;
+        }
     }
-  }
 }
 ```
 
-
-#### Output
+#### Saída
 
 ```plaintext
 1
@@ -65,117 +75,79 @@ class Main {
 5
 ```
 
-Here is how this program works.
+Aqui está como este programa funciona.
 
-| Iteration | Variable          | Condition: i `<=` n | Action                                     |
-|-----------|-------------------|-------------------|--------------------------------------------|
-| 1st       | `i = 1` `n = 5`   | `true`            | `1` is printed. `i` is increased to **2**. |
-| 2nd       | `i = 2` `n = 5 `  | `true`            | `2` is printed. `i` is increased to **3**. |
-| 3rd       | `i = 3` ` n = 5 ` | `true`            | `3` is printed.`i` is increased to **4**.  |
-| 4th       | `i = 4` ` n = 5 ` | `true`            | `4` is printed. `i` is increased to **5**. |
-| 5th       | `i = 5` ` n = 5`  | `true`            | `5` is printed. `i` is increased to **6**. |
-| 6th       | `i = 6` `n = 5`   | `false`           | The loop is terminated                     |
+| Iteração | Variável        | Condição: i `<=` n | Ação                                        |
+| -------- | --------------- | ------------------ | ------------------------------------------- |
+| 1ª       | `i = 1` `n = 5` | `true`             | `1` é impresso. `i` é aumentado para **2**. |
+| 2ª       | `i = 2` `n = 5` | `true`             | `2` é impresso. `i` é aumentado para **3**. |
+| 3ª       | `i = 3` `n = 5` | `true`             | `3` é impresso. `i` é aumentado para **4**. |
+| 4ª       | `i = 4` `n = 5` | `true`             | `4` é impresso. `i` é aumentado para **5**. |
+| 5ª       | `i = 5` `n = 5` | `true`             | `5` é impresso. `i` é aumentado para **6**. |
+| 6ª       | `i = 6` `n = 5` | `false`            | O loop é terminado                          |
 
-### Example 2: Sum of Positive Numbers Only
+### Exemplo 2: Soma de Números Positivos Apenas
 
 ```java
-// Java program to find the sum of positive numbers
+// Programa Java para encontrar a soma de números positivos
 import java.util.Scanner;
 
-class Main {
-  public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) {
+        int soma = 0;
 
-    int sum = 0;
+        // criar um objeto da classe Scanner
+        Scanner input = new Scanner(System.in);
 
-    // create an object of Scanner class
-    Scanner input = new Scanner(System.in);
+        // receber entrada inteira do usuário
+        System.out.println("Digite um número");
+        int numero = input.nextInt();
 
-    // take integer input from the user
-    System.out.println("Enter a number");
-    int number = input.nextInt();
+        // loop while continua
+        // até que o número digitado seja positivo
+        while (numero >= 0) {
+            // adicionar apenas números positivos
+            soma += numero;
 
-    // while loop continues
-    // until entered number is positive
-    while (number >= 0) {
-      // add only positive numbers
-      sum += number;
+            System.out.println("Digite um número");
+            numero = input.nextInt();
+        }
 
-      System.out.println("Enter a number");
-      number = input.nextInt();
+        System.out.println("Soma = " + soma);
+        input.close();
     }
-
-    System.out.println("Sum = " + sum);
-    input.close();
-  }
 }
 ```
 
-#### Output
+## Loop do...while em Java
 
-```plaintext
-Enter a number
-25
-Enter a number
-9
-Enter a number
-5
-Enter a number
--3
-Sum = 39
-```
+O loop `do...while` é similar ao loop `while`, mas há uma diferença importante: o loop `do...while` executa o corpo pelo menos uma vez antes de verificar a condição.
 
-In the above program, we have used the [Scanner class](./scanner) to take input from the user. Here, `nextInt()` takes integer input from the user.
+### Sintaxe do Loop do...while
 
-The `while` loop continues until the user enters a negative number. During each iteration, the number entered by the user is added to the `sum` variable.
-
-When the user enters a negative number, the loop terminates. Finally, the total sum is displayed.
-
-## Java do...while loop
-
-The `do...while` loop is similar to while loop. However, the body of `do...while` loop is executed once before the test expression is checked. For example,
 ```java
 do {
-    // body of loop
-} while(textExpression);
+    // corpo do loop
+} while (expressaoTeste);
 ```
-Here,
 
-1. The body of the loop is executed at first. Then the **textExpression** is evaluated.
-2. If the **textExpression** evaluates to `true`, the body of the loop inside the `do` statement is executed again.
-3. The **textExpression** is evaluated once again.
-4. If the **textExpression** evaluates to `true`, the body of the loop inside the `do` statement is executed again.
-5. This process continues until the **textExpression** evaluates to false. Then the loop stops.
-
-## Flowchart of do...while loop
-{/* ![Flowchart of Java do...while loop](https://picsum.photos/600x400?text=Flowchart+of+Java+do...while+loop) */}
-
-Let's see the working of `do...while` loop.
-
----
-
-### Example 3: Display Numbers from 1 to 5
+### Exemplo 3: Loop do...while
 
 ```java
-// Java Program to display numbers from 1 to 5
+public class DoWhileExample {
+    public static void main(String[] args) {
+        int i = 1, n = 5;
 
-import java.util.Scanner;
-
-// Program to find the sum of natural numbers from 1 to 100.
-
-class Main {
-  public static void main(String[] args) {
-
-    int i = 1, n = 5;
-
-    // do...while loop from 1 to 5
-    do {
-      System.out.println(i);
-      i++;
-    } while(i <= n);
-  }
+        // loop do...while de 1 a 5
+        do {
+            System.out.println(i);
+            i++;
+        } while (i <= n);
+    }
 }
 ```
-#### Output
+
+#### Saída
 
 ```plaintext
 1
@@ -185,111 +157,359 @@ class Main {
 5
 ```
 
-Here is how this program works.
+## Diferenças entre while e do...while
 
-| Iteration | Variable          | Condition: i `<=` n | Action                                     |
-|-----------|-------------------|-------------------|--------------------------------------------|
-|           | `i = 1` `n = 5`   | not checked       | `1` is printed. `i` is increased to **2**. |
-| 1st       | `i = 2` `n = 5 `  | `true`            | `2` is printed. `i` is increased to **3**. |
-| 2nd       | `i = 3` ` n = 5 ` | `true`            | `3` is printed.`i` is increased to **4**.  |
-| 3rd       | `i = 4` ` n = 5 ` | `true`            | `4` is printed. `i` is increased to **5**. |
-| 4th       | `i = 5` ` n = 5`  | `true`            | `5` is printed. `i` is increased to **6**. |
-| 5th       | `i = 6` `n = 5`   | `false`           | The loop is terminated                     |
+| Aspecto             | Loop while                          | Loop do...while                                     |
+| ------------------- | ----------------------------------- | --------------------------------------------------- |
+| **Verificação**     | Verifica antes de executar          | Executa antes de verificar                          |
+| **Execução mínima** | Pode não executar nenhuma vez       | Executa pelo menos uma vez                          |
+| **Sintaxe**         | `while(condição) { ... }`           | `do { ... } while(condição);`                       |
+| **Uso**             | Quando não sabemos se deve executar | Quando sabemos que deve executar pelo menos uma vez |
 
----
+## Exemplos Práticos
 
-### Example 4: Sum of Positive Numbers
+### Exemplo 1: Calculadora de Média com Validação
 
 ```java
-// Java program to find the sum of positive numbers
 import java.util.Scanner;
 
-class Main {
-  public static void main(String[] args) {
+public class CalculadoraMedia {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        double soma = 0;
+        int contador = 0;
 
-    int sum = 0;
-    int number = 0;
+        System.out.println("Digite números (digite -1 para parar):");
 
-    // create an object of Scanner class
-    Scanner input = new Scanner(System.in);
+        while (true) {
+            System.out.print("Digite um número: ");
+            double numero = scanner.nextDouble();
 
-    // do...while loop continues
-    // until entered number is positive
-    do {
-      // add only positive numbers
-      sum += number;
-      System.out.println("Enter a number");
-      number = input.nextInt();
-    } while(number >= 0);
+            if (numero == -1) {
+                break;
+            }
 
-    System.out.println("Sum = " + sum);
-    input.close();
-  }
-}
-```
-#### Output 1
+            soma += numero;
+            contador++;
+        }
 
-```plaintext
-Enter a number
-25
-Enter a number
-9
-Enter a number
-5
-Enter a number
--3
-Sum = 39
-```
-Here, the user enters a positive number, that number is added to the `sum` variable. And this process continues until the number is negative. When the number is negative, the loop terminates and displays the sum without adding the negative number.
+        if (contador > 0) {
+            double media = soma / contador;
+            System.out.println("Média: " + media);
+        } else {
+            System.out.println("Nenhum número foi digitado.");
+        }
 
-#### Output 2
-
-```plaintext
-Enter a number
--8
-Sum is 0
-```
-Here, the user enters a negative number. The test condition will be `false` but the code inside of the loop executes once.
-
-## Infinite while loop
-
-If **the condition** of a loop is always `true`, the loop runs for infinite times (until the memory is full). For example,
-
-```java
-// infinite while loop
-while(true){
-    // body of loop
-}
-```
-## Infinite do...while loop
-
-Here is an example of an infinite `do...while` loop.
-
-```java
-// infinite do...while loop
-int count = 1;
-do {
-   // body of loop
-} while(count == 1)
-```
-In the above programs, the **textExpression** is always `true`. Hence, the loop body will run for infinite times.
-
----
-
-## for and while loops
-
-The `for` loop is used when the number of iterations is known. For example,
-
-```java
-for (let i = 1; i <=5; ++i) {
-   // body of loop
+        scanner.close();
+    }
 }
 ```
 
-And `while` and `do...while` loops are generally used when the number of iterations is unknown. For example,
+### Exemplo 2: Jogo de Adivinhação
 
 ```java
-while (condition) {
-    // body of loop
+import java.util.Scanner;
+import java.util.Random;
+
+public class JogoAdivinhacao {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        int numeroSecreto = random.nextInt(100) + 1;
+        int tentativas = 0;
+        int palpite;
+
+        System.out.println("Bem-vindo ao Jogo de Adivinhação!");
+        System.out.println("Tente adivinhar o número entre 1 e 100.");
+
+        do {
+            System.out.print("Digite seu palpite: ");
+            palpite = scanner.nextInt();
+            tentativas++;
+
+            if (palpite < numeroSecreto) {
+                System.out.println("Muito baixo! Tente novamente.");
+            } else if (palpite > numeroSecreto) {
+                System.out.println("Muito alto! Tente novamente.");
+            } else {
+                System.out.println("Parabéns! Você acertou em " + tentativas + " tentativas!");
+            }
+        } while (palpite != numeroSecreto);
+
+        scanner.close();
+    }
 }
 ```
+
+### Exemplo 3: Menu Interativo
+
+```java
+import java.util.Scanner;
+
+public class MenuInterativo {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int opcao;
+
+        do {
+            System.out.println("\n=== Menu ===");
+            System.out.println("1. Calcular área do círculo");
+            System.out.println("2. Calcular área do retângulo");
+            System.out.println("3. Calcular área do triângulo");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+
+            opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    System.out.print("Digite o raio: ");
+                    double raio = scanner.nextDouble();
+                    double areaCirculo = Math.PI * raio * raio;
+                    System.out.println("Área do círculo: " + areaCirculo);
+                    break;
+
+                case 2:
+                    System.out.print("Digite a largura: ");
+                    double largura = scanner.nextDouble();
+                    System.out.print("Digite a altura: ");
+                    double altura = scanner.nextDouble();
+                    double areaRetangulo = largura * altura;
+                    System.out.println("Área do retângulo: " + areaRetangulo);
+                    break;
+
+                case 3:
+                    System.out.print("Digite a base: ");
+                    double base = scanner.nextDouble();
+                    System.out.print("Digite a altura: ");
+                    double alturaTriangulo = scanner.nextDouble();
+                    double areaTriangulo = (base * alturaTriangulo) / 2;
+                    System.out.println("Área do triângulo: " + areaTriangulo);
+                    break;
+
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } while (opcao != 0);
+
+        scanner.close();
+    }
+}
+```
+
+### Exemplo 4: Validador de Senha
+
+```java
+import java.util.Scanner;
+
+public class ValidadorSenha {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String senha;
+        boolean senhaValida = false;
+
+        do {
+            System.out.print("Digite uma senha (mínimo 8 caracteres): ");
+            senha = scanner.nextLine();
+
+            if (senha.length() >= 8) {
+                senhaValida = true;
+                System.out.println("Senha válida!");
+            } else {
+                System.out.println("Senha muito curta! Tente novamente.");
+            }
+        } while (!senhaValida);
+
+        scanner.close();
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de Fatorial
+
+**Objetivo**: Calcular fatorial usando loop while.
+
+**Enunciado**: Crie um programa que calcule o fatorial de um número usando loop while.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class CalculadoraFatorial {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite um número para calcular o fatorial: ");
+        int numero = scanner.nextInt();
+
+        if (numero < 0) {
+            System.out.println("Fatorial não é definido para números negativos.");
+        } else {
+            int fatorial = 1;
+            int i = 1;
+
+            while (i <= numero) {
+                fatorial *= i;
+                i++;
+            }
+
+            System.out.println("Fatorial de " + numero + " = " + fatorial);
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 2: Série de Fibonacci
+
+**Objetivo**: Gerar série de Fibonacci usando loop do...while.
+
+**Enunciado**: Crie um programa que gere a série de Fibonacci usando loop do...while.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class FibonacciDoWhile {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite quantos números da série Fibonacci deseja ver: ");
+        int n = scanner.nextInt();
+
+        if (n <= 0) {
+            System.out.println("Digite um número positivo.");
+        } else {
+            int primeiro = 0, segundo = 1;
+            int contador = 0;
+
+            System.out.println("Série de Fibonacci:");
+
+            do {
+                System.out.print(primeiro + " ");
+
+                int proximo = primeiro + segundo;
+                primeiro = segundo;
+                segundo = proximo;
+
+                contador++;
+            } while (contador < n);
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 3: Verificador de Números Primos
+
+**Objetivo**: Verificar números primos usando loop while.
+
+**Enunciado**: Crie um programa que verifique se um número é primo usando loop while.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class VerificadorPrimos {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite um número para verificar se é primo: ");
+        int numero = scanner.nextInt();
+
+        if (numero <= 1) {
+            System.out.println(numero + " não é primo.");
+        } else {
+            boolean ehPrimo = true;
+            int divisor = 2;
+
+            while (divisor <= Math.sqrt(numero)) {
+                if (numero % divisor == 0) {
+                    ehPrimo = false;
+                    break;
+                }
+                divisor++;
+            }
+
+            if (ehPrimo) {
+                System.out.println(numero + " é primo.");
+            } else {
+                System.out.println(numero + " não é primo.");
+            }
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 4: Calculadora de Potência
+
+**Objetivo**: Calcular potência usando loop do...while.
+
+**Enunciado**: Crie um programa que calcule a potência de um número usando loop do...while.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class CalculadoraPotencia {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite a base: ");
+        double base = scanner.nextDouble();
+
+        System.out.print("Digite o expoente: ");
+        int expoente = scanner.nextInt();
+
+        if (expoente < 0) {
+            System.out.println("Expoente deve ser não negativo.");
+        } else {
+            double resultado = 1;
+            int i = 0;
+
+            do {
+                resultado *= base;
+                i++;
+            } while (i < expoente);
+
+            System.out.println(base + " elevado a " + expoente + " = " + resultado);
+        }
+
+        scanner.close();
+    }
+}
+```
+
+## Conclusão
+
+Os loops `while` e `do...while` são ferramentas fundamentais em Java para:
+
+- **Iteração baseada em condição**: Executar código enquanto uma condição for verdadeira
+- **Entrada de usuário**: Processar dados de entrada com validação
+- **Menus interativos**: Criar interfaces de usuário simples
+- **Processamento de dados**: Iterar sobre dados até uma condição ser atendida
+
+**Boas práticas**:
+
+- Sempre garanta que a condição do loop mude para evitar loops infinitos
+- Use `break` para sair prematuramente quando necessário
+- Use `continue` para pular iterações
+- Escolha entre while e do...while baseado se precisa executar pelo menos uma vez
+- Mantenha o código do loop simples e legível
+
+Lembre-se de que o loop while é ideal quando você não sabe quantas iterações serão necessárias, enquanto o do...while é útil quando você sabe que pelo menos uma execução é necessária.

@@ -1,219 +1,696 @@
 ---
-title: Java Class and Objects
-description: In this tutorial, we will learn about classes and objects in Java with the help of examples.
+title: "Classes e Objetos em Java"
+description: "Neste tutorial, aprenderemos sobre classes e objetos em Java com exemplos práticos"
+difficulty: "Básico"
+category: "Programação Orientada a Objetos"
 ---
 
-Java is an object-oriented programming language. The core concept of the object-oriented approach is to break complex problems into smaller objects.
+## Classes e Objetos em Java
 
-An object is any entity that has a state and behavior. For example, a bicycle is an object. It has
+Java é uma linguagem de programação orientada a objetos. O conceito central da abordagem orientada a objetos é dividir problemas complexos em objetos menores.
 
-- **States**: idle, first gear, etc
-- **Behaviors**: braking, accelerating, etc.
+Um objeto é qualquer entidade que tem um estado e comportamento. Por exemplo, uma bicicleta é um objeto. Ela tem:
 
-Before we learn about objects, let's first know about classes in Java.
+- **Estados**: parada, primeira marcha, etc.
+- **Comportamentos**: frear, acelerar, etc.
 
-## Java Class
-A class is a blueprint for the object. Before we create an object, we first need to define the class.
+Antes de aprendermos sobre objetos, vamos primeiro conhecer as classes em Java.
 
-We can think of the class as a sketch (prototype) of a house. It contains all the details about the floors, doors, windows, etc. Based on these descriptions we build the house. House is the object.
+## Classe em Java
 
-Since many houses can be made from the same description, we can create many objects from a class.
+Uma classe é um modelo para o objeto. Antes de criarmos um objeto, primeiro precisamos definir a classe.
 
-### Create a class in Java
-We can create a class in Java using the class keyword. For example,
+Podemos pensar na classe como um esboço (protótipo) de uma casa. Ela contém todos os detalhes sobre os andares, portas, janelas, etc. Com base nessas descrições construímos a casa. A casa é o objeto.
+
+Como muitas casas podem ser feitas a partir da mesma descrição, podemos criar muitos objetos a partir de uma classe.
+
+### Criar uma classe em Java
+
+Podemos criar uma classe em Java usando a palavra-chave `class`. Por exemplo,
 
 ```java
-class ClassName {
-  // fields
-  // methods
+class NomeDaClasse {
+  // campos
+  // métodos
 }
 ```
 
-Here, `fields` [(variables)](/docs/variables-literals) and [methods](/docs/methods) represent the **state** and **behavior** of the object respectively.
+Aqui, `campos` [(variáveis)](/docs/variables-literals) e [métodos](/docs/methods) representam o **estado** e **comportamento** do objeto respectivamente.
 
-- fields are used to store data
-- methods are used to perform some operations
+- campos são usados para armazenar dados
+- métodos são usados para realizar algumas operações
 
-For our `bicycle` object, we can create the class as
+Para nosso objeto `bicicleta`, podemos criar a classe como:
 
 ```java
-class Bicycle {
+class Bicicleta {
 
-  // state or field
-  private int gear = 5;
+  // estado ou campo
+  private int marcha = 5;
 
-  // behavior or method
-  public void braking() {
-    System.out.println("Working of Braking");
+  // comportamento ou método
+  public void frear() {
+    System.out.println("Funcionamento do Freio");
   }
 }
 ```
-In the above example, we have created a class named `Bicycle`. It contains a field named `gear` and a method named `braking()`.
 
-Here, `Bicycle` is a prototype. Now, we can create any number of bicycles using the prototype. And, all the bicycles will share the fields and methods of the prototype.
+No exemplo acima, criamos uma classe chamada `Bicicleta`. Ela contém um campo chamado `marcha` e um método chamado `frear()`.
+
+Aqui, `Bicicleta` é um protótipo. Agora, podemos criar qualquer número de bicicletas usando o protótipo. E todas as bicicletas compartilharão os campos e métodos do protótipo.
 
 <Callout>
 
-**Note:** We have used keywords private and public. These are known as access modifiers. To learn more, visit Java access modifiers.
+**Nota**: Usamos as palavras-chave `private` e `public`. Estas são conhecidas como modificadores de acesso. Para aprender mais, visite modificadores de acesso Java.
 
 </Callout>
 
----
+## Objetos em Java
 
-## Java Objects
-An object is called an instance of a class. For example, suppose Bicycle is a class then MountainBicycle, SportsBicycle, TouringBicycle, etc can be considered as objects of the class.
+Um objeto é chamado de instância de uma classe. Por exemplo, suponha que `Bicicleta` é uma classe, então `BicicletaMontanha`, `BicicletaEsporte`, `BicicletaTouring`, etc. podem ser considerados como objetos da classe.
 
-Creating an Object in Java
-Here is how we can create an object of a class.
+### Criando um Objeto em Java
+
+Aqui está como podemos criar um objeto de uma classe.
 
 ```java
-className object = new className();
+nomeDaClasse objeto = new nomeDaClasse();
 
-// for Bicycle class
-Bicycle sportsBicycle = new Bicycle();
+// para a classe Bicicleta
+Bicicleta bicicletaEsporte = new Bicicleta();
 
-Bicycle touringBicycle = new Bicycle();
+Bicicleta bicicletaTouring = new Bicicleta();
 ```
-We have used the `new` keyword along with the constructor of the class to create an object. Constructors are similar to methods and have the same name as the class. For example, `Bicycle()` is the constructor of the `Bicycle` class. To learn more, visit [Java Constructors](/docs/constructors).
 
-Here, `sportsBicycle` and `touringBicycle` are the names of objects. We can use them to access fields and methods of the class.
+Usamos a palavra-chave `new` junto com o construtor da classe para criar um objeto. Construtores são similares a métodos e têm o mesmo nome da classe. Por exemplo, `Bicicleta()` é o construtor da classe `Bicicleta`. Para aprender mais, visite [Construtores Java](/docs/constructors).
 
-As you can see, we have created two objects of the class. We can create multiple objects of a single class in Java.
+Aqui, `bicicletaEsporte` e `bicicletaTouring` são os nomes dos objetos. Podemos usá-los para acessar campos e métodos da classe.
+
+Como você pode ver, criamos dois objetos da classe. Podemos criar múltiplos objetos de uma única classe em Java.
 
 <Callout>
 
-**Note:** Fields and methods of a class are also called members of the class.
+**Nota**: Campos e métodos de uma classe também são chamados de membros da classe.
 
 </Callout>
 
----
+## Acessar Membros de uma Classe
 
-## Access Members of a Class
-We can use the name of objects along with the `.` operator to access members of a class. For example,
-
-```java
-class Bicycle {
-
-  // field of class
-  int gear = 5;
-
-  // method of class
-  void braking() {
-    ...
-  }
-}
-
-// create object
-Bicycle sportsBicycle = new Bicycle();
-
-// access field and method
-sportsBicycle.gear;
-sportsBicycle.braking();
-```
-In the above example, we have created a class named `Bicycle`. It includes a field named `gear` and a method named `braking()`. Notice the statement,
+Podemos usar o nome dos objetos junto com o operador `.` para acessar membros de uma classe. Por exemplo,
 
 ```java
-Bicycle sportsBicycle = new Bicycle();
-```
-Here, we have created an object of Bicycle named sportsBicycle. We then use the object to access the field and method of the class.
+class Bicicleta {
 
-- `sportsBicycle.gear` - access the field gear
-- `sportsBicycle.braking()` - access the method `braking()`
+  // campo da classe
+  int marcha = 5;
 
-We have mentioned the word **method** quite a few times. You will learn about [Java methods](/docs/methods) in detail in the next chapter.
-
-Now that we understand what is class and object. Let's see a fully working example.
-
-### Example: Java Class and Objects
-```java
-class Lamp {
-
-  // stores the value for light
-  // true if light is on
-  // false if light is off
-  boolean isOn;
-
-  // method to turn on the light
-  void turnOn() {
-    isOn = true;
-    System.out.println("Light on? " + isOn);
-
-  }
-
-  // method to turnoff the light
-  void turnOff() {
-    isOn = false;
-    System.out.println("Light on? " + isOn);
+  // método da classe
+  public void frear() {
+    System.out.println("Freando!");
   }
 }
 
 public class Main {
   public static void main(String[] args) {
-
-    // create objects led and halogen
-    Lamp led = new Lamp();
-    Lamp halogen = new Lamp();
-
-    // turn on the light by
-    // calling method turnOn()
-    led.turnOn();
-
-    // turn off the light by
-    // calling method turnOff()
-    halogen.turnOff();
+    // criar objeto
+    Bicicleta bicicleta1 = new Bicicleta();
+    
+    // acessar campo
+    System.out.println("Marcha: " + bicicleta1.marcha);
+    
+    // chamar método
+    bicicleta1.frear();
   }
 }
 ```
-#### Output:
 
-```plaintext
-Light on? true
-Light on? false
-```
-In the above program, we have created a class named `Lamp`. It contains a variable: `isOn` and two methods: `turnOn()` and `turnOff()`.
+## Exemplos Práticos
 
-Inside the `Main` class, we have created two objects: `led` and `halogen` of the `Lamp` class. We then used the objects to call the methods of the class.
-
-- `led.turnOn()` - It sets the isOn variable to true and prints the output.
-- `halogen.turnOff()` - It sets the isOn variable to false and prints the output.
-
-The variable `isOn` defined inside the class is also called an instance variable. It is because when we create an object of the class, it is called an instance of the class. And, each instance will have its own copy of the variable.
-
-That is, `led` and `halogen` objects will have their own copy of the `isOn` variable.
-
-### Example: Create objects inside the same class
-Note that in the previous example, we have created objects inside another class and accessed the members from that class.
-
-However, we can also create objects inside the same class.
+### Exemplo 1: Classe Carro
 
 ```java
-class Lamp {
+class Carro {
+    // Campos (atributos)
+    private String marca;
+    private String modelo;
+    private int ano;
+    private double velocidade;
+    
+    // Construtor
+    public Carro(String marca, String modelo, int ano) {
+        this.marca = marca;
+        this.modelo = modelo;
+        this.ano = ano;
+        this.velocidade = 0.0;
+    }
+    
+    // Métodos (comportamentos)
+    public void acelerar(double quantidade) {
+        velocidade += quantidade;
+        System.out.println("Acelerando... Velocidade atual: " + velocidade + " km/h");
+    }
+    
+    public void frear(double quantidade) {
+        if (velocidade >= quantidade) {
+            velocidade -= quantidade;
+        } else {
+            velocidade = 0;
+        }
+        System.out.println("Freando... Velocidade atual: " + velocidade + " km/h");
+    }
+    
+    public void exibirInformacoes() {
+        System.out.println("Marca: " + marca);
+        System.out.println("Modelo: " + modelo);
+        System.out.println("Ano: " + ano);
+        System.out.println("Velocidade: " + velocidade + " km/h");
+    }
+    
+    // Getters e Setters
+    public String getMarca() {
+        return marca;
+    }
+    
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+    
+    public double getVelocidade() {
+        return velocidade;
+    }
+}
 
-  // stores the value for light
-  // true if light is on
-  // false if light is off
-  boolean isOn;
-
-  // method to turn on the light
-  void turnOn() {
-    isOn = true;
-    System.out.println("Light on? " + isOn);
-
-  }
-
-  public static void main(String[] args) {
-
-    // create an object of Lamp
-    Lamp led = new Lamp();
-
-    // access method using object
-    led.turnOn();
-  }
+public class ExemploCarro {
+    public static void main(String[] args) {
+        // Criar objetos
+        Carro carro1 = new Carro("Toyota", "Corolla", 2020);
+        Carro carro2 = new Carro("Honda", "Civic", 2021);
+        
+        // Usar métodos
+        carro1.acelerar(50);
+        carro1.frear(20);
+        carro1.exibirInformacoes();
+        
+        System.out.println();
+        
+        carro2.acelerar(80);
+        carro2.exibirInformacoes();
+    }
 }
 ```
-#### Output
 
-```plaintext
-Light on? true
+### Exemplo 2: Classe Estudante
+
+```java
+class Estudante {
+    // Campos
+    private String nome;
+    private int idade;
+    private String curso;
+    private double[] notas;
+    
+    // Construtor
+    public Estudante(String nome, int idade, String curso) {
+        this.nome = nome;
+        this.idade = idade;
+        this.curso = curso;
+        this.notas = new double[4]; // 4 disciplinas
+    }
+    
+    // Métodos
+    public void adicionarNota(int disciplina, double nota) {
+        if (disciplina >= 0 && disciplina < notas.length) {
+            notas[disciplina] = nota;
+        }
+    }
+    
+    public double calcularMedia() {
+        double soma = 0;
+        for (double nota : notas) {
+            soma += nota;
+        }
+        return soma / notas.length;
+    }
+    
+    public boolean estaAprovado() {
+        return calcularMedia() >= 7.0;
+    }
+    
+    public void exibirInformacoes() {
+        System.out.println("Nome: " + nome);
+        System.out.println("Idade: " + idade);
+        System.out.println("Curso: " + curso);
+        System.out.println("Média: " + calcularMedia());
+        System.out.println("Status: " + (estaAprovado() ? "Aprovado" : "Reprovado"));
+    }
+}
+
+public class ExemploEstudante {
+    public static void main(String[] args) {
+        // Criar estudantes
+        Estudante estudante1 = new Estudante("João", 20, "Engenharia");
+        Estudante estudante2 = new Estudante("Maria", 19, "Medicina");
+        
+        // Adicionar notas
+        estudante1.adicionarNota(0, 8.5);
+        estudante1.adicionarNota(1, 7.2);
+        estudante1.adicionarNota(2, 9.0);
+        estudante1.adicionarNota(3, 6.8);
+        
+        estudante2.adicionarNota(0, 9.5);
+        estudante2.adicionarNota(1, 8.8);
+        estudante2.adicionarNota(2, 9.2);
+        estudante2.adicionarNota(3, 8.9);
+        
+        // Exibir informações
+        estudante1.exibirInformacoes();
+        System.out.println();
+        estudante2.exibirInformacoes();
+    }
+}
 ```
-Here, we are creating the object inside the `main()` method of the same class.
+
+### Exemplo 3: Classe Conta Bancária
+
+```java
+class ContaBancaria {
+    // Campos
+    private String titular;
+    private String numeroConta;
+    private double saldo;
+    private String tipoConta;
+    
+    // Construtor
+    public ContaBancaria(String titular, String numeroConta, String tipoConta) {
+        this.titular = titular;
+        this.numeroConta = numeroConta;
+        this.tipoConta = tipoConta;
+        this.saldo = 0.0;
+    }
+    
+    // Métodos
+    public void depositar(double valor) {
+        if (valor > 0) {
+            saldo += valor;
+            System.out.println("Depósito de R$ " + valor + " realizado com sucesso.");
+            System.out.println("Saldo atual: R$ " + saldo);
+        } else {
+            System.out.println("Valor inválido para depósito.");
+        }
+    }
+    
+    public boolean sacar(double valor) {
+        if (valor > 0 && valor <= saldo) {
+            saldo -= valor;
+            System.out.println("Saque de R$ " + valor + " realizado com sucesso.");
+            System.out.println("Saldo atual: R$ " + saldo);
+            return true;
+        } else {
+            System.out.println("Saldo insuficiente ou valor inválido.");
+            return false;
+        }
+    }
+    
+    public void transferir(ContaBancaria destino, double valor) {
+        if (this.sacar(valor)) {
+            destino.depositar(valor);
+            System.out.println("Transferência de R$ " + valor + " realizada com sucesso.");
+        }
+    }
+    
+    public void exibirExtrato() {
+        System.out.println("=== Extrato Bancário ===");
+        System.out.println("Titular: " + titular);
+        System.out.println("Número da Conta: " + numeroConta);
+        System.out.println("Tipo de Conta: " + tipoConta);
+        System.out.println("Saldo: R$ " + saldo);
+    }
+}
+
+public class ExemploContaBancaria {
+    public static void main(String[] args) {
+        // Criar contas
+        ContaBancaria conta1 = new ContaBancaria("João Silva", "12345-6", "Corrente");
+        ContaBancaria conta2 = new ContaBancaria("Maria Santos", "67890-1", "Poupança");
+        
+        // Realizar operações
+        conta1.depositar(1000.0);
+        conta1.sacar(300.0);
+        conta1.transferir(conta2, 200.0);
+        
+        System.out.println();
+        conta1.exibirExtrato();
+        System.out.println();
+        conta2.exibirExtrato();
+    }
+}
+```
+
+### Exemplo 4: Classe Produto
+
+```java
+class Produto {
+    // Campos
+    private String nome;
+    private String codigo;
+    private double preco;
+    private int quantidadeEstoque;
+    
+    // Construtor
+    public Produto(String nome, String codigo, double preco, int quantidadeEstoque) {
+        this.nome = nome;
+        this.codigo = codigo;
+        this.preco = preco;
+        this.quantidadeEstoque = quantidadeEstoque;
+    }
+    
+    // Métodos
+    public void adicionarEstoque(int quantidade) {
+        if (quantidade > 0) {
+            quantidadeEstoque += quantidade;
+            System.out.println(quantidade + " unidades adicionadas ao estoque.");
+        }
+    }
+    
+    public boolean vender(int quantidade) {
+        if (quantidade > 0 && quantidade <= quantidadeEstoque) {
+            quantidadeEstoque -= quantidade;
+            System.out.println(quantidade + " unidades vendidas.");
+            return true;
+        } else {
+            System.out.println("Quantidade insuficiente em estoque.");
+            return false;
+        }
+    }
+    
+    public double calcularValorTotal() {
+        return preco * quantidadeEstoque;
+    }
+    
+    public boolean temEstoque() {
+        return quantidadeEstoque > 0;
+    }
+    
+    public void exibirInformacoes() {
+        System.out.println("=== Informações do Produto ===");
+        System.out.println("Nome: " + nome);
+        System.out.println("Código: " + codigo);
+        System.out.println("Preço: R$ " + preco);
+        System.out.println("Quantidade em Estoque: " + quantidadeEstoque);
+        System.out.println("Valor Total em Estoque: R$ " + calcularValorTotal());
+        System.out.println("Tem Estoque: " + (temEstoque() ? "Sim" : "Não"));
+    }
+}
+
+public class ExemploProduto {
+    public static void main(String[] args) {
+        // Criar produtos
+        Produto produto1 = new Produto("Laptop", "LAP001", 2500.0, 10);
+        Produto produto2 = new Produto("Mouse", "MOU001", 50.0, 50);
+        
+        // Realizar operações
+        produto1.vender(3);
+        produto1.adicionarEstoque(5);
+        produto2.vender(10);
+        
+        System.out.println();
+        produto1.exibirInformacoes();
+        System.out.println();
+        produto2.exibirInformacoes();
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Classe Retângulo
+**Objetivo**: Criar uma classe para representar um retângulo.
+
+**Enunciado**: Crie uma classe `Retangulo` com métodos para calcular área e perímetro.
+
+**Resolução**:
+
+```java
+class Retangulo {
+    private double largura;
+    private double altura;
+    
+    public Retangulo(double largura, double altura) {
+        this.largura = largura;
+        this.altura = altura;
+    }
+    
+    public double calcularArea() {
+        return largura * altura;
+    }
+    
+    public double calcularPerimetro() {
+        return 2 * (largura + altura);
+    }
+    
+    public boolean ehQuadrado() {
+        return largura == altura;
+    }
+    
+    public void exibirInformacoes() {
+        System.out.println("Largura: " + largura);
+        System.out.println("Altura: " + altura);
+        System.out.println("Área: " + calcularArea());
+        System.out.println("Perímetro: " + calcularPerimetro());
+        System.out.println("É quadrado: " + (ehQuadrado() ? "Sim" : "Não"));
+    }
+}
+
+public class TesteRetangulo {
+    public static void main(String[] args) {
+        Retangulo retangulo1 = new Retangulo(5.0, 3.0);
+        Retangulo retangulo2 = new Retangulo(4.0, 4.0);
+        
+        System.out.println("Retângulo 1:");
+        retangulo1.exibirInformacoes();
+        
+        System.out.println("\nRetângulo 2:");
+        retangulo2.exibirInformacoes();
+    }
+}
+```
+
+### Exercício 2: Classe Calculadora
+**Objetivo**: Criar uma classe calculadora com operações básicas.
+
+**Enunciado**: Crie uma classe `Calculadora` com métodos para operações matemáticas.
+
+**Resolução**:
+
+```java
+class Calculadora {
+    private double resultado;
+    
+    public Calculadora() {
+        this.resultado = 0.0;
+    }
+    
+    public void somar(double valor) {
+        resultado += valor;
+        System.out.println("Soma: " + resultado);
+    }
+    
+    public void subtrair(double valor) {
+        resultado -= valor;
+        System.out.println("Subtração: " + resultado);
+    }
+    
+    public void multiplicar(double valor) {
+        resultado *= valor;
+        System.out.println("Multiplicação: " + resultado);
+    }
+    
+    public void dividir(double valor) {
+        if (valor != 0) {
+            resultado /= valor;
+            System.out.println("Divisão: " + resultado);
+        } else {
+            System.out.println("Erro: Divisão por zero!");
+        }
+    }
+    
+    public void limpar() {
+        resultado = 0.0;
+        System.out.println("Calculadora limpa. Resultado: " + resultado);
+    }
+    
+    public double getResultado() {
+        return resultado;
+    }
+}
+
+public class TesteCalculadora {
+    public static void main(String[] args) {
+        Calculadora calc = new Calculadora();
+        
+        calc.somar(10);
+        calc.multiplicar(5);
+        calc.subtrair(15);
+        calc.dividir(2);
+        calc.limpar();
+    }
+}
+```
+
+### Exercício 3: Classe Livro
+**Objetivo**: Criar uma classe para representar um livro.
+
+**Enunciado**: Crie uma classe `Livro` com informações básicas e métodos para gerenciar o status.
+
+**Resolução**:
+
+```java
+class Livro {
+    private String titulo;
+    private String autor;
+    private int anoPublicacao;
+    private boolean emprestado;
+    private String genero;
+    
+    public Livro(String titulo, String autor, int anoPublicacao, String genero) {
+        this.titulo = titulo;
+        this.autor = autor;
+        this.anoPublicacao = anoPublicacao;
+        this.genero = genero;
+        this.emprestado = false;
+    }
+    
+    public void emprestar() {
+        if (!emprestado) {
+            emprestado = true;
+            System.out.println("Livro '" + titulo + "' foi emprestado.");
+        } else {
+            System.out.println("Livro '" + titulo + "' já está emprestado.");
+        }
+    }
+    
+    public void devolver() {
+        if (emprestado) {
+            emprestado = false;
+            System.out.println("Livro '" + titulo + "' foi devolvido.");
+        } else {
+            System.out.println("Livro '" + titulo + "' não estava emprestado.");
+        }
+    }
+    
+    public boolean estaDisponivel() {
+        return !emprestado;
+    }
+    
+    public void exibirInformacoes() {
+        System.out.println("=== Informações do Livro ===");
+        System.out.println("Título: " + titulo);
+        System.out.println("Autor: " + autor);
+        System.out.println("Ano de Publicação: " + anoPublicacao);
+        System.out.println("Gênero: " + genero);
+        System.out.println("Status: " + (estaDisponivel() ? "Disponível" : "Emprestado"));
+    }
+}
+
+public class TesteLivro {
+    public static void main(String[] args) {
+        Livro livro1 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, "Fantasia");
+        Livro livro2 = new Livro("1984", "George Orwell", 1949, "Ficção Científica");
+        
+        livro1.exibirInformacoes();
+        livro1.emprestar();
+        livro1.emprestar();
+        livro1.devolver();
+        
+        System.out.println();
+        livro2.exibirInformacoes();
+    }
+}
+```
+
+### Exercício 4: Classe Pessoa
+**Objetivo**: Criar uma classe para representar uma pessoa.
+
+**Enunciado**: Crie uma classe `Pessoa` com informações pessoais e métodos para calcular idade.
+
+**Resolução**:
+
+```java
+import java.time.LocalDate;
+import java.time.Period;
+
+class Pessoa {
+    private String nome;
+    private String cpf;
+    private LocalDate dataNascimento;
+    private String endereco;
+    
+    public Pessoa(String nome, String cpf, LocalDate dataNascimento, String endereco) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.endereco = endereco;
+    }
+    
+    public int calcularIdade() {
+        LocalDate hoje = LocalDate.now();
+        Period periodo = Period.between(dataNascimento, hoje);
+        return periodo.getYears();
+    }
+    
+    public boolean ehMaiorDeIdade() {
+        return calcularIdade() >= 18;
+    }
+    
+    public String obterCategoriaIdade() {
+        int idade = calcularIdade();
+        if (idade < 12) return "Criança";
+        else if (idade < 18) return "Adolescente";
+        else if (idade < 60) return "Adulto";
+        else return "Idoso";
+    }
+    
+    public void exibirInformacoes() {
+        System.out.println("=== Informações da Pessoa ===");
+        System.out.println("Nome: " + nome);
+        System.out.println("CPF: " + cpf);
+        System.out.println("Data de Nascimento: " + dataNascimento);
+        System.out.println("Endereço: " + endereco);
+        System.out.println("Idade: " + calcularIdade() + " anos");
+        System.out.println("Categoria: " + obterCategoriaIdade());
+        System.out.println("Maior de Idade: " + (ehMaiorDeIdade() ? "Sim" : "Não"));
+    }
+}
+
+public class TestePessoa {
+    public static void main(String[] args) {
+        Pessoa pessoa1 = new Pessoa("João Silva", "123.456.789-00", 
+                                   LocalDate.of(1990, 5, 15), "Rua A, 123");
+        Pessoa pessoa2 = new Pessoa("Maria Santos", "987.654.321-00", 
+                                   LocalDate.of(2010, 8, 20), "Rua B, 456");
+        
+        pessoa1.exibirInformacoes();
+        System.out.println();
+        pessoa2.exibirInformacoes();
+    }
+}
+```
+
+## Conclusão
+
+Classes e objetos são fundamentais na programação orientada a objetos em Java:
+
+- **Classes**: Modelos ou moldes para criar objetos
+- **Objetos**: Instâncias de classes com estado e comportamento
+- **Encapsulamento**: Controle de acesso aos dados através de modificadores
+- **Reutilização**: Múltiplos objetos podem ser criados a partir de uma classe
+
+**Boas práticas**:
+- Use nomes descritivos para classes e objetos
+- Encapsule dados usando modificadores de acesso apropriados
+- Crie construtores para inicializar objetos
+- Implemente métodos para representar comportamentos
+- Use getters e setters para controlar acesso aos dados
+- Mantenha classes coesas e com responsabilidades bem definidas
+
+Lembre-se de que a programação orientada a objetos ajuda a organizar código de forma mais modular e reutilizável.
