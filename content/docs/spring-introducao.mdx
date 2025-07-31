@@ -1,0 +1,359 @@
+---
+title: Introdução ao Spring Framework
+description: Aprenda sobre o Spring Framework - o framework mais popular para desenvolvimento Java enterprise
+---
+
+## Introdução ao Spring Framework
+
+O **Spring Framework** é um dos frameworks mais populares para desenvolvimento de aplicações Java enterprise. Criado por Rod Johnson em 2003, o Spring simplifica o desenvolvimento de aplicações Java através de sua arquitetura modular e recursos poderosos.
+
+### Por que usar Spring?
+
+1. **Inversão de Controle (IoC)**: O Spring gerencia a criação e ciclo de vida dos objetos
+2. **Injeção de Dependência (DI)**: Facilita o acoplamento frouxo entre componentes
+3. **Aspect-Oriented Programming (AOP)**: Permite separar preocupações transversais
+4. **Modularidade**: Você pode usar apenas os módulos que precisa
+5. **Produtividade**: Reduz código boilerplate e acelera o desenvolvimento
+
+### Arquitetura do Spring
+
+```
+Spring Framework
+├── Core Container
+│   ├── Spring Core
+│   ├── Spring Beans
+│   ├── Spring Context
+│   └── Spring Expression Language (SpEL)
+├── Data Access/Integration
+│   ├── JDBC
+│   ├── ORM
+│   ├── JMS
+│   └── Transaction
+├── Web
+│   ├── Spring MVC
+│   ├── Spring WebFlux
+│   └── WebSocket
+├── AOP
+├── Instrumentation
+└── Test
+```
+
+### Módulos Principais
+
+#### 1. Spring Core Container
+
+**Spring Core**: Funcionalidades fundamentais do framework
+**Spring Beans**: Implementação do padrão Factory
+**Spring Context**: Construído sobre Core e Beans
+
+#### 2. Spring Web
+
+**Spring MVC**: Framework web tradicional
+**Spring WebFlux**: Framework web reativo
+**Spring WebSocket**: Suporte a WebSockets
+
+#### 3. Spring Data Access
+
+**Spring JDBC**: Abstração sobre JDBC
+**Spring ORM**: Integração com frameworks ORM
+**Spring Transaction**: Gerenciamento de transações
+
+### Inversão de Controle (IoC)
+
+O IoC é o princípio fundamental do Spring. Em vez de objetos criarem suas dependências, o Spring cria e injeta as dependências.
+
+**Sem IoC (Tradicional)**:
+```java
+public class ServicoEmail {
+    private RepositorioUsuario repositorio;
+    
+    public ServicoEmail() {
+        this.repositorio = new RepositorioUsuarioImpl(); // Acoplamento forte
+    }
+}
+```
+
+**Com IoC (Spring)**:
+```java
+@Component
+public class ServicoEmail {
+    private RepositorioUsuario repositorio;
+    
+    @Autowired
+    public ServicoEmail(RepositorioUsuario repositorio) {
+        this.repositorio = repositorio; // Injeção de dependência
+    }
+}
+```
+
+### Injeção de Dependência
+
+O Spring oferece três tipos de injeção de dependência:
+
+#### 1. Injeção por Construtor (Recomendada)
+
+```java
+@Service
+public class ServicoUsuario {
+    private final RepositorioUsuario repositorio;
+    private final ServicoEmail servicoEmail;
+    
+    @Autowired
+    public ServicoUsuario(RepositorioUsuario repositorio, 
+                         ServicoEmail servicoEmail) {
+        this.repositorio = repositorio;
+        this.servicoEmail = servicoEmail;
+    }
+}
+```
+
+#### 2. Injeção por Setter
+
+```java
+@Service
+public class ServicoUsuario {
+    private RepositorioUsuario repositorio;
+    
+    @Autowired
+    public void setRepositorio(RepositorioUsuario repositorio) {
+        this.repositorio = repositorio;
+    }
+}
+```
+
+#### 3. Injeção por Campo
+
+```java
+@Service
+public class ServicoUsuario {
+    @Autowired
+    private RepositorioUsuario repositorio;
+}
+```
+
+### Configuração do Spring
+
+#### 1. Configuração por Anotações (Recomendada)
+
+```java
+@Configuration
+@ComponentScan("com.exemplo")
+public class ConfiguracaoApp {
+    
+    @Bean
+    public RepositorioUsuario repositorioUsuario() {
+        return new RepositorioUsuarioImpl();
+    }
+    
+    @Bean
+    public ServicoEmail servicoEmail() {
+        return new ServicoEmailImpl();
+    }
+}
+```
+
+#### 2. Configuração por XML (Legado)
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="repositorioUsuario" 
+          class="com.exemplo.RepositorioUsuarioImpl" />
+    
+    <bean id="servicoEmail" 
+          class="com.exemplo.ServicoEmailImpl" />
+    
+    <bean id="servicoUsuario" 
+          class="com.exemplo.ServicoUsuario">
+        <constructor-arg ref="repositorioUsuario" />
+        <constructor-arg ref="servicoEmail" />
+    </bean>
+
+</beans>
+```
+
+### Anotações Principais
+
+#### Anotações de Componentes
+
+```java
+@Component // Componente genérico
+@Service   // Camada de serviço
+@Repository // Camada de acesso a dados
+@Controller // Controlador web
+```
+
+#### Anotações de Injeção
+
+```java
+@Autowired // Injeção automática
+@Qualifier("nomeBean") // Especifica qual bean usar
+@Value("${propriedade}") // Injeção de propriedades
+```
+
+#### Anotações de Configuração
+
+```java
+@Configuration // Classe de configuração
+@Bean // Define um bean
+@ComponentScan // Escaneia componentes
+@PropertySource // Carrega arquivo de propriedades
+```
+
+### Exemplo Completo
+
+```java
+// Modelo
+public class Usuario {
+    private Long id;
+    private String nome;
+    private String email;
+    
+    // Construtores, getters, setters...
+}
+
+// Repositório
+@Repository
+public class RepositorioUsuarioImpl implements RepositorioUsuario {
+    
+    @Override
+    public Usuario buscarPorId(Long id) {
+        // Implementação...
+        return new Usuario(id, "João", "joao@email.com");
+    }
+    
+    @Override
+    public void salvar(Usuario usuario) {
+        // Implementação...
+    }
+}
+
+// Serviço
+@Service
+public class ServicoUsuario {
+    
+    private final RepositorioUsuario repositorio;
+    private final ServicoEmail servicoEmail;
+    
+    @Autowired
+    public ServicoUsuario(RepositorioUsuario repositorio, 
+                         ServicoEmail servicoEmail) {
+        this.repositorio = repositorio;
+        this.servicoEmail = servicoEmail;
+    }
+    
+    @Transactional
+    public void criarUsuario(Usuario usuario) {
+        repositorio.salvar(usuario);
+        servicoEmail.enviarEmailBoasVindas(usuario.getEmail());
+    }
+}
+
+// Controlador
+@RestController
+@RequestMapping("/usuarios")
+public class UsuarioController {
+    
+    private final ServicoUsuario servicoUsuario;
+    
+    @Autowired
+    public UsuarioController(ServicoUsuario servicoUsuario) {
+        this.servicoUsuario = servicoUsuario;
+    }
+    
+    @PostMapping
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+        servicoUsuario.criarUsuario(usuario);
+        return ResponseEntity.ok(usuario);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
+        Usuario usuario = servicoUsuario.buscarPorId(id);
+        return ResponseEntity.ok(usuario);
+    }
+}
+```
+
+### Gerenciamento de Transações
+
+```java
+@Service
+public class ServicoTransacao {
+    
+    @Transactional
+    public void transferir(Long contaOrigem, Long contaDestino, BigDecimal valor) {
+        // Lógica de transferência
+        // Se algo der errado, toda a transação é revertida
+    }
+    
+    @Transactional(readOnly = true)
+    public BigDecimal consultarSaldo(Long contaId) {
+        // Consulta otimizada para leitura
+        return BigDecimal.ZERO;
+    }
+}
+```
+
+### AOP (Aspect-Oriented Programming)
+
+```java
+@Aspect
+@Component
+public class LoggingAspect {
+    
+    @Before("execution(* com.exemplo.*.ServicoUsuario.*(..))")
+    public void logAntesDoMetodo(JoinPoint joinPoint) {
+        System.out.println("Executando: " + joinPoint.getSignature().getName());
+    }
+    
+    @AfterThrowing(pointcut = "execution(* com.exemplo.*.*(..))", 
+                   throwing = "erro")
+    public void logErro(JoinPoint joinPoint, Throwable erro) {
+        System.out.println("Erro em: " + joinPoint.getSignature().getName());
+        System.out.println("Erro: " + erro.getMessage());
+    }
+}
+```
+
+### Testes com Spring
+
+```java
+@SpringBootTest
+class ServicoUsuarioTest {
+    
+    @Autowired
+    private ServicoUsuario servicoUsuario;
+    
+    @MockBean
+    private RepositorioUsuario repositorioUsuario;
+    
+    @Test
+    void deveCriarUsuario() {
+        // Given
+        Usuario usuario = new Usuario(null, "João", "joao@email.com");
+        
+        // When
+        servicoUsuario.criarUsuario(usuario);
+        
+        // Then
+        verify(repositorioUsuario).salvar(usuario);
+    }
+}
+```
+
+### Vantagens do Spring
+
+1. **Produtividade**: Menos código boilerplate
+2. **Testabilidade**: Fácil de testar com injeção de dependência
+3. **Flexibilidade**: Módulos independentes
+4. **Ecosistema**: Grande comunidade e bibliotecas
+5. **Padrões**: Implementa padrões de projeto comprovados
+
+### Conclusão
+
+O Spring Framework revolucionou o desenvolvimento Java enterprise. Sua arquitetura baseada em IoC e DI torna o código mais limpo, testável e manutenível. Com sua vasta gama de módulos e anotações, o Spring simplifica o desenvolvimento de aplicações complexas. 

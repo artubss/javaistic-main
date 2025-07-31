@@ -4,6 +4,7 @@ description: Neste tutorial, aprenderemos como usar arrays em Java para armazena
 ---
 
 ## Arrays em Java
+
 Um array é uma coleção de dados do mesmo tipo.
 
 Por exemplo, se queremos armazenar os nomes de 100 pessoas, podemos criar um array do tipo String que pode armazenar 100 nomes.
@@ -11,14 +12,17 @@ Por exemplo, se queremos armazenar os nomes de 100 pessoas, podemos criar um arr
 ```java
 String[] array = new String[100];
 ```
+
 Aqui, o array acima não pode armazenar mais de 100 nomes. O número de valores em um array Java é sempre fixo.
 
 ### Como declarar um array em Java?
+
 Em Java, aqui está como podemos declarar um array.
 
 ```java
 tipoDeDados[] nomeDoArray;
 ```
+
 - `tipoDeDados` - pode ser tipos primitivos como `int`, `char`, `double`, `byte`, etc. ou objetos Java
 - `nomeDoArray` - é um identificador
 
@@ -27,6 +31,7 @@ Por exemplo,
 ```java
 double[] dados;
 ```
+
 Aqui, dados é um array que pode conter valores do tipo double.
 
 Mas, quantos elementos este array pode conter?
@@ -40,6 +45,7 @@ double[] dados;
 // alocar memória
 dados = new double[10];
 ```
+
 Aqui, o array pode armazenar 10 elementos. Também podemos dizer que o tamanho ou comprimento do array é 10.
 
 Em Java, podemos declarar e alocar a memória de um array em uma única declaração. Por exemplo,
@@ -49,12 +55,14 @@ double[] dados = new double[10];
 ```
 
 ### Como Inicializar Arrays em Java?
+
 Em Java, podemos inicializar arrays durante a declaração. Por exemplo,
 
 ```java
 // declarar e inicializar um array
 int[] idade = {12, 4, 5, 2, 5};
 ```
+
 Aqui, criamos um array chamado idade e o inicializamos com os valores dentro das chaves.
 
 Observe que não fornecemos o tamanho do array. Neste caso, o compilador Java especifica automaticamente o tamanho contando o número de elementos no array (ou seja, 5).
