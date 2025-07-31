@@ -1,128 +1,642 @@
 ---
-title: Java Expressions, Statements and Blocks
-description:  In this tutorial, you will learn about Java expressions, Java statements, difference between expression and statement, and Java blocks with the help of examples.
+title: "Expressões, Instruções e Blocos em Java"
+description: "Aprenda sobre expressões Java, instruções Java, diferença entre expressão e instrução, e blocos Java com exemplos práticos"
+difficulty: "Básico"
+category: "Fundamentos Java"
 ---
 
-In previous chapters, we have used expressions, statements, and blocks without much explaining about them. Now that you know about variables, operators, and literals, it will be easier to understand these concepts.
+## Expressões, Instruções e Blocos em Java
 
-## Java Expressions
+Nos capítulos anteriores, usamos expressões, instruções e blocos sem explicar muito sobre eles. Agora que você conhece variáveis, operadores e literais, será mais fácil entender esses conceitos.
 
-A Java expression consists of variables, operators, literals, and method calls. To know more about method calls, visit Java methods. For example,
+## Expressões Java
 
-```java
-int score;
-score = 90;
-```
-Here, `score = 90` is an expression that returns an `int`. Consider another example,
+Uma expressão Java consiste em variáveis, operadores, literais e chamadas de métodos. Para saber mais sobre chamadas de métodos, visite [Métodos Java](/docs/methods). Por exemplo,
 
 ```java
-Double a = 2.2, b = 3.4, result;
-result = a + b - 3.4;
-```
-Here, `a + b - 3.4` is an expression.
-
-```java
-if (number1 == number2)
-System.out.println("Number 1 is larger than number 2");
-```
-Here, `number1 == number2` is an expression that returns a boolean value. Similarly, `"Number 1 is larger than number 2"` is a string expression.
-
-## Java Statements
-
-In Java, each statement is a complete unit of execution. For example,
-
-```java
-int score = 9*5;
-```
-Here, we have a statement. The complete execution of this statement involves multiplying integers `9` and `5` and then assigning the result to the variable `score`.
-
-In the above statement, we have an expression `9 * 5`. In Java, expressions are part of statements.
-
-### Expression statements
-
-We can convert an expression into a statement by terminating the expression with a `;`. These are known as expression statements. For example,
-
-```java
-// expression
-number = 10
-// statement
-number = 10;
-```
-In the above example, we have an expression `number = 10`. Here, by adding a semicolon (`;`), we have converted the expression into a statement (`number = 10;`).
-
-Consider another example,
-
-```java
-// expression
-++number
-// statement
-++number;
+int pontuacao;
+pontuacao = 90;
 ```
 
-Similarly, `++number` is an expression whereas `++number;` is a statement.
-
-### Declaration Statements
-
-In Java, declaration statements are used for declaring variables. For example,
+Aqui, `pontuacao = 90` é uma expressão que retorna um `int`. Considere outro exemplo,
 
 ```java
-Double tax = 9.5;
+Double a = 2.2, b = 3.4, resultado;
+resultado = a + b - 3.4;
 ```
-The statement above declares a variable tax which is initialized to 9.5.
-<Callout>
 
-**Note:** There are control flow statements that are used in decision making and looping in Java. You will learn about control flow statements in later chapters.
-
-</Callout>
-
-## Java Blocks
-
-A block is a group of statements (zero or more) that is enclosed in curly braces { }. For example,
+Aqui, `a + b - 3.4` é uma expressão.
 
 ```java
-class Main {
+if (numero1 == numero2)
+    System.out.println("Número 1 é maior que número 2");
+```
+
+Aqui, `numero1 == numero2` é uma expressão que retorna um valor booleano. Da mesma forma, `"Número 1 é maior que número 2"` é uma expressão de string.
+
+### Tipos de Expressões
+
+#### 1. Expressões Aritméticas
+
+```java
+public class ExemploExpressoes {
     public static void main(String[] args) {
+        // Expressões aritméticas
+        int a = 10;
+        int b = 5;
 
-        String band = "Beatles";
+        int soma = a + b;           // Expressão de soma
+        int subtracao = a - b;      // Expressão de subtração
+        int multiplicacao = a * b;   // Expressão de multiplicação
+        int divisao = a / b;        // Expressão de divisão
+        int modulo = a % b;         // Expressão de módulo
 
-        if (band == "Beatles") { // start of block
-            System.out.print("Hey ");
-            System.out.print("Jude!");
-        } // end of block
+        System.out.println("Soma: " + soma);
+        System.out.println("Subtração: " + subtracao);
+        System.out.println("Multiplicação: " + multiplicacao);
+        System.out.println("Divisão: " + divisao);
+        System.out.println("Módulo: " + modulo);
     }
 }
 ```
-Output:
+
+#### 2. Expressões Lógicas
+
+```java
+public class ExpressoesLogicas {
+    public static void main(String[] args) {
+        boolean x = true;
+        boolean y = false;
+
+        // Expressões lógicas
+        boolean and = x && y;    // AND lógico
+        boolean or = x || y;     // OR lógico
+        boolean not = !x;        // NOT lógico
+
+        System.out.println("x AND y: " + and);
+        System.out.println("x OR y: " + or);
+        System.out.println("NOT x: " + not);
+
+        // Expressões de comparação
+        int a = 10;
+        int b = 5;
+
+        boolean igual = a == b;      // Igual
+        boolean diferente = a != b;   // Diferente
+        boolean maior = a > b;       // Maior
+        boolean menor = a < b;       // Menor
+        boolean maiorIgual = a >= b; // Maior ou igual
+        boolean menorIgual = a <= b; // Menor ou igual
+
+        System.out.println("a == b: " + igual);
+        System.out.println("a != b: " + diferente);
+        System.out.println("a > b: " + maior);
+        System.out.println("a < b: " + menor);
+    }
+}
+```
+
+#### 3. Expressões de Atribuição
+
+```java
+public class ExpressoesAtribuicao {
+    public static void main(String[] args) {
+        int a = 10;
+
+        // Operadores de atribuição
+        a += 5;    // Equivale a: a = a + 5
+        a -= 3;    // Equivale a: a = a - 3
+        a *= 2;    // Equivale a: a = a * 2
+        a /= 4;    // Equivale a: a = a / 4
+        a %= 3;    // Equivale a: a = a % 3
+
+        System.out.println("Valor final de a: " + a);
+
+        // Operadores de incremento/decremento
+        int b = 5;
+        int c = ++b;  // Pré-incremento
+        int d = b++;  // Pós-incremento
+
+        System.out.println("b: " + b);
+        System.out.println("c: " + c);
+        System.out.println("d: " + d);
+    }
+}
+```
+
+## Instruções Java
+
+Em Java, cada instrução é uma unidade completa de execução. Por exemplo,
+
+```java
+int pontuacao = 9 * 5;
+```
+
+Aqui, temos uma instrução. A execução completa desta instrução envolve multiplicar os inteiros `9` e `5` e então atribuir o resultado à variável `pontuacao`.
+
+Na instrução acima, temos uma expressão `9 * 5`. Em Java, expressões fazem parte de instruções.
+
+### Instruções de Expressão
+
+Podemos converter uma expressão em uma instrução terminando a expressão com `;`. Estas são conhecidas como instruções de expressão. Por exemplo,
+
+```java
+// expressão
+numero = 10
+// instrução
+numero = 10;
+```
+
+No exemplo acima, temos uma expressão `numero = 10`. Aqui, adicionando um ponto e vírgula (`;`), convertemos a expressão em uma instrução (`numero = 10;`).
+
+Considere outro exemplo,
+
+```java
+// expressão
+++numero
+// instrução
+++numero;
+```
+
+Da mesma forma, `++numero` é uma expressão, enquanto `++numero;` é uma instrução.
+
+### Instruções de Declaração
+
+Em Java, instruções de declaração são usadas para declarar variáveis. Por exemplo,
+
+```java
+Double imposto = 9.5;
+```
+
+A instrução acima declara uma variável `imposto` que é inicializada com 9.5.
+
+### Instruções de Controle de Fluxo
+
+```java
+public class InstrucoesControle {
+    public static void main(String[] args) {
+        // Instrução if
+        int idade = 18;
+        if (idade >= 18) {
+            System.out.println("Maior de idade");
+        }
+
+        // Instrução if-else
+        int nota = 7;
+        if (nota >= 7) {
+            System.out.println("Aprovado");
+        } else {
+            System.out.println("Reprovado");
+        }
+
+        // Instrução for
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Iteração: " + i);
+        }
+
+        // Instrução while
+        int contador = 0;
+        while (contador < 3) {
+            System.out.println("Contador: " + contador);
+            contador++;
+        }
+
+        // Instrução switch
+        int dia = 3;
+        switch (dia) {
+            case 1:
+                System.out.println("Segunda-feira");
+                break;
+            case 2:
+                System.out.println("Terça-feira");
+                break;
+            default:
+                System.out.println("Outro dia");
+        }
+    }
+}
+```
+
+<Callout>
+
+**Nota:** Existem instruções de controle de fluxo que são usadas em tomada de decisão e loops em Java. Você aprenderá sobre instruções de controle de fluxo nos próximos capítulos.
+
+</Callout>
+
+## Blocos Java
+
+Um bloco é um grupo de instruções (zero ou mais) que está entre chaves `{ }`. Por exemplo,
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        String banda = "Beatles";
+
+        if (banda == "Beatles") { // início do bloco
+            System.out.print("Hey ");
+            System.out.print("Jude!");
+        } // fim do bloco
+    }
+}
+```
+
+**Saída**:
 
 ```plaintext
 Hey Jude!
 ```
-In the above example, we have a block `if {....}`.
 
-Here, inside the block we have two statements:
+No exemplo acima, temos um bloco `if {....}`.
 
-- `System.out.print("Hey ");`
-- `System.out.print("Jude!");`
+### Tipos de Blocos
 
-However, a block may not have any statements. Consider the following examples,
+#### 1. Blocos de Classe
 
 ```java
-class Main {
-    public static void main(String[] args) {
+public class ExemploClasse {
+    // Bloco de classe - contém todos os membros da classe
 
-        if (10 > 5) { // start of block
+    // Variáveis de instância
+    private String nome;
+    private int idade;
 
-        } // end of block
+    // Construtor
+    public ExemploClasse(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+
+    // Métodos
+    public void exibirInformacoes() {
+        System.out.println("Nome: " + nome);
+        System.out.println("Idade: " + idade);
     }
 }
 ```
-This is a valid Java program. Here, we have a block `if {...}`. However, there is no any statement inside this block.
+
+#### 2. Blocos de Método
 
 ```java
-class AssignmentOperator {
-    public static void main(String[] args) {  // start of block
+public class ExemploMetodo {
+    public void metodoExemplo() {
+        // Bloco do método
+        int a = 10;
+        int b = 20;
 
-    } // end of block
+        if (a < b) {
+            // Bloco condicional
+            System.out.println("a é menor que b");
+        }
+
+        for (int i = 0; i < 3; i++) {
+            // Bloco de loop
+            System.out.println("Iteração: " + i);
+        }
+    }
 }
 ```
-Here, we have block `public static void main() {...}`. However, similar to the above example, this block does not have any statement.
+
+#### 3. Blocos Estáticos
+
+```java
+public class ExemploBlocos {
+    private static int contador;
+
+    // Bloco estático - executado quando a classe é carregada
+    static {
+        contador = 0;
+        System.out.println("Bloco estático executado");
+    }
+
+    // Bloco de instância - executado antes do construtor
+    {
+        contador++;
+        System.out.println("Bloco de instância executado");
+    }
+
+    public ExemploBlocos() {
+        System.out.println("Construtor executado");
+    }
+}
+```
+
+#### 4. Blocos Aninhados
+
+```java
+public class BlocosAninhados {
+    public static void main(String[] args) {
+        // Bloco externo
+        {
+            int x = 10;
+            System.out.println("x no bloco externo: " + x);
+
+            // Bloco interno
+            {
+                int y = 20;
+                System.out.println("x no bloco interno: " + x);
+                System.out.println("y no bloco interno: " + y);
+            }
+
+            // y não está acessível aqui
+            // System.out.println("y fora do bloco interno: " + y); // ERRO!
+        }
+
+        // x e y não estão acessíveis aqui
+        // System.out.println("x fora do bloco: " + x); // ERRO!
+    }
+}
+```
+
+## Exemplos Práticos
+
+### Exemplo 1: Calculadora Simples
+
+```java
+public class Calculadora {
+    public static void main(String[] args) {
+        // Declaração de variáveis
+        double numero1 = 10.5;
+        double numero2 = 5.2;
+
+        // Expressões aritméticas
+        double soma = numero1 + numero2;
+        double subtracao = numero1 - numero2;
+        double multiplicacao = numero1 * numero2;
+        double divisao = numero1 / numero2;
+
+        // Bloco de instruções
+        {
+            System.out.println("=== Resultados ===");
+            System.out.println("Soma: " + soma);
+            System.out.println("Subtração: " + subtracao);
+            System.out.println("Multiplicação: " + multiplicacao);
+            System.out.println("Divisão: " + divisao);
+        }
+
+        // Expressões lógicas
+        boolean numero1Maior = numero1 > numero2;
+        boolean saoIguais = numero1 == numero2;
+
+        // Instruções condicionais
+        if (numero1Maior) {
+            System.out.println("Número 1 é maior que número 2");
+        } else if (saoIguais) {
+            System.out.println("Os números são iguais");
+        } else {
+            System.out.println("Número 2 é maior que número 1");
+        }
+    }
+}
+```
+
+### Exemplo 2: Validação de Dados
+
+```java
+public class ValidadorDados {
+    public static void main(String[] args) {
+        // Dados de entrada
+        String nome = "João";
+        int idade = 25;
+        String email = "joao@email.com";
+
+        // Expressões de validação
+        boolean nomeValido = nome != null && nome.length() > 0;
+        boolean idadeValida = idade >= 0 && idade <= 120;
+        boolean emailValido = email != null && email.contains("@");
+
+        // Bloco de validação
+        {
+            System.out.println("=== Validação de Dados ===");
+            System.out.println("Nome válido: " + nomeValido);
+            System.out.println("Idade válida: " + idadeValida);
+            System.out.println("Email válido: " + emailValido);
+
+            // Instrução condicional composta
+            if (nomeValido && idadeValida && emailValido) {
+                System.out.println("Todos os dados são válidos!");
+            } else {
+                System.out.println("Existem dados inválidos!");
+            }
+        }
+    }
+}
+```
+
+### Exemplo 3: Processamento de Array
+
+```java
+public class ProcessamentoArray {
+    public static void main(String[] args) {
+        // Declaração e inicialização do array
+        int[] numeros = {1, 2, 3, 4, 5};
+
+        // Expressões para calcular soma e média
+        int soma = 0;
+        for (int numero : numeros) {
+            soma += numero; // Expressão de atribuição composta
+        }
+
+        double media = (double) soma / numeros.length; // Expressão de divisão
+
+        // Bloco de processamento
+        {
+            System.out.println("=== Processamento do Array ===");
+            System.out.println("Array: " + java.util.Arrays.toString(numeros));
+            System.out.println("Soma: " + soma);
+            System.out.println("Média: " + media);
+
+            // Expressões para encontrar máximo e mínimo
+            int maximo = numeros[0];
+            int minimo = numeros[0];
+
+            for (int numero : numeros) {
+                maximo = Math.max(maximo, numero); // Expressão de função
+                minimo = Math.min(minimo, numero); // Expressão de função
+            }
+
+            System.out.println("Máximo: " + maximo);
+            System.out.println("Mínimo: " + minimo);
+        }
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de IMC
+
+**Objetivo**: Criar expressões para calcular o Índice de Massa Corporal.
+
+**Enunciado**: Crie um programa que calcule o IMC usando expressões matemáticas.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class CalculadoraIMC {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Digite o peso (kg): ");
+        double peso = scanner.nextDouble();
+
+        System.out.print("Digite a altura (m): ");
+        double altura = scanner.nextDouble();
+
+        // Expressão para calcular IMC
+        double imc = peso / (altura * altura);
+
+        // Expressões lógicas para classificação
+        boolean abaixoPeso = imc < 18.5;
+        boolean pesoNormal = imc >= 18.5 && imc < 25;
+        boolean sobrepeso = imc >= 25 && imc < 30;
+        boolean obesidade = imc >= 30;
+
+        // Bloco de saída
+        {
+            System.out.println("=== Resultado do IMC ===");
+            System.out.println("Peso: " + peso + " kg");
+            System.out.println("Altura: " + altura + " m");
+            System.out.println("IMC: " + String.format("%.2f", imc));
+
+            // Instruções condicionais baseadas em expressões
+            if (abaixoPeso) {
+                System.out.println("Classificação: Abaixo do peso");
+            } else if (pesoNormal) {
+                System.out.println("Classificação: Peso normal");
+            } else if (sobrepeso) {
+                System.out.println("Classificação: Sobrepeso");
+            } else if (obesidade) {
+                System.out.println("Classificação: Obesidade");
+            }
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 2: Validador de Senha
+
+**Objetivo**: Usar expressões lógicas para validar uma senha.
+
+**Enunciado**: Crie um programa que valide uma senha usando expressões booleanas.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class ValidadorSenha {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Digite uma senha: ");
+        String senha = scanner.nextLine();
+
+        // Expressões de validação
+        boolean temComprimentoMinimo = senha.length() >= 8;
+        boolean temMaiuscula = false;
+        boolean temMinuscula = false;
+        boolean temNumero = false;
+        boolean temEspecial = false;
+
+        // Bloco de verificação de caracteres
+        {
+            for (char c : senha.toCharArray()) {
+                temMaiuscula = temMaiuscula || Character.isUpperCase(c);
+                temMinuscula = temMinuscula || Character.isLowerCase(c);
+                temNumero = temNumero || Character.isDigit(c);
+                temEspecial = temEspecial || !Character.isLetterOrDigit(c);
+            }
+        }
+
+        // Expressão lógica composta
+        boolean senhaValida = temComprimentoMinimo && temMaiuscula &&
+                             temMinuscula && temNumero && temEspecial;
+
+        // Bloco de resultado
+        {
+            System.out.println("=== Validação da Senha ===");
+            System.out.println("Comprimento mínimo (8): " + temComprimentoMinimo);
+            System.out.println("Tem maiúscula: " + temMaiuscula);
+            System.out.println("Tem minúscula: " + temMinuscula);
+            System.out.println("Tem número: " + temNumero);
+            System.out.println("Tem caractere especial: " + temEspecial);
+            System.out.println("Senha válida: " + senhaValida);
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 3: Calculadora de Juros Compostos
+
+**Objetivo**: Criar expressões matemáticas para calcular juros compostos.
+
+**Enunciado**: Crie um programa que calcule juros compostos usando expressões matemáticas.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class CalculadoraJurosCompostos {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Capital inicial: R$ ");
+        double capital = scanner.nextDouble();
+
+        System.out.print("Taxa de juros (% ao mês): ");
+        double taxa = scanner.nextDouble() / 100; // Converte para decimal
+
+        System.out.print("Tempo (meses): ");
+        int tempo = scanner.nextInt();
+
+        // Expressão para calcular montante
+        double montante = capital * Math.pow(1 + taxa, tempo);
+
+        // Expressão para calcular juros
+        double juros = montante - capital;
+
+        // Bloco de resultados
+        {
+            System.out.println("=== Cálculo de Juros Compostos ===");
+            System.out.println("Capital inicial: R$ " + String.format("%.2f", capital));
+            System.out.println("Taxa de juros: " + String.format("%.2f", taxa * 100) + "% ao mês");
+            System.out.println("Tempo: " + tempo + " meses");
+            System.out.println("Montante final: R$ " + String.format("%.2f", montante));
+            System.out.println("Juros ganhos: R$ " + String.format("%.2f", juros));
+
+            // Expressão para calcular rentabilidade
+            double rentabilidade = (montante / capital - 1) * 100;
+            System.out.println("Rentabilidade total: " + String.format("%.2f", rentabilidade) + "%");
+        }
+
+        scanner.close();
+    }
+}
+```
+
+## Conclusão
+
+Expressões, instruções e blocos são fundamentais em Java:
+
+- **Expressões**: Combinam variáveis, operadores e literais para produzir valores
+- **Instruções**: Unidades completas de execução que terminam com `;`
+- **Blocos**: Grupos de instruções entre chaves `{ }`
+
+**Características importantes**:
+
+- Expressões fazem parte de instruções
+- Instruções podem conter múltiplas expressões
+- Blocos podem conter múltiplas instruções
+- Blocos criam escopo para variáveis
+- Expressões podem ser simples ou complexas
+
+Lembre-se de usar expressões, instruções e blocos de forma clara e organizada para criar código legível e eficiente.

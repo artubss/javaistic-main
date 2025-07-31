@@ -1,249 +1,521 @@
 ---
-title: Java Variables and Literals
-description: Variables and Literals in Java
+title: "Variáveis e Literais em Java"
+description: "Aprenda sobre variáveis e literais em Java com exemplos práticos"
+difficulty: "Básico"
+category: "Fundamentos Java"
 ---
 
-In this tutorial, we will learn about Java variables and literals with the help of examples.
+## Variáveis e Literais em Java
 
-## Java Variables
+Neste tutorial, aprenderemos sobre variáveis e literais Java com a ajuda de exemplos.
 
-A variable is a location in memory (storage area) to hold data.
+## Variáveis Java
 
-To indicate the storage area, each variable should be given a unique name (identifier). Learn more about [Java identifiers](https://javaistic.vercel.app/java-introduction/keywords-identifiers).
+Uma variável é uma localização na memória (área de armazenamento) para manter dados.
+
+Para indicar a área de armazenamento, cada variável deve receber um nome único (identificador). Saiba mais sobre [identificadores Java](/docs/introduction).
 
 ---
 
-### Create Variables in Java
+### Criar Variáveis em Java
 
-Here's how we create a variable in Java,
-
-```java
-int speedLimit = 80;
-
-```
-
-Here, `speedLimit` is a variable of `int` data type and we have assigned value **80** to it.
-
-The int data type suggests that the variable can only hold integers.
-To learn more, visit [Java data types](/docs/variables-primitive-data-types).
-
-In the example, we have assigned value to the variable during declaration. However, it's not mandatory.
-
-You can declare variables and assign variables separately. For example,
+Aqui está como criamos uma variável em Java:
 
 ```java
-int speedLimit;
-speedLimit = 80;
+int limiteVelocidade = 80;
 ```
-<p className="mt-4"/>
+
+Aqui, `limiteVelocidade` é uma variável do tipo de dados `int` e atribuímos o valor **80** a ela.
+
+O tipo de dados int sugere que a variável pode apenas manter inteiros.
+Para saber mais, visite [tipos de dados Java](/docs/variables-primitive-data-types).
+
+No exemplo, atribuímos valor à variável durante a declaração. No entanto, não é obrigatório.
+
+Você pode declarar variáveis e atribuir valores separadamente. Por exemplo:
+
+```java
+int limiteVelocidade;
+limiteVelocidade = 80;
+```
 
 <Callout>
 
-**Note :** Java is a statically-typed language. It means that all variables
-must be declared before they can be used.
+**Nota:** Java é uma linguagem estaticamente tipada. Isso significa que todas as variáveis devem ser declaradas antes de serem usadas.
 
 </Callout>
 
 ---
 
-### Change values of variables
+### Alterar Valores de Variáveis
 
-The value of a variable can be changed in the program, hence the name variable. For example,
-
-```java
-int speedLimit = 80;
-... .. ...
-speedLimit = 90;
-```
-
-Here, initially, the value of `speedLimit` is **80**. Later, we changed it to **90**.
-
-However, we cannot change the data type of a variable in Java within the same scope.
-
-What is the variable scope?
-
-Don't worry about it for now. Just remember that we can't do something like this:
+O valor de uma variável pode ser alterado no programa, daí o nome variável. Por exemplo:
 
 ```java
-int speedLimit = 80;
-... .. ...
-float speedLimit;
+int limiteVelocidade = 80;
+// ... código ...
+limiteVelocidade = 90;
 ```
 
-To learn more, visit: [Can I change declaration type for a variable in Java](http://stackoverflow.com/questions/27092245/can-i-change-declaration-type-for-a-variable-in-java)?
+Aqui, inicialmente, o valor de `limiteVelocidade` é **80**. Mais tarde, alteramos para **90**.
+
+No entanto, não podemos alterar o tipo de dados de uma variável em Java dentro do mesmo escopo.
+
+O que é escopo de variável?
+
+Não se preocupe com isso agora. Apenas lembre-se de que não podemos fazer algo assim:
+
+```java
+int limiteVelocidade = 80;
+// ... código ...
+float limiteVelocidade; // ERRO! Não pode alterar o tipo
+```
 
 ---
 
-### Rules for Naming Variables in Java
+### Regras para Nomear Variáveis em Java
 
-Java programming language has its own set of rules and conventions for naming variables. Here's what you need to know:
+A linguagem de programação Java tem seu próprio conjunto de regras e convenções para nomear variáveis. Aqui está o que você precisa saber:
 
-- Java is case sensitive. Hence, `age` and `AGE` are two different variables. For example,
+- Java é sensível a maiúsculas e minúsculas. Portanto, `idade` e `IDADE` são duas variáveis diferentes. Por exemplo:
 
 ```java
-int age = 24;
-int AGE = 25;
+int idade = 24;
+int IDADE = 25;
 
-System.out.println(age); // prints 24
-System.out.println(AGE); // prints 25
+System.out.println(idade); // imprime 24
+System.out.println(IDADE); // imprime 25
 ```
 
-- Variables must start with either a **letter** or an **underscore**, **\_** or a **dollar**, **$** sign. For example,
+- Variáveis devem começar com uma **letra**, **underscore** `_` ou **dólar** `$`. Por exemplo:
 
 ```java
-int age; // valid name and good practice
-int _age; // valid but bad practice
-int $age; // valid but bad practice
+int idade;    // nome válido e boa prática
+int _idade;   // válido mas má prática
+int $idade;   // válido mas má prática
 ```
 
-- Variable names cannot start with numbers. For example,
+- Nomes de variáveis não podem começar com números. Por exemplo:
 
 ```java
-int 1age; // invalid variables
+int 1idade;   // inválido
+int idade1;   // válido
 ```
 
-- Variable names can't use whitespace. For example,
+- Nomes de variáveis não podem conter espaços ou caracteres especiais (exceto `_` e `$`). Por exemplo:
 
 ```java
-int my age; // invalid variables
+int idade_usuario;  // válido
+int idadeUsuario;   // válido (camelCase - recomendado)
+int idade-usuario;  // inválido
+int idade usuario;  // inválido
 ```
 
-Here, is we need to use variable names having more than one word, use all lowercase letters for the first word and capitalize the first letter of each subsequent word. For example, `myAge`.
-
-- When creating variables, choose a name that makes sense. For example, `score` , `number` , `level` makes more sense than variable names such as `s` ,`n` , and `l`.
-- If you choose one-word variable names, use all lowercase letters. For example, it's better to use `speed` rather than `SPEED`, or `sPEED`.
-
----
-
-There are 4 types of variables in Java programming language:
-
-- **Instance Variables (Non-Static Fields)**
-- **Class Variables (Static Fields)**
-- **Local Variables**
-- **Parameters**
-
-If you are interested to learn more about it now, visit [Java Variable Types](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/variables.html).
-
----
-
-## Java Literals
-
-Literals are data used for representing fixed values. They can be used directly in the code. For example,
+- Não pode usar palavras-chave Java como nomes de variáveis. Por exemplo:
 
 ```java
-int a = 1;
-float b = 2.5;
-char c = 'F';
+int class;    // inválido - class é palavra-chave
+int public;   // inválido - public é palavra-chave
+int nome;     // válido
 ```
 
-Here, `1` , `2.5` , and `'F'` are literals.
-
-Here are different types of literals in Java.
-
----
-
-### 1. Boolean Literals
-
-In Java, boolean literals are used to initialize boolean data types. They can store two values: true and false. For example,
+### Convenções de Nomenclatura
 
 ```java
-boolean flag1 = false;
-boolean flag2 = true;
-```
+public class ExemploNomenclatura {
+    public static void main(String[] args) {
+        // camelCase para variáveis locais
+        String nomeCompleto = "João Silva";
+        int idadeUsuario = 25;
+        double salarioMensal = 5000.0;
 
-Here, `false` and `true` are two boolean literals.
+        // snake_case para constantes (não recomendado em Java)
+        final int MAX_TENTATIVAS = 3;
+        final String NOME_APLICACAO = "Minha App";
 
----
+        // camelCase para variáveis de instância
+        private String nomeProduto;
+        private int quantidadeEstoque;
 
-### 2. Integer Literals
-
-An integer literal is a numeric value(associated with numbers) without any fractional or exponential part. There are 4 types of integer literals in Java:
-
-1. binary (base 2)
-2. decimal (base 10)
-3. octal (base 8)
-4. hexadecimal (base 16)
-
-For example:
-
-```java
-// binary
-int binaryNumber = 0b10010;
-// octal
-int octalNumber = 027;
-
-// decimal
-int decNumber = 34;
-
-// hexadecimal
-int hexNumber = 0x2F; // 0x represents hexadecimal
-// binary
-int binNumber = 0b10010; // 0b represents binary
-
-```
-
-In Java, binary starts with **0b**, octal starts with **0**, and hexadecimal starts with **0x**.
-
-<p className="mt-4"/>
-
-<Callout>
-
-**Note :** Integer literals are used to initialize variables of integer types
-like `byte` , `short` , `int` , and `long` .
-</Callout>
-
----
-
-### 3. Floating-point Literals
-
-A floating-point literal is a numeric literal that has either a fractional form or an exponential form. For example,
-
-```java
-class Main {
-  public static void main(String[] args) {
-    double myDouble = 3.4;
-    float myFloat = 3.4F;
-
-    // 3.445*10^2
-    double myDoubleScientific = 3.445e2;
-
-    System.out.println(myDouble); // prints 3.4
-    System.out.println(myFloat); // prints 3.4
-    System.out.println(myDoubleScientific); // prints 344.5
-  }
+        // PascalCase para nomes de classes
+        class Produto {
+            // ...
+        }
+    }
 }
 ```
-<p className="mt-4"/>
 
-<Callout>
+## Literais Java
 
-**Note :** The floating-point literals are used to initialize `float` and `double`
-type variables.
+Literais são valores fixos que são atribuídos diretamente às variáveis. Eles representam dados de diferentes tipos.
 
-</Callout>
+### Tipos de Literais
 
----
-### 4. Character Literals
-
-Character literals are unicode character enclosed inside single quotes. For example,
+#### 1. Literais Inteiros
 
 ```java
-char letter = 'a';
+public class LiteraisInteiros {
+    public static void main(String[] args) {
+        // Literais decimais
+        int decimal = 100;
+        int negativo = -50;
+
+        // Literais octais (base 8) - começam com 0
+        int octal = 0144;  // 100 em decimal
+
+        // Literais hexadecimais (base 16) - começam com 0x ou 0X
+        int hex = 0x64;    // 100 em decimal
+
+        // Literais binários (base 2) - começam com 0b ou 0B
+        int binario = 0b1100100;  // 100 em decimal
+
+        // Literais long - terminam com L ou l
+        long numeroLongo = 123456789L;
+
+        System.out.println("Decimal: " + decimal);
+        System.out.println("Octal: " + octal);
+        System.out.println("Hexadecimal: " + hex);
+        System.out.println("Binário: " + binario);
+        System.out.println("Long: " + numeroLongo);
+    }
+}
 ```
 
-Here, `a` is the character literal.
-
-We can also use escape sequences as character literals. For example, **\b** (backspace), **\t** (tab), **\n** (new line), etc.
-
----
-
-### 5. String Literals
-
-A string literal is a sequence of characters enclosed inside double-quotes. For example,
+#### 2. Literais de Ponto Flutuante
 
 ```java
-String str1 = "Java Programming";
-String str2 = "Javaistic";
+public class LiteraisPontoFlutuante {
+    public static void main(String[] args) {
+        // Literais double (padrão)
+        double pi = 3.14159;
+        double negativo = -2.5;
+        double cientifico = 1.23e-4;  // 0.000123
+
+        // Literais float - terminam com F ou f
+        float altura = 1.75f;
+        float temperatura = -10.5f;
+
+        // Notação científica
+        double grande = 1.23e6;   // 1230000.0
+        double pequeno = 1.23e-6;  // 0.00000123
+
+        System.out.println("Pi: " + pi);
+        System.out.println("Altura: " + altura);
+        System.out.println("Científico: " + cientifico);
+        System.out.println("Grande: " + grande);
+        System.out.println("Pequeno: " + pequeno);
+    }
+}
 ```
 
-Here, `Java Programming` and `Javaistic` are two string literals.
+#### 3. Literais de Caractere
+
+```java
+public class LiteraisCaractere {
+    public static void main(String[] args) {
+        // Caracteres simples
+        char letra = 'A';
+        char numero = '5';
+        char simbolo = '@';
+
+        // Caracteres especiais (escape sequences)
+        char quebraLinha = '\n';
+        char tab = '\t';
+        char aspas = '\"';
+        char barra = '\\';
+
+        // Caracteres Unicode
+        char unicode = '\u0041';  // 'A'
+        char acento = 'ç';
+
+        System.out.println("Letra: " + letra);
+        System.out.println("Número: " + numero);
+        System.out.println("Unicode: " + unicode);
+        System.out.println("Acento: " + acento);
+    }
+}
+```
+
+#### 4. Literais de String
+
+```java
+public class LiteraisString {
+    public static void main(String[] args) {
+        // Strings simples
+        String nome = "João";
+        String frase = "Olá, mundo!";
+
+        // Strings com caracteres especiais
+        String caminho = "C:\\Users\\João\\Documents";
+        String citacao = "Ele disse: \"Olá!\"";
+        String quebraLinha = "Primeira linha\nSegunda linha";
+
+        // Strings vazias
+        String vazia = "";
+        String nula = null;
+
+        // Concatenação de strings
+        String completo = nome + " " + "Silva";
+
+        System.out.println("Nome: " + nome);
+        System.out.println("Caminho: " + caminho);
+        System.out.println("Citação: " + citacao);
+        System.out.println("Completo: " + completo);
+    }
+}
+```
+
+#### 5. Literais Booleanos
+
+```java
+public class LiteraisBooleanos {
+    public static void main(String[] args) {
+        // Valores booleanos
+        boolean verdadeiro = true;
+        boolean falso = false;
+
+        // Expressões booleanas
+        boolean maior = 10 > 5;
+        boolean igual = 10 == 10;
+        boolean diferente = 10 != 5;
+
+        // Operações lógicas
+        boolean and = true && false;
+        boolean or = true || false;
+        boolean not = !true;
+
+        System.out.println("Verdadeiro: " + verdadeiro);
+        System.out.println("Falso: " + falso);
+        System.out.println("Maior: " + maior);
+        System.out.println("AND: " + and);
+        System.out.println("OR: " + or);
+        System.out.println("NOT: " + not);
+    }
+}
+```
+
+## Exemplos Práticos
+
+### Exemplo 1: Calculadora de Área
+
+```java
+public class CalculadoraArea {
+    public static void main(String[] args) {
+        // Variáveis para dimensões
+        double largura = 10.5;
+        double altura = 5.2;
+
+        // Cálculo da área
+        double area = largura * altura;
+
+        // Exibição do resultado
+        System.out.println("=== Cálculo de Área ===");
+        System.out.println("Largura: " + largura + " metros");
+        System.out.println("Altura: " + altura + " metros");
+        System.out.println("Área: " + area + " metros quadrados");
+
+        // Verificação se é um quadrado
+        boolean ehQuadrado = largura == altura;
+        System.out.println("É um quadrado? " + ehQuadrado);
+    }
+}
+```
+
+### Exemplo 2: Conversor de Temperatura
+
+```java
+public class ConversorTemperatura {
+    public static void main(String[] args) {
+        // Temperatura em Celsius
+        double celsius = 25.0;
+
+        // Constantes para conversão
+        final double FATOR_CELSIUS_FARENHEIT = 9.0 / 5.0;
+        final double AJUSTE_FARENHEIT = 32.0;
+
+        // Conversão para Fahrenheit
+        double fahrenheit = (celsius * FATOR_CELSIUS_FARENHEIT) + AJUSTE_FARENHEIT;
+
+        // Conversão para Kelvin
+        final double AJUSTE_KELVIN = 273.15;
+        double kelvin = celsius + AJUSTE_KELVIN;
+
+        // Exibição dos resultados
+        System.out.println("=== Conversor de Temperatura ===");
+        System.out.println("Celsius: " + celsius + "°C");
+        System.out.println("Fahrenheit: " + fahrenheit + "°F");
+        System.out.println("Kelvin: " + kelvin + "K");
+    }
+}
+```
+
+### Exemplo 3: Validador de Senha
+
+```java
+public class ValidadorSenha {
+    public static void main(String[] args) {
+        // Dados de entrada
+        String senha = "MinhaSenha123";
+
+        // Validações
+        boolean temComprimentoMinimo = senha.length() >= 8;
+        boolean temMaiuscula = false;
+        boolean temMinuscula = false;
+        boolean temNumero = false;
+
+        // Verificar caracteres
+        for (char c : senha.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                temMaiuscula = true;
+            } else if (Character.isLowerCase(c)) {
+                temMinuscula = true;
+            } else if (Character.isDigit(c)) {
+                temNumero = true;
+            }
+        }
+
+        // Resultado final
+        boolean senhaValida = temComprimentoMinimo && temMaiuscula &&
+                             temMinuscula && temNumero;
+
+        // Exibição dos resultados
+        System.out.println("=== Validação de Senha ===");
+        System.out.println("Senha: " + senha);
+        System.out.println("Comprimento mínimo (8): " + temComprimentoMinimo);
+        System.out.println("Tem maiúscula: " + temMaiuscula);
+        System.out.println("Tem minúscula: " + temMinuscula);
+        System.out.println("Tem número: " + temNumero);
+        System.out.println("Senha válida: " + senhaValida);
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de IMC
+
+**Objetivo**: Criar variáveis para calcular o Índice de Massa Corporal.
+
+**Enunciado**: Crie um programa que calcule o IMC usando variáveis apropriadas.
+
+**Resolução**:
+
+```java
+public class CalculadoraIMC {
+    public static void main(String[] args) {
+        // Dados de entrada
+        double peso = 70.5;  // em quilogramas
+        double altura = 1.75; // em metros
+
+        // Cálculo do IMC
+        double imc = peso / (altura * altura);
+
+        // Classificação do IMC
+        String classificacao;
+        if (imc < 18.5) {
+            classificacao = "Abaixo do peso";
+        } else if (imc < 25) {
+            classificacao = "Peso normal";
+        } else if (imc < 30) {
+            classificacao = "Sobrepeso";
+        } else {
+            classificacao = "Obesidade";
+        }
+
+        // Exibição dos resultados
+        System.out.println("=== Cálculo de IMC ===");
+        System.out.println("Peso: " + peso + " kg");
+        System.out.println("Altura: " + altura + " m");
+        System.out.printf("IMC: %.2f\n", imc);
+        System.out.println("Classificação: " + classificacao);
+    }
+}
+```
+
+### Exercício 2: Calculadora de Juros
+
+**Objetivo**: Usar variáveis para calcular juros simples.
+
+**Enunciado**: Crie um programa que calcule juros simples usando variáveis.
+
+**Resolução**:
+
+```java
+public class CalculadoraJuros {
+    public static void main(String[] args) {
+        // Dados de entrada
+        double capital = 1000.0;    // Capital inicial
+        double taxa = 0.05;         // Taxa de juros (5% ao ano)
+        int tempo = 2;              // Tempo em anos
+
+        // Cálculo dos juros
+        double juros = capital * taxa * tempo;
+        double montante = capital + juros;
+
+        // Exibição dos resultados
+        System.out.println("=== Cálculo de Juros Simples ===");
+        System.out.println("Capital inicial: R$ " + capital);
+        System.out.println("Taxa de juros: " + (taxa * 100) + "% ao ano");
+        System.out.println("Tempo: " + tempo + " anos");
+        System.out.println("Juros: R$ " + juros);
+        System.out.println("Montante final: R$ " + montante);
+
+        // Verificação se é um bom investimento
+        boolean bomInvestimento = juros > 100;
+        System.out.println("É um bom investimento? " + bomInvestimento);
+    }
+}
+```
+
+### Exercício 3: Validador de CPF
+
+**Objetivo**: Usar variáveis para validar um CPF.
+
+**Enunciado**: Crie um programa que valide um CPF usando variáveis.
+
+**Resolução**:
+
+```java
+public class ValidadorCPF {
+    public static void main(String[] args) {
+        // CPF para validação
+        String cpf = "12345678909";
+
+        // Variáveis para validação
+        boolean tem11Digitos = cpf.length() == 11;
+        boolean todosIguais = cpf.matches("(\\d)\\1{10}");
+
+        // Validação básica
+        boolean cpfValido = tem11Digitos && !todosIguais;
+
+        // Exibição dos resultados
+        System.out.println("=== Validação de CPF ===");
+        System.out.println("CPF: " + cpf);
+        System.out.println("Tem 11 dígitos: " + tem11Digitos);
+        System.out.println("Todos os dígitos iguais: " + todosIguais);
+        System.out.println("CPF válido: " + cpfValido);
+
+        // Mensagem final
+        String mensagem = cpfValido ? "CPF válido!" : "CPF inválido!";
+        System.out.println("Resultado: " + mensagem);
+    }
+}
+```
+
+## Conclusão
+
+Variáveis e literais são fundamentais em Java:
+
+- **Variáveis**: Armazenam dados que podem ser alterados durante a execução
+- **Literais**: Representam valores fixos de diferentes tipos
+- **Nomenclatura**: Seguir convenções para código legível
+- **Tipos**: Escolher o tipo apropriado para cada dado
+
+**Boas práticas**:
+
+- Use nomes descritivos para variáveis
+- Escolha o tipo de dados apropriado
+- Use constantes (final) para valores que não mudam
+- Siga as convenções de nomenclatura Java
+
+Lembre-se de praticar com diferentes tipos de variáveis e literais para dominar esses conceitos básicos.

@@ -75,7 +75,7 @@ public class ExemploBreak {
             System.out.print(i + " ");
         }
         System.out.println("\n");
-        
+
         // Exemplo 2: break em while
         System.out.println("Exemplo 2 - break em while:");
         int j = 1;
@@ -87,7 +87,7 @@ public class ExemploBreak {
             j++;
         }
         System.out.println("\n");
-        
+
         // Exemplo 3: break em do-while
         System.out.println("Exemplo 3 - break em do-while:");
         int k = 1;
@@ -111,11 +111,11 @@ public class BreakRotulado {
         // Loop externo
         externo: for (int i = 1; i <= 3; i++) {
             System.out.println("Iteração externa: " + i);
-            
+
             // Loop interno
             for (int j = 1; j <= 5; j++) {
                 System.out.println("  Iteração interna: " + j);
-                
+
                 if (i == 2 && j == 3) {
                     System.out.println("  Saindo do loop externo!");
                     break externo; // Sai do loop externo
@@ -133,7 +133,7 @@ public class BreakRotulado {
 public class BreakSwitch {
     public static void main(String[] args) {
         int dia = 3;
-        
+
         switch (dia) {
             case 1:
                 System.out.println("Segunda-feira");
@@ -174,7 +174,7 @@ public class BuscaArray {
         int[] numeros = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
         int numeroProcurado = 50;
         boolean encontrado = false;
-        
+
         for (int i = 0; i < numeros.length; i++) {
             if (numeros[i] == numeroProcurado) {
                 System.out.println("Número " + numeroProcurado + " encontrado na posição " + i);
@@ -182,7 +182,7 @@ public class BuscaArray {
                 break; // Para a busca assim que encontrar
             }
         }
-        
+
         if (!encontrado) {
             System.out.println("Número " + numeroProcurado + " não encontrado!");
         }
@@ -197,13 +197,13 @@ public class ValidacaoSenha {
     public static void main(String[] args) {
         String senha = "abc123";
         boolean senhaValida = true;
-        
+
         // Verificar se tem pelo menos 6 caracteres
         if (senha.length() < 6) {
             System.out.println("Senha deve ter pelo menos 6 caracteres!");
             senhaValida = false;
         }
-        
+
         // Verificar se tem pelo menos um número
         boolean temNumero = false;
         for (char c : senha.toCharArray()) {
@@ -212,12 +212,12 @@ public class ValidacaoSenha {
                 break; // Para assim que encontrar um número
             }
         }
-        
+
         if (!temNumero) {
             System.out.println("Senha deve conter pelo menos um número!");
             senhaValida = false;
         }
-        
+
         if (senhaValida) {
             System.out.println("Senha válida!");
         }
@@ -233,7 +233,7 @@ import java.util.Scanner;
 public class MenuOpcoes {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
+
         while (true) {
             System.out.println("\n=== MENU ===");
             System.out.println("1. Opção 1");
@@ -241,9 +241,9 @@ public class MenuOpcoes {
             System.out.println("3. Opção 3");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
-            
+
             int opcao = scanner.nextInt();
-            
+
             switch (opcao) {
                 case 1:
                     System.out.println("Você escolheu a opção 1");
@@ -270,6 +270,7 @@ public class MenuOpcoes {
 ## Exercícios Práticos
 
 ### Exercício 1: Números Primos
+
 **Objetivo**: Encontrar o primeiro número primo em um intervalo.
 
 **Enunciado**: Crie um programa que encontre o primeiro número primo entre 1 e 100.
@@ -280,10 +281,10 @@ public class MenuOpcoes {
 public class PrimeiroPrimo {
     public static void main(String[] args) {
         System.out.println("Procurando o primeiro número primo entre 1 e 100...");
-        
+
         for (int i = 2; i <= 100; i++) {
             boolean ehPrimo = true;
-            
+
             // Verificar se i é primo
             for (int j = 2; j <= Math.sqrt(i); j++) {
                 if (i % j == 0) {
@@ -291,7 +292,7 @@ public class PrimeiroPrimo {
                     break; // Não é primo, para a verificação
                 }
             }
-            
+
             if (ehPrimo) {
                 System.out.println("Primeiro número primo encontrado: " + i);
                 break; // Para a busca assim que encontrar o primeiro primo
@@ -302,6 +303,7 @@ public class PrimeiroPrimo {
 ```
 
 ### Exercício 2: Soma até Limite
+
 **Objetivo**: Somar números até atingir um limite.
 
 **Enunciado**: Crie um programa que some números de 1 até que a soma ultrapasse 100.
@@ -313,25 +315,26 @@ public class SomaAteLimite {
     public static void main(String[] args) {
         int soma = 0;
         int numero = 1;
-        
+
         while (true) {
             soma += numero;
-            
+
             if (soma > 100) {
                 System.out.println("Soma ultrapassou 100: " + soma);
                 System.out.println("Último número adicionado: " + numero);
                 break;
             }
-            
+
             numero++;
         }
-        
+
         System.out.println("Números somados: 1 até " + (numero - 1));
     }
 }
 ```
 
 ### Exercício 3: Break Rotulado Avançado
+
 **Objetivo**: Usar break rotulado para sair de loops aninhados.
 
 **Enunciado**: Crie um programa que encontre a primeira ocorrência de um número em uma matriz.
@@ -347,21 +350,21 @@ public class BuscaMatriz {
             {9, 10, 11, 12},
             {13, 14, 15, 16}
         };
-        
+
         int numeroProcurado = 11;
         boolean encontrado = false;
-        
+
         busca: for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[i].length; j++) {
                 if (matriz[i][j] == numeroProcurado) {
-                    System.out.println("Número " + numeroProcurado + 
+                    System.out.println("Número " + numeroProcurado +
                                      " encontrado na posição [" + i + "][" + j + "]");
                     encontrado = true;
                     break busca; // Sai de ambos os loops
                 }
             }
         }
-        
+
         if (!encontrado) {
             System.out.println("Número " + numeroProcurado + " não encontrado na matriz!");
         }
@@ -379,6 +382,3 @@ A instrução `break` é uma ferramenta poderosa para controlar o fluxo de execu
 - **Uso eficiente**: Melhora a performance evitando iterações desnecessárias
 
 Lembre-se de usar `break` com moderação e sempre com uma condição clara para manter o código legível e previsível.
-
-
-

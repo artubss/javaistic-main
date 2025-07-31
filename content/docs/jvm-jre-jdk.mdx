@@ -26,8 +26,10 @@ Java é uma **linguagem independente de plataforma**. Isso acontece porque quand
 5. **Garbage Collection**: Memória não utilizada é liberada automaticamente
 
 <div align="center">
-![Funcionamento de um Programa Java](/img/docs/jvm-jre-jdk/1.svg)
-<p align="center" className="text-sm text-zinc-500 font-medium">Funcionamento de um Programa Java</p>
+  ![Funcionamento de um Programa Java](/img/docs/jvm-jre-jdk/1.svg)
+  <p align="center" className="text-sm text-zinc-500 font-medium">
+    Funcionamento de um Programa Java
+  </p>
 </div>
 
 Se você estiver interessado em aprender sobre a Arquitetura da JVM, visite [The JVM Architecture Explained](https://dzone.com/articles/jvm-architecture-explained).
@@ -47,10 +49,10 @@ Se você estiver interessado em aprender sobre a Arquitetura da JVM, visite [The
 O JRE é o superconjunto da JVM, ou seja, contém a JVM e muito mais.
 
 <div align="center">
-![Ambiente de Execução Java](/img/docs/jvm-jre-jdk/2.svg)
-<p align="center" className="text-sm text-zinc-500 font-medium">
-  Ambiente de Execução Java
-</p>
+  ![Ambiente de Execução Java](/img/docs/jvm-jre-jdk/2.svg)
+  <p align="center" className="text-sm text-zinc-500 font-medium">
+    Ambiente de Execução Java
+  </p>
 </div>
 
 Se você precisa executar programas Java, mas não desenvolvê-los, o JRE é o que você precisa. Você pode baixar o JRE da [página de downloads do Java SE Runtime Environment](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html).
@@ -105,11 +107,11 @@ Se você quer desenvolver aplicações Java, [baixe o JDK](http://www.oracle.com
 
 ## Resumo das Diferenças
 
-| Componente | Descrição | Quando Usar |
-|------------|-----------|-------------|
-| **JVM** | Máquina virtual que executa bytecode Java | Sempre necessário para executar Java |
-| **JRE** | JVM + bibliotecas Java + ferramentas de execução | Para executar aplicações Java |
-| **JDK** | JRE + ferramentas de desenvolvimento | Para desenvolver aplicações Java |
+| Componente | Descrição                                        | Quando Usar                          |
+| ---------- | ------------------------------------------------ | ------------------------------------ |
+| **JVM**    | Máquina virtual que executa bytecode Java        | Sempre necessário para executar Java |
+| **JRE**    | JVM + bibliotecas Java + ferramentas de execução | Para executar aplicações Java        |
+| **JDK**    | JRE + ferramentas de desenvolvimento             | Para desenvolver aplicações Java     |
 
 ## Exemplo Prático
 
@@ -127,6 +129,7 @@ java -version
 ## Exercícios Práticos
 
 ### Exercício 1: Verificação de Instalação
+
 **Objetivo**: Verificar se o Java está instalado corretamente.
 
 **Enunciado**: Execute os seguintes comandos e verifique a saída:
@@ -137,11 +140,13 @@ javac -version
 ```
 
 **Resolução**:
+
 - Se ambos os comandos retornarem versões, você tem o JDK instalado
 - Se apenas `java -version` funcionar, você tem apenas o JRE
 - Se nenhum funcionar, você precisa instalar o Java
 
 ### Exercício 2: Compilação e Execução
+
 **Objetivo**: Criar e executar um programa Java simples.
 
 **Enunciado**: Crie um arquivo `Teste.java` com o seguinte conteúdo:
@@ -157,6 +162,7 @@ public class Teste {
 ```
 
 **Resolução**:
+
 ```bash
 # Compilar
 javac Teste.java
@@ -166,11 +172,13 @@ java Teste
 ```
 
 ### Exercício 3: Análise de Bytecode
+
 **Objetivo**: Entender como o código Java é compilado.
 
 **Enunciado**: Use o comando `javap` para analisar o bytecode gerado.
 
 **Resolução**:
+
 ```bash
 # Ver informações básicas da classe
 javap Teste.class

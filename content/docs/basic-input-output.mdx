@@ -1,57 +1,60 @@
 ---
-title: Java Basic Input and Output
-description:  In this tutorial, you will learn simple ways to display output to users and take input from users in Java.
-
+title: "Entrada e Saída Básica em Java"
+description: "Aprenda formas simples de exibir saída para usuários e receber entrada de usuários em Java"
+difficulty: "Básico"
+category: "Fundamentos Java"
 ---
 
+## Saída Java
 
-## Java Output
-In Java, you can simply use
+Em Java, você pode simplesmente usar
 
 ```java
-System.out.println(); or
+System.out.println(); ou
 
-System.out.print(); or
+System.out.print(); ou
 
 System.out.printf();
 ```
 
-to send output to standard output (screen).
+para enviar saída para a saída padrão (tela).
 
-Here,
+Aqui,
 
-- `System` is a class
-- `out` is a `public` `static` field: it accepts output data.
+- `System` é uma classe
+- `out` é um campo `public` `static`: ele aceita dados de saída.
 
-Don't worry if you don't understand it. We will discuss `class`, `public`, and `static` in later chapters.
+Não se preocupe se você não entender. Discutiremos `class`, `public` e `static` nos próximos capítulos.
 
-Let's take an example to output a line.
+Vamos ver um exemplo para exibir uma linha.
 
 ```java
-class AssignmentOperator {
+public class SaidaBasica {
     public static void main(String[] args) {
-
-        System.out.println("Java programming is interesting.");
+        System.out.println("Programação Java é interessante.");
     }
 }
 ```
-**Output:**
+
+**Saída:**
 
 ```plaintext
-Java programming is interesting.
+Programação Java é interessante.
 ```
-Here, we have used the `println()` method to display the string.
 
-## Difference between println(), print() and printf()
-- `print()` - It prints string inside the quotes.
-- `println()` - It prints string inside the quotes similar like `print()` method. Then the cursor moves to the beginning of the next line.
-- `printf()` - It provides string formatting.
+Aqui, usamos o método `println()` para exibir a string.
 
-### Example: print() and println()
+## Diferença entre println(), print() e printf()
+
+- `print()` - Imprime a string dentro das aspas.
+- `println()` - Imprime a string dentro das aspas similar ao método `print()`. Então o cursor se move para o início da próxima linha.
+- `printf()` - Fornece formatação de string.
+
+### Exemplo: print() e println()
+
 ```java
-class Output {
+public class Saida {
     public static void main(String[] args) {
-
         System.out.println("1. println ");
         System.out.println("2. println ");
 
@@ -60,157 +63,536 @@ class Output {
     }
 }
 ```
-**Output:**
+
+**Saída:**
+
 ```plaintext
 1. println
 2. println
 1. print 2. print
 ```
-In the above example, we have shown the working of the `print()` and `println()` methods. To learn about the `printf()` method, visit Java [**printf()**](https://www.cs.colostate.edu/~cs160/.Summer16/resources/Java_printf_method_quick_reference.pdf).
 
-### Example: Printing Variables and Literals
+No exemplo acima, mostramos o funcionamento dos métodos `print()` e `println()`. Para aprender sobre o método `printf()`, visite [**printf()**](https://www.cs.colostate.edu/~cs160/.Summer16/resources/Java_printf_method_quick_reference.pdf).
+
+### Exemplo: Imprimindo Variáveis e Literais
 
 ```java
-class Variables {
+public class Variaveis {
     public static void main(String[] args) {
-
-        Double number = -10.6;
+        Double numero = -10.6;
 
         System.out.println(5);
-        System.out.println(number);
+        System.out.println(numero);
     }
 }
 ```
-When you run the program, the output will be:
+
+Quando você executa o programa, a saída será:
 
 ```plaintext
 5
 -10.6
 ```
-Here, you can see that we have not used the quotation marks. It is because to display integers, variables and so on, we don't use quotation marks.
 
-### Example: Print Concatenated Strings
+Aqui, você pode ver que não usamos aspas. É porque para exibir inteiros, variáveis e assim por diante, não usamos aspas.
+
+### Exemplo: Imprimir Strings Concatenadas
+
 ```java
-class PrintVariables {
+public class ImprimirVariaveis {
     public static void main(String[] args) {
+        Double numero = -10.6;
 
-        Double number = -10.6;
-
-        System.out.println("I am " + "awesome.");
-        System.out.println("Number = " + number);
+        System.out.println("Eu sou " + "incrível.");
+        System.out.println("Número = " + numero);
     }
 }
 ```
-**Output:**
 
-```java
-I am awesome.
-Number = -10.6
-```
-In the above example, notice the line,
-
-```java
-System.out.println("I am " + "awesome.");
-```
-
-Here, we have used the + operator to concatenate (join) the two strings: `"I am "` and `"awesome."`.
-
-And also, the line,
-
-```java
-System.out.println("Number = " + number);
-```
-Here, first the value of variable `number` is evaluated. Then, the value is concatenated to the string: `"Number = "`.
-
-## Java Input
-Java provides different ways to get input from the user. However, in this tutorial, you will learn to get input from user using the object of `Scanner` class.
-
-In order to use the object of `Scanner`, we need to import `java.util.Scanner` package.
-
-
-```java
-import java.util.Scanner;
-```
-To learn more about importing packages in Java, visit [Java Import Packages]().
-
-Then, we need to create an object of the `Scanner` class. We can use the object to take input from the user.
-
-
-```java
-// create an object of Scanner
-Scanner input = new Scanner(System.in);
-
-// take input from the user
-int number = input.nextInt();
-```
-
-### Example: Get Integer Input From the User
-```java
-import java.util.Scanner;
-
-class Input {
-    public static void main(String[] args) {
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.print("Enter an integer: ");
-        int number = input.nextInt();
-        System.out.println("You entered " + number);
-
-        // closing the scanner object
-        input.close();
-    }
-}
-```
-**Output:**
+**Saída:**
 
 ```plaintext
-Enter an integer: 23
-You entered 23
+Eu sou incrível.
+Número = -10.6
 ```
-In the above example, we have created an object named `input` of the `Scanner` class. We then call the `nextInt()` method of the `Scanner` class to get an integer input from the user.
 
-Similarly, we can use `nextLong()`, `nextFloat()`, `nextDouble()`, and `next()` methods to get `long`, `float`, `double`, and `string` input respectively from the user.
+## Métodos de Saída Detalhados
 
-<Callout>
-**Note:** We have used the `close()` method to close the object. It is recommended to close the scanner object once the input is taken.
-</Callout>
+### 1. System.out.print()
 
-### Example: Get float, double and String Input
 ```java
-import java.util.Scanner;
-
-class Input {
+public class ExemploPrint {
     public static void main(String[] args) {
+        // Imprime sem quebra de linha
+        System.out.print("Olá");
+        System.out.print(" Mundo");
+        System.out.print("!");
 
-        Scanner input = new Scanner(System.in);
-
-        // Getting float input
-        System.out.print("Enter float: ");
-        float myFloat = input.nextFloat();
-        System.out.println("Float entered = " + myFloat);
-
-        // Getting double input
-        System.out.print("Enter double: ");
-        double myDouble = input.nextDouble();
-        System.out.println("Double entered = " + myDouble);
-
-        // Getting String input
-        System.out.print("Enter text: ");
-        String myString = input.next();
-        System.out.println("Text entered = " + myString);
+        // Resultado: Olá Mundo!
     }
 }
 ```
 
-**Output:**
+### 2. System.out.println()
 
-```plaintext
-Enter float: 2.343
-Float entered = 2.343
-Enter double: -23.4
-Double entered = -23.4
-Enter text: Hey!
-Text entered = Hey!
+```java
+public class ExemploPrintln {
+    public static void main(String[] args) {
+        // Imprime com quebra de linha
+        System.out.println("Primeira linha");
+        System.out.println("Segunda linha");
+        System.out.println("Terceira linha");
+
+        // Resultado:
+        // Primeira linha
+        // Segunda linha
+        // Terceira linha
+    }
+}
 ```
-As mentioned, there are other several ways to get input from the user. To learn more about `Scanner`, visit Java Scanner.
+
+### 3. System.out.printf()
+
+```java
+public class ExemploPrintf {
+    public static void main(String[] args) {
+        String nome = "João";
+        int idade = 25;
+        double altura = 1.75;
+
+        // Formatação básica
+        System.out.printf("Nome: %s\n", nome);
+        System.out.printf("Idade: %d anos\n", idade);
+        System.out.printf("Altura: %.2f metros\n", altura);
+
+        // Formatação com largura fixa
+        System.out.printf("%-10s %5d %8.2f\n", nome, idade, altura);
+
+        // Formatação de números
+        double preco = 123.456;
+        System.out.printf("Preço: R$ %.2f\n", preco);
+        System.out.printf("Preço: R$ %10.2f\n", preco); // Alinhado à direita
+    }
+}
+```
+
+## Entrada Java
+
+Para receber entrada do usuário, usamos a classe `Scanner`.
+
+### Exemplo Básico de Entrada
+
+```java
+import java.util.Scanner;
+
+public class EntradaBasica {
+    public static void main(String[] args) {
+        // Criar objeto Scanner
+        Scanner scanner = new Scanner(System.in);
+
+        // Receber entrada
+        System.out.print("Digite seu nome: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Digite sua idade: ");
+        int idade = scanner.nextInt();
+
+        // Exibir resultado
+        System.out.println("Olá, " + nome + "! Você tem " + idade + " anos.");
+
+        // Fechar scanner
+        scanner.close();
+    }
+}
+```
+
+### Métodos de Entrada do Scanner
+
+```java
+import java.util.Scanner;
+
+public class MetodosScanner {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // nextLine() - lê uma linha completa
+        System.out.print("Digite uma frase: ");
+        String frase = scanner.nextLine();
+
+        // next() - lê até encontrar espaço
+        System.out.print("Digite uma palavra: ");
+        String palavra = scanner.next();
+
+        // nextInt() - lê um inteiro
+        System.out.print("Digite um número inteiro: ");
+        int numero = scanner.nextInt();
+
+        // nextDouble() - lê um double
+        System.out.print("Digite um número decimal: ");
+        double decimal = scanner.nextDouble();
+
+        // nextBoolean() - lê um boolean
+        System.out.print("Digite true ou false: ");
+        boolean valor = scanner.nextBoolean();
+
+        // Exibir resultados
+        System.out.println("Frase: " + frase);
+        System.out.println("Palavra: " + palavra);
+        System.out.println("Número: " + numero);
+        System.out.println("Decimal: " + decimal);
+        System.out.println("Boolean: " + valor);
+
+        scanner.close();
+    }
+}
+```
+
+## Exemplos Práticos
+
+### Exemplo 1: Calculadora Simples
+
+```java
+import java.util.Scanner;
+
+public class CalculadoraSimples {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Digite o primeiro número: ");
+        double num1 = scanner.nextDouble();
+
+        System.out.print("Digite o segundo número: ");
+        double num2 = scanner.nextDouble();
+
+        System.out.print("Digite a operação (+, -, *, /): ");
+        String operacao = scanner.next();
+
+        // Processamento
+        double resultado = 0;
+        boolean operacaoValida = true;
+
+        switch (operacao) {
+            case "+":
+                resultado = num1 + num2;
+                break;
+            case "-":
+                resultado = num1 - num2;
+                break;
+            case "*":
+                resultado = num1 * num2;
+                break;
+            case "/":
+                if (num2 != 0) {
+                    resultado = num1 / num2;
+                } else {
+                    System.out.println("Erro: Divisão por zero!");
+                    operacaoValida = false;
+                }
+                break;
+            default:
+                System.out.println("Operação inválida!");
+                operacaoValida = false;
+        }
+
+        // Saída
+        if (operacaoValida) {
+            System.out.printf("%.2f %s %.2f = %.2f\n",
+                            num1, operacao, num2, resultado);
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exemplo 2: Formulário de Cadastro
+
+```java
+import java.util.Scanner;
+
+public class FormularioCadastro {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.println("=== Formulário de Cadastro ===");
+
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+
+        System.out.print("Idade: ");
+        int idade = scanner.nextInt();
+        scanner.nextLine(); // Consumir quebra de linha
+
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Telefone: ");
+        String telefone = scanner.nextLine();
+
+        System.out.print("Altura (metros): ");
+        double altura = scanner.nextDouble();
+
+        // Saída formatada
+        System.out.println("\n=== Dados Cadastrados ===");
+        System.out.printf("Nome: %s\n", nome);
+        System.out.printf("Idade: %d anos\n", idade);
+        System.out.printf("Email: %s\n", email);
+        System.out.printf("Telefone: %s\n", telefone);
+        System.out.printf("Altura: %.2f metros\n", altura);
+
+        scanner.close();
+    }
+}
+```
+
+### Exemplo 3: Menu Interativo
+
+```java
+import java.util.Scanner;
+
+public class MenuInterativo {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            // Exibir menu
+            System.out.println("\n=== Menu Principal ===");
+            System.out.println("1. Calcular área do círculo");
+            System.out.println("2. Calcular área do retângulo");
+            System.out.println("3. Calcular área do triângulo");
+            System.out.println("0. Sair");
+            System.out.print("Escolha uma opção: ");
+
+            int opcao = scanner.nextInt();
+
+            switch (opcao) {
+                case 1:
+                    calcularAreaCirculo(scanner);
+                    break;
+                case 2:
+                    calcularAreaRetangulo(scanner);
+                    break;
+                case 3:
+                    calcularAreaTriangulo(scanner);
+                    break;
+                case 0:
+                    System.out.println("Saindo do programa...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private static void calcularAreaCirculo(Scanner scanner) {
+        System.out.print("Digite o raio do círculo: ");
+        double raio = scanner.nextDouble();
+        double area = Math.PI * raio * raio;
+        System.out.printf("Área do círculo: %.2f\n", area);
+    }
+
+    private static void calcularAreaRetangulo(Scanner scanner) {
+        System.out.print("Digite a largura: ");
+        double largura = scanner.nextDouble();
+        System.out.print("Digite a altura: ");
+        double altura = scanner.nextDouble();
+        double area = largura * altura;
+        System.out.printf("Área do retângulo: %.2f\n", area);
+    }
+
+    private static void calcularAreaTriangulo(Scanner scanner) {
+        System.out.print("Digite a base: ");
+        double base = scanner.nextDouble();
+        System.out.print("Digite a altura: ");
+        double altura = scanner.nextDouble();
+        double area = (base * altura) / 2;
+        System.out.printf("Área do triângulo: %.2f\n", area);
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de Média
+
+**Objetivo**: Criar um programa que calcule a média de notas.
+
+**Enunciado**: Crie um programa que receba 3 notas e calcule a média.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class CalculadoraMedia {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Digite a primeira nota: ");
+        double nota1 = scanner.nextDouble();
+
+        System.out.print("Digite a segunda nota: ");
+        double nota2 = scanner.nextDouble();
+
+        System.out.print("Digite a terceira nota: ");
+        double nota3 = scanner.nextDouble();
+
+        // Cálculo da média
+        double media = (nota1 + nota2 + nota3) / 3;
+
+        // Saída formatada
+        System.out.println("\n=== Resultado ===");
+        System.out.printf("Nota 1: %.1f\n", nota1);
+        System.out.printf("Nota 2: %.1f\n", nota2);
+        System.out.printf("Nota 3: %.1f\n", nota3);
+        System.out.printf("Média: %.2f\n", media);
+
+        // Verificar aprovação
+        if (media >= 7.0) {
+            System.out.println("Status: Aprovado");
+        } else {
+            System.out.println("Status: Reprovado");
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 2: Conversor de Temperatura
+
+**Objetivo**: Criar um conversor de temperatura.
+
+**Enunciado**: Crie um programa que converta Celsius para Fahrenheit.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class ConversorTemperatura {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Digite a temperatura em Celsius: ");
+        double celsius = scanner.nextDouble();
+
+        // Conversão para Fahrenheit
+        double fahrenheit = (celsius * 9/5) + 32;
+
+        // Saída formatada
+        System.out.println("\n=== Conversão de Temperatura ===");
+        System.out.printf("Celsius: %.1f°C\n", celsius);
+        System.out.printf("Fahrenheit: %.1f°F\n", fahrenheit);
+
+        // Classificação da temperatura
+        if (fahrenheit < 32) {
+            System.out.println("Classificação: Muito frio");
+        } else if (fahrenheit < 50) {
+            System.out.println("Classificação: Frio");
+        } else if (fahrenheit < 70) {
+            System.out.println("Classificação: Ameno");
+        } else if (fahrenheit < 90) {
+            System.out.println("Classificação: Quente");
+        } else {
+            System.out.println("Classificação: Muito quente");
+        }
+
+        scanner.close();
+    }
+}
+```
+
+### Exercício 3: Validador de CPF
+
+**Objetivo**: Criar um validador de CPF com entrada e saída.
+
+**Enunciado**: Crie um programa que valide um CPF digitado pelo usuário.
+
+**Resolução**:
+
+```java
+import java.util.Scanner;
+
+public class ValidadorCPF {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Entrada de dados
+        System.out.print("Digite o CPF (apenas números): ");
+        String cpf = scanner.nextLine();
+
+        // Remover caracteres não numéricos
+        cpf = cpf.replaceAll("[^0-9]", "");
+
+        // Validação básica
+        boolean cpfValido = validarCPF(cpf);
+
+        // Saída formatada
+        System.out.println("\n=== Validação de CPF ===");
+        System.out.println("CPF digitado: " + cpf);
+
+        if (cpfValido) {
+            System.out.println("Status: CPF válido");
+        } else {
+            System.out.println("Status: CPF inválido");
+        }
+
+        scanner.close();
+    }
+
+    private static boolean validarCPF(String cpf) {
+        // Verificar se tem 11 dígitos
+        if (cpf.length() != 11) {
+            return false;
+        }
+
+        // Verificar se todos os dígitos são iguais
+        if (cpf.matches("(\\d)\\1{10}")) {
+            return false;
+        }
+
+        // Validar primeiro dígito verificador
+        int soma = 0;
+        for (int i = 0; i < 9; i++) {
+            soma += Integer.parseInt(cpf.substring(i, i + 1)) * (10 - i);
+        }
+        int resto = 11 - (soma % 11);
+        int digito1 = (resto == 10 || resto == 11) ? 0 : resto;
+
+        // Validar segundo dígito verificador
+        soma = 0;
+        for (int i = 0; i < 10; i++) {
+            soma += Integer.parseInt(cpf.substring(i, i + 1)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        int digito2 = (resto == 10 || resto == 11) ? 0 : resto;
+
+        // Verificar se os dígitos verificadores estão corretos
+        return cpf.substring(9, 11).equals(digito1 + "" + digito2);
+    }
+}
+```
+
+## Conclusão
+
+Entrada e saída são fundamentais em Java:
+
+- **Saída**: Use `System.out.print()`, `System.out.println()` ou `System.out.printf()`
+- **Entrada**: Use a classe `Scanner` para receber dados do usuário
+- **Formatação**: Use `printf()` para saída formatada
+- **Validação**: Sempre valide os dados de entrada
+
+**Boas práticas**:
+
+- Sempre feche o `Scanner` após o uso
+- Use formatação adequada para melhor legibilidade
+- Valide dados de entrada antes de processá-los
+- Forneça mensagens claras para o usuário
+
+Lembre-se de praticar com diferentes tipos de entrada e saída para dominar esses conceitos fundamentais.

@@ -1,291 +1,474 @@
 ---
-title: Java if...else Statement
-description: In this tutorial, you will learn about control flow statements using Java if and if...else statements with the help of examples.
+title: "Instrução if...else em Java"
+description: "Neste tutorial, você aprenderá sobre instruções de controle de fluxo usando instruções Java if e if...else com exemplos práticos"
+difficulty: "Básico"
+category: "Controle de Fluxo"
 ---
 
+## Instrução if...else em Java
 
-In programming, we use the `if..else` statement to run a block of code among more than one alternatives.
+Em programação, usamos a instrução `if..else` para executar um bloco de código entre mais de uma alternativa.
 
-For example, assigning grades (A, B, C) based on the percentage obtained by a student.
+Por exemplo, atribuir notas (A, B, C) com base na porcentagem obtida por um estudante.
 
-- if the percentage is above **90**, assign grade **A**
-- if the percentage is above **75**, assign grade **B**
-- if the percentage is above **65**, assign grade **C**
+- se a porcentagem for acima de **90**, atribuir nota **A**
+- se a porcentagem for acima de **75**, atribuir nota **B**
+- se a porcentagem for acima de **65**, atribuir nota **C**
 
-## 1. Java if (if-then) Statement
-The syntax of an **if-then** statement is:
+## 1. Instrução Java if (if-then)
+
+A sintaxe de uma instrução **if-then** é:
 
 ```java
-if (condition) {
-  // statements
+if (condicao) {
+  // instruções
 }
 ```
-Here, `condition` is a boolean expression such as `age >= 18`.
 
-- if `condition` evaluates to `true` , statements are executed
-- if `condition` evaluates to `false` , statements are skipped
+Aqui, `condicao` é uma expressão booleana como `idade >= 18`.
 
+- se `condicao` for avaliada como `true`, as instruções são executadas
+- se `condicao` for avaliada como `false`, as instruções são puladas
 
-## Working of if Statement
+## Funcionamento da Instrução if
 
 <div>
 
-![Working of Java if statement](/img/docs/wroking-of-java-if-statement.svg)
+![Funcionamento da instrução Java if](/img/docs/wroking-of-java-if-statement.svg)
 
-<p align="center" className="text-base text-gray-600 font-medium">Working of Java if statement</p>
-
-</div>
-
-
-### Example 1: Java if Statement
-
-```java
-class IfStatement {
-  public static void main(String[] args) {
-
-    int number = 10;
-
-    // checks if number is less than 0
-    if (number < 0) {
-      System.out.println("The number is negative.");
-    }
-
-    System.out.println("Statement outside if block");
-  }
-}
-```
-#### Output
-
-```plaintext
-Statement outside if block
-```
-
-In the program, `number < 0` is `false`. Hence, the code inside the parenthesis is **skipped**.
-
-<Callout>
-
-**Note:** If you want to learn more about about test conditions, visit [Java Relational Operators](/docs/operators#3-java-relational-operators) and [Java Logical Operators](/docs/operators#4-java-logical-operators).
-
-</Callout>
-
-We can also use Java Strings as the test condition.
-
-### Example 2: Java if with String
-
-```java
-class Main {
-  public static void main(String[] args) {
-    // create a string variable
-    String language = "Java";
-
-    // if statement
-    if (language == "Java") {
-      System.out.println("Best Programming Language");
-    }
-  }
-}
-```
-#### Output
-
-```plaintext
-Best Programming Language
-```
-
-In the above example, we are comparing two strings in the `if` block.
-
-## 2. Java if...else (if-then-else) Statement
-The `if` statement executes a certain section of code if the test expression is evaluated to `true`. However, if the test expression is evaluated to `false`, it does nothing.
-
-In this case, we can use an optional `else` block. Statements inside the body of `else` block are executed if the test expression is evaluated to `false`. This is known as the **if-...else** statement in Java.
-
-The syntax of the **if...else** statement is:
-
-```java
-if (condition) {
-  // codes in if block
-}
-else {
-  // codes in else block
-}
-```
-Here, the program will do one task (codes inside if block) if the condition is true and another task (codes inside else block) if the condition is false.
-
-## How the if...else statement works?
-
-<div>
-![Working of Java if statement](/img/docs/wroking-of-if-else-statement.svg)
-
-<p align="center" className="text-base text-gray-600 font-medium">Working of Java if-else statements</p>
+<p align="center" className="text-base text-gray-600 font-medium">
+  Funcionamento da instrução Java if
+</p>
 
 </div>
 
-
-### Example 3: Java if...else Statement
+### Exemplo 1: Instrução Java if
 
 ```java
-class Main {
-  public static void main(String[] args) {
-    int number = 10;
+public class IfStatement {
+    public static void main(String[] args) {
+        int numero = 10;
 
-    // checks if number is greater than 0
-    if (number > 0) {
-      System.out.println("The number is positive.");
+        // verifica se o número é menor que 0
+        if (numero < 0) {
+            System.out.println("O número é negativo.");
+        }
+
+        System.out.println("Instrução fora do bloco if");
     }
-
-    // execute this block
-    // if number is not greater than 0
-    else {
-      System.out.println("The number is not positive.");
-    }
-
-    System.out.println("Statement outside if...else block");
-  }
 }
 ```
-#### Output
+
+**Saída**:
 
 ```plaintext
-The number is positive.
-Statement outside if...else block
-```
-In the above example, we have a variable named `number`. Here, the test expression `number > 0` checks if `number` is greater than 0.
-
-Since the value of the `number` is `10`, the test expression evaluates to `true`. Hence code inside the body of `if` is executed.
-
-Now, change the value of the `number` to a negative integer. Let's say `-5`.
-
-```java
-int number = -5;
-```
-If we run the program with the new value of `number`, the output will be:
-
-```plaintext
-The number is not positive.
-Statement outside if...else block
-```
-Here, the value of number is `-5`. So the test expression evaluates to `false`. Hence code inside the body of `else` is executed.
-
-## 3. Java if...else...if Statement
-In Java, we have an if...else...if ladder, that can be used to execute one block of code among multiple other blocks.
-
-```java
-if (condition1) {
-  // codes
-}
-else if(condition2) {
-  // codes
-}
-else if (condition3) {
-  // codes
-}
-.
-.
-else {
-  // codes
-}
-```
-Here, `if` statements are executed from the top towards the bottom. When the test condition is `true`, codes inside the body of that `if` block is executed. And, program control jumps outside the **if...else...if** ladder.
-
-If all test expressions are `false`, codes inside the body of `else` are executed.
-
-## How the if...else...if ladder works?
-
-If the first test condition if true, code inside first if block is executed, if the second condition is true, block inside second if is executed, and if all conditions are false, the else block is executed
-Working of if...else...if ladder
-
-### Example 4: Java if...else...if Statement
-
-```java
-class Main {
-  public static void main(String[] args) {
-
-    int number = 0;
-
-    // checks if number is greater than 0
-    if (number > 0) {
-      System.out.println("The number is positive.");
-    }
-
-    // checks if number is less than 0
-    else if (number < 0) {
-      System.out.println("The number is negative.");
-    }
-
-    // if both condition is false
-    else {
-      System.out.println("The number is 0.");
-    }
-  }
-}
+Instrução fora do bloco if
 ```
 
-#### Output
-
-```plaintext
-The number is 0.
-```
-In the above example, we are checking whether `number` is **positive**, **negative**, or **zero**. Here, we have two condition expressions:
-
-- `number > 0` - checks if `number` is greater than `0`.
-- `number < 0` - checks if `number` is less than `0`.
-
-Here, the value of `number` is `0`. So both the conditions evaluate to `false`. Hence the statement inside the body of `else` is executed.
+No programa, `numero < 0` é `false`. Portanto, o código dentro dos parênteses é **pulado**.
 
 <Callout>
 
-**Note:** Java provides a special operator called **ternary operator**, which is a kind of shorthand notation of **if...else...if** statement. To learn about the ternary operator, visit [Java Ternary Operator](/docs/operators#java-ternary-operator).
+**Nota**: Se você quiser aprender mais sobre condições de teste, visite [Operadores Relacionais Java](/docs/operators#3-java-relational-operators) e [Operadores Lógicos Java](/docs/operators#4-java-logical-operators).
 
 </Callout>
 
-## 4. Java Nested if..else Statement
+Também podemos usar Strings Java como condição de teste.
 
-In Java, it is also possible to use `if..else` statements inside an `if...else` statement. It's called the nested `if...else` statement.
-
-Here's a program to find the largest of **3** numbers using the nested `if...else` statement.
-
-### Example 5: Nested if...else Statement
+### Exemplo 2: Java if com String
 
 ```java
-class Main {
-  public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) {
+        // criar uma variável string
+        String linguagem = "Java";
 
-    // declaring double type variables
-    Double n1 = -1.0, n2 = 4.5, n3 = -5.3, largest;
-
-    // checks if n1 is greater than or equal to n2
-    if (n1 >= n2) {
-
-      // if...else statement inside the if block
-      // checks if n1 is greater than or equal to n3
-      if (n1 >= n3) {
-        largest = n1;
-      }
-
-      else {
-        largest = n3;
-      }
-    } else {
-
-      // if..else statement inside else block
-      // checks if n2 is greater than or equal to n3
-      if (n2 >= n3) {
-        largest = n2;
-      }
-
-      else {
-        largest = n3;
-      }
+        // instrução if
+        if (linguagem == "Java") {
+            System.out.println("Melhor Linguagem de Programação");
+        }
     }
-
-    System.out.println("Largest Number: " + largest);
-  }
 }
 ```
-#### Output:
+
+**Saída**:
 
 ```plaintext
-Largest Number: 4.5
+Melhor Linguagem de Programação
 ```
-In the above programs, we have assigned the value of variables ourselves to make this easier.
 
-However, in real-world applications, these values may come from user input data, log files, form submission, etc.
+No exemplo acima, estamos comparando duas strings no bloco `if`.
+
+## 2. Instrução Java if...else (if-then-else)
+
+A instrução `if` executa uma certa seção de código se a expressão de teste for avaliada como `true`. No entanto, se a expressão de teste for avaliada como `false`, ela não faz nada.
+
+Neste caso, podemos usar um bloco `else` opcional. As instruções dentro do corpo do bloco `else` são executadas se a expressão de teste for avaliada como `false`. Isso é conhecido como a instrução **if-...else** em Java.
+
+### Sintaxe da Instrução if...else
+
+```java
+if (condicao) {
+    // instruções executadas se a condição for true
+} else {
+    // instruções executadas se a condição for false
+}
+```
+
+### Exemplo 3: Instrução Java if...else
+
+```java
+public class IfElseStatement {
+    public static void main(String[] args) {
+        int numero = 10;
+
+        // verifica se o número é maior que 0
+        if (numero > 0) {
+            System.out.println("O número é positivo.");
+        } else {
+            System.out.println("O número não é positivo.");
+        }
+    }
+}
+```
+
+**Saída**:
+
+```plaintext
+O número é positivo.
+```
+
+## 3. Instrução Java if...else if...else
+
+A instrução `if...else if...else` é usada para executar um bloco de código entre múltiplas alternativas.
+
+### Sintaxe da Instrução if...else if...else
+
+```java
+if (condicao1) {
+    // instruções executadas se condicao1 for true
+} else if (condicao2) {
+    // instruções executadas se condicao2 for true
+} else {
+    // instruções executadas se todas as condições forem false
+}
+```
+
+### Exemplo 4: Instrução Java if...else if...else
+
+```java
+public class IfElseIfStatement {
+    public static void main(String[] args) {
+        int numero = 0;
+
+        if (numero > 0) {
+            System.out.println("O número é positivo.");
+        } else if (numero < 0) {
+            System.out.println("O número é negativo.");
+        } else {
+            System.out.println("O número é zero.");
+        }
+    }
+}
+```
+
+**Saída**:
+
+```plaintext
+O número é zero.
+```
+
+## 4. Instrução if Aninhada
+
+Podemos usar uma instrução `if` dentro de outra instrução `if`. Isso é conhecido como instrução if aninhada.
+
+### Exemplo 5: Instrução if Aninhada
+
+```java
+public class NestedIfStatement {
+    public static void main(String[] args) {
+        int idade = 25;
+        int peso = 70;
+
+        if (idade >= 18) {
+            if (peso >= 50) {
+                System.out.println("Você é elegível para doar sangue.");
+            } else {
+                System.out.println("Você não é elegível para doar sangue.");
+            }
+        } else {
+            System.out.println("Você deve ter pelo menos 18 anos para doar sangue.");
+        }
+    }
+}
+```
+
+**Saída**:
+
+```plaintext
+Você é elegível para doar sangue.
+```
+
+## Exemplos Práticos
+
+### Exemplo 1: Calculadora de Notas
+
+```java
+public class CalculadoraNotas {
+    public static void main(String[] args) {
+        double nota = 85.5;
+        String conceito;
+
+        if (nota >= 90) {
+            conceito = "A";
+        } else if (nota >= 80) {
+            conceito = "B";
+        } else if (nota >= 70) {
+            conceito = "C";
+        } else if (nota >= 60) {
+            conceito = "D";
+        } else {
+            conceito = "F";
+        }
+
+        System.out.println("Nota: " + nota);
+        System.out.println("Conceito: " + conceito);
+    }
+}
+```
+
+### Exemplo 2: Verificador de Idade
+
+```java
+public class VerificadorIdade {
+    public static void main(String[] args) {
+        int idade = 25;
+        String categoria;
+
+        if (idade < 13) {
+            categoria = "Criança";
+        } else if (idade < 20) {
+            categoria = "Adolescente";
+        } else if (idade < 65) {
+            categoria = "Adulto";
+        } else {
+            categoria = "Idoso";
+        }
+
+        System.out.println("Idade: " + idade);
+        System.out.println("Categoria: " + categoria);
+    }
+}
+```
+
+### Exemplo 3: Calculadora de IMC
+
+```java
+public class CalculadoraIMC {
+    public static void main(String[] args) {
+        double peso = 70.0;
+        double altura = 1.75;
+        double imc = peso / (altura * altura);
+        String classificacao;
+
+        if (imc < 18.5) {
+            classificacao = "Abaixo do peso";
+        } else if (imc < 25) {
+            classificacao = "Peso normal";
+        } else if (imc < 30) {
+            classificacao = "Sobrepeso";
+        } else if (imc < 35) {
+            classificacao = "Obesidade grau 1";
+        } else if (imc < 40) {
+            classificacao = "Obesidade grau 2";
+        } else {
+            classificacao = "Obesidade grau 3";
+        }
+
+        System.out.printf("IMC: %.2f\n", imc);
+        System.out.println("Classificação: " + classificacao);
+    }
+}
+```
+
+### Exemplo 4: Validador de Senha
+
+```java
+public class ValidadorSenha {
+    public static void main(String[] args) {
+        String senha = "MinhaSenha123";
+        String resultado;
+
+        if (senha.length() < 8) {
+            resultado = "Senha muito curta";
+        } else if (!senha.matches(".*[A-Z].*")) {
+            resultado = "Senha deve conter pelo menos uma maiúscula";
+        } else if (!senha.matches(".*[a-z].*")) {
+            resultado = "Senha deve conter pelo menos uma minúscula";
+        } else if (!senha.matches(".*\\d.*")) {
+            resultado = "Senha deve conter pelo menos um número";
+        } else {
+            resultado = "Senha válida";
+        }
+
+        System.out.println("Senha: " + senha);
+        System.out.println("Resultado: " + resultado);
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de Desconto
+
+**Objetivo**: Criar um sistema de desconto baseado no valor da compra.
+
+**Enunciado**: Crie um programa que calcule o desconto baseado no valor da compra:
+
+- 0% para compras até R$ 100
+- 5% para compras entre R$ 100 e R$ 500
+- 10% para compras entre R$ 500 e R$ 1000
+- 15% para compras acima de R$ 1000
+
+**Resolução**:
+
+```java
+public class CalculadoraDesconto {
+    public static void main(String[] args) {
+        double valorCompra = 750.0;
+        double desconto = 0.0;
+        double valorFinal = 0.0;
+
+        if (valorCompra <= 100) {
+            desconto = 0.0;
+        } else if (valorCompra <= 500) {
+            desconto = valorCompra * 0.05;
+        } else if (valorCompra <= 1000) {
+            desconto = valorCompra * 0.10;
+        } else {
+            desconto = valorCompra * 0.15;
+        }
+
+        valorFinal = valorCompra - desconto;
+
+        System.out.println("=== Calculadora de Desconto ===");
+        System.out.printf("Valor da compra: R$ %.2f\n", valorCompra);
+        System.out.printf("Desconto: R$ %.2f\n", desconto);
+        System.out.printf("Valor final: R$ %.2f\n", valorFinal);
+    }
+}
+```
+
+### Exercício 2: Verificador de Número
+
+**Objetivo**: Classificar números como positivo, negativo, par, ímpar, etc.
+
+**Enunciado**: Crie um programa que classifique um número em múltiplas categorias.
+
+**Resolução**:
+
+```java
+public class VerificadorNumero {
+    public static void main(String[] args) {
+        int numero = 15;
+
+        System.out.println("=== Verificador de Número ===");
+        System.out.println("Número: " + numero);
+
+        // Verificar se é positivo, negativo ou zero
+        if (numero > 0) {
+            System.out.println("Tipo: Positivo");
+        } else if (numero < 0) {
+            System.out.println("Tipo: Negativo");
+        } else {
+            System.out.println("Tipo: Zero");
+        }
+
+        // Verificar se é par ou ímpar
+        if (numero % 2 == 0) {
+            System.out.println("Paridade: Par");
+        } else {
+            System.out.println("Paridade: Ímpar");
+        }
+
+        // Verificar se é primo
+        boolean ehPrimo = true;
+        if (numero <= 1) {
+            ehPrimo = false;
+        } else {
+            for (int i = 2; i <= Math.sqrt(numero); i++) {
+                if (numero % i == 0) {
+                    ehPrimo = false;
+                    break;
+                }
+            }
+        }
+
+        if (ehPrimo) {
+            System.out.println("Primo: Sim");
+        } else {
+            System.out.println("Primo: Não");
+        }
+    }
+}
+```
+
+### Exercício 3: Sistema de Login
+
+**Objetivo**: Criar um sistema de login com validações.
+
+**Enunciado**: Crie um programa que valide credenciais de login.
+
+**Resolução**:
+
+```java
+public class SistemaLogin {
+    public static void main(String[] args) {
+        String usuario = "admin";
+        String senha = "123456";
+        String usuarioDigitado = "admin";
+        String senhaDigitada = "123456";
+
+        System.out.println("=== Sistema de Login ===");
+
+        if (usuarioDigitado.equals(usuario)) {
+            if (senhaDigitada.equals(senha)) {
+                System.out.println("Login realizado com sucesso!");
+                System.out.println("Bem-vindo, " + usuario + "!");
+            } else {
+                System.out.println("Senha incorreta!");
+            }
+        } else {
+            System.out.println("Usuário não encontrado!");
+        }
+
+        // Verificação adicional de segurança
+        if (usuarioDigitado.length() < 3) {
+            System.out.println("Aviso: Nome de usuário muito curto!");
+        }
+
+        if (senhaDigitada.length() < 6) {
+            System.out.println("Aviso: Senha muito curta!");
+        }
+    }
+}
+```
+
+## Conclusão
+
+As instruções `if...else` são fundamentais em Java para:
+
+- **Tomada de decisão**: Executar código baseado em condições
+- **Controle de fluxo**: Direcionar a execução do programa
+- **Validação**: Verificar dados e condições
+- **Classificação**: Categorizar dados baseado em critérios
+
+**Boas práticas**:
+
+- Use condições claras e legíveis
+- Evite aninhamento excessivo de ifs
+- Use `else if` para múltiplas condições mutuamente exclusivas
+- Sempre considere o caso `else` quando apropriado
+- Use operadores lógicos para combinar condições
+
+Lembre-se de praticar com diferentes cenários para dominar o controle de fluxo em Java.

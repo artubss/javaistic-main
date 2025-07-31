@@ -1,96 +1,767 @@
 ---
-title: Java Comments
-description:  In this tutorial, you will learn about Java comments, why we use them, and how to use comments in right way.
+title: "Comentários em Java"
+description: "Aprenda sobre comentários em Java, por que usá-los e como usar comentários da maneira correta"
+difficulty: "Básico"
+category: "Fundamentos Java"
 ---
 
+## Comentários em Java
 
-In computer programming, comments are a portion of the program that are completely ignored by Java compilers. They are mainly used to help programmers to understand the code. For example,
+Em programação de computadores, comentários são uma parte do programa que é completamente ignorada pelos compiladores Java. Eles são principalmente usados para ajudar programadores a entender o código. Por exemplo,
 
 ```java
-// declare and initialize two variables
+// declarar e inicializar duas variáveis
 int a = 1;
 int b = 3;
 
-// print the output
-System.out.println("This is output");
+// imprimir a saída
+System.out.println("Esta é a saída");
 ```
-Here, we have used the following comments,
 
-- declare and initialize two variables
-- print the output
+Aqui, usamos os seguintes comentários:
 
-## Types of Comments in Java
+- declarar e inicializar duas variáveis
+- imprimir a saída
 
-In Java, there are two types of comments:
+## Tipos de Comentários em Java
 
-- single-line comment
-- multi-line comment
+Em Java, existem três tipos de comentários:
 
-### Single-line Comment
+- comentário de linha única
+- comentário de múltiplas linhas
+- comentário de documentação (JavaDoc)
 
-A single-line comment starts and ends in the same line. To write a single-line comment, we can use the `//` symbol. For example,
+### Comentário de Linha Única
+
+Um comentário de linha única começa e termina na mesma linha. Para escrever um comentário de linha única, podemos usar o símbolo `//`. Por exemplo,
 
 ```java
-// "Hello, World!" program example
+// Exemplo do programa "Olá, Mundo!"
 
-class Main {
+public class Main {
     public static void main(String[] args) {
-    {
-        // prints "Hello, World!"
-        System.out.println("Hello, World!");
+        // imprime "Olá, Mundo!"
+        System.out.println("Olá, Mundo!");
     }
 }
 ```
-Output:
+
+**Saída**:
 
 ```plaintext
-Hello, World!
+Olá, Mundo!
 ```
-Here, we have used two single-line comments:
 
-- `"Hello, World!" program example`
-- `prints "Hello World!"`
+Aqui, usamos dois comentários de linha única:
 
-The Java compiler ignores everything from `//` to the end of line. Hence, it is also known as **End of Line** comment.
+- `Exemplo do programa "Olá, Mundo!"`
+- `imprime "Olá, Mundo!"`
 
-### Multi-line Comment
+O compilador Java ignora tudo desde `//` até o final da linha. Por isso, também é conhecido como comentário **Fim de Linha**.
 
-When we want to write comments in multiple lines, we can use the multi-line comment. To write multi-line comments, we can use the `/*....*/` symbol. For example,
+### Comentário de Múltiplas Linhas
+
+Quando queremos escrever comentários em múltiplas linhas, podemos usar o comentário de múltiplas linhas. Para escrever comentários de múltiplas linhas, podemos usar o símbolo `/*....*/`. Por exemplo,
 
 ```java
-/* This is an example of  multi-line comment.
- * The program prints "Hello, World!" to the standard output.
+/* Este é um exemplo de comentário de múltiplas linhas.
+ * O programa imprime "Olá, Mundo!" na saída padrão.
  */
 
-class HelloWorld {
+public class HelloWorld {
     public static void main(String[] args) {
-    {
-        System.out.println("Hello, World!");
+        System.out.println("Olá, Mundo!");
     }
 }
 ```
-Output:
+
+**Saída**:
 
 ```plaintext
-Hello, World!
+Olá, Mundo!
 ```
-Here, we have used the multi-line comment:
+
+Aqui, usamos o comentário de múltiplas linhas:
 
 ```java
-/* This is an example of multi-line comment.
-* The program prints "Hello, World!" to the standard output.
+/* Este é um exemplo de comentário de múltiplas linhas.
+* O programa imprime "Olá, Mundo!" na saída padrão.
 */
 ```
-This type of comment is also known as **Traditional Comment**. In this type of comment, the Java compiler ignores everything from `/*` to `*/`.
 
-## Use Comments the Right Way
+Este tipo de comentário também é conhecido como **Comentário Tradicional**. Neste tipo de comentário, o compilador Java ignora tudo desde `/*` até `*/`.
 
-One thing you should always consider that comments shouldn't be the substitute for a way to explain poorly written code in English. You should always write well structured and self explaining code. And, then use comments.
+### Comentário de Documentação (JavaDoc)
 
-Some believe that code should be self-describing and comments should be rarely used. However, in my personal opinion, there is nothing wrong with using comments. We can use comments to explain complex algorithms, regex or scenarios where we have to choose one technique among different technique to solve problems.
+O comentário de documentação é usado para gerar documentação automática. Ele começa com `/**` e termina com `*/`. Por exemplo,
 
-<Callout>
+```java
+/**
+ * Classe que representa uma calculadora simples.
+ * Esta classe fornece métodos básicos para operações matemáticas.
+ *
+ * @author João Silva
+ * @version 1.0
+ * @since 2024
+ */
+public class Calculadora {
 
-**Note:** In most cases, always use comments to explain **'why'** rather than **'how'** and you are good to go.
+    /**
+     * Soma dois números inteiros.
+     *
+     * @param a o primeiro número
+     * @param b o segundo número
+     * @return a soma dos dois números
+     */
+    public int somar(int a, int b) {
+        return a + b;
+    }
 
-</Callout>
+    /**
+     * Subtrai dois números inteiros.
+     *
+     * @param a o primeiro número
+     * @param b o segundo número
+     * @return a diferença entre os dois números
+     */
+    public int subtrair(int a, int b) {
+        return a - b;
+    }
+}
+```
+
+## Exemplos Práticos de Comentários
+
+### Exemplo 1: Comentários em Algoritmos
+
+```java
+public class AlgoritmoBusca {
+
+    /**
+     * Implementa a busca binária em um array ordenado.
+     * Complexidade: O(log n)
+     *
+     * @param array array ordenado para busca
+     * @param chave valor a ser encontrado
+     * @return índice do elemento se encontrado, -1 caso contrário
+     */
+    public static int buscaBinaria(int[] array, int chave) {
+        int inicio = 0;
+        int fim = array.length - 1;
+
+        // Loop principal da busca binária
+        while (inicio <= fim) {
+            // Calcula o ponto médio
+            int meio = (inicio + fim) / 2;
+
+            // Se encontrou o elemento
+            if (array[meio] == chave) {
+                return meio;
+            }
+
+            // Se o elemento está na metade esquerda
+            if (array[meio] > chave) {
+                fim = meio - 1;
+            }
+            // Se o elemento está na metade direita
+            else {
+                inicio = meio + 1;
+            }
+        }
+
+        // Elemento não encontrado
+        return -1;
+    }
+}
+```
+
+### Exemplo 2: Comentários em Validação
+
+```java
+public class ValidadorSenha {
+
+    /**
+     * Valida se uma senha atende aos critérios de segurança.
+     *
+     * @param senha senha a ser validada
+     * @return true se a senha é válida, false caso contrário
+     */
+    public static boolean validarSenha(String senha) {
+        // Verifica se a senha não é nula ou vazia
+        if (senha == null || senha.trim().isEmpty()) {
+            return false;
+        }
+
+        // Verifica se tem pelo menos 8 caracteres
+        if (senha.length() < 8) {
+            return false;
+        }
+
+        boolean temMaiuscula = false;
+        boolean temMinuscula = false;
+        boolean temNumero = false;
+        boolean temEspecial = false;
+
+        // Verifica cada caractere da senha
+        for (char c : senha.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                temMaiuscula = true;
+            } else if (Character.isLowerCase(c)) {
+                temMinuscula = true;
+            } else if (Character.isDigit(c)) {
+                temNumero = true;
+            } else {
+                // Caractere especial
+                temEspecial = true;
+            }
+        }
+
+        // Retorna true apenas se todos os critérios são atendidos
+        return temMaiuscula && temMinuscula && temNumero && temEspecial;
+    }
+}
+```
+
+### Exemplo 3: Comentários em Configuração
+
+```java
+public class ConfiguracaoAplicacao {
+
+    // Configurações de banco de dados
+    public static final String DB_URL = "jdbc:mysql://localhost:3306/minhaapp";
+    public static final String DB_USER = "usuario";
+    public static final String DB_PASSWORD = "senha123";
+
+    // Configurações de email
+    public static final String SMTP_HOST = "smtp.gmail.com";
+    public static final int SMTP_PORT = 587;
+    public static final String EMAIL_FROM = "noreply@minhaapp.com";
+
+    // Configurações de cache
+    public static final int CACHE_TTL = 3600; // 1 hora em segundos
+    public static final int MAX_CACHE_SIZE = 1000; // Máximo de itens no cache
+
+    // Configurações de segurança
+    public static final int MAX_LOGIN_ATTEMPTS = 3;
+    public static final int SESSION_TIMEOUT = 1800; // 30 minutos em segundos
+
+    /**
+     * Inicializa as configurações da aplicação.
+     * Este método deve ser chamado antes de usar qualquer funcionalidade.
+     */
+    public static void inicializar() {
+        // Configurar logging
+        configurarLogging();
+
+        // Configurar pool de conexões
+        configurarPoolConexoes();
+
+        // Configurar cache
+        configurarCache();
+    }
+
+    /**
+     * Configura o sistema de logging da aplicação.
+     */
+    private static void configurarLogging() {
+        // TODO: Implementar configuração de logging
+        System.out.println("Logging configurado");
+    }
+
+    /**
+     * Configura o pool de conexões com o banco de dados.
+     */
+    private static void configurarPoolConexoes() {
+        // FIXME: Implementar pool de conexões
+        System.out.println("Pool de conexões configurado");
+    }
+
+    /**
+     * Configura o sistema de cache da aplicação.
+     */
+    private static void configurarCache() {
+        // HACK: Implementação temporária do cache
+        System.out.println("Cache configurado");
+    }
+}
+```
+
+## Boas Práticas para Comentários
+
+### 1. Comente o "Porquê", não o "Como"
+
+```java
+// ❌ Ruim - comenta o óbvio
+int idade = 25; // Define a idade como 25
+
+// ✅ Bom - explica o motivo
+int idade = 25; // Idade mínima para acessar o sistema
+
+// ❌ Ruim - comenta o que o código faz
+for (int i = 0; i < array.length; i++) {
+    // Itera sobre o array
+    System.out.println(array[i]);
+}
+
+// ✅ Bom - explica o propósito
+for (int i = 0; i < array.length; i++) {
+    // Imprime cada elemento para debug
+    System.out.println(array[i]);
+}
+```
+
+### 2. Use Comentários para Explicar Algoritmos Complexos
+
+```java
+public class AlgoritmoOrdenacao {
+
+    /**
+     * Implementa o algoritmo QuickSort.
+     *
+     * @param array array a ser ordenado
+     * @param inicio índice inicial
+     * @param fim índice final
+     */
+    public static void quickSort(int[] array, int inicio, int fim) {
+        if (inicio < fim) {
+            // Particiona o array e obtém o índice do pivô
+            int indicePivo = particionar(array, inicio, fim);
+
+            // Ordena recursivamente a parte esquerda
+            quickSort(array, inicio, indicePivo - 1);
+
+            // Ordena recursivamente a parte direita
+            quickSort(array, indicePivo + 1, fim);
+        }
+    }
+
+    /**
+     * Particiona o array usando o último elemento como pivô.
+     *
+     * @param array array a ser particionado
+     * @param inicio índice inicial
+     * @param fim índice final
+     * @return índice do pivô após a partição
+     */
+    private static int particionar(int[] array, int inicio, int fim) {
+        int pivô = array[fim]; // Escolhe o último elemento como pivô
+        int i = inicio - 1; // Índice do menor elemento
+
+        // Move elementos menores que o pivô para a esquerda
+        for (int j = inicio; j < fim; j++) {
+            if (array[j] <= pivô) {
+                i++;
+                trocar(array, i, j);
+            }
+        }
+
+        // Coloca o pivô na posição correta
+        trocar(array, i + 1, fim);
+        return i + 1;
+    }
+
+    /**
+     * Troca dois elementos de posição no array.
+     */
+    private static void trocar(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
+```
+
+### 3. Use Comentários para Documentar Decisões de Design
+
+```java
+public class GerenciadorArquivos {
+
+    // Usamos FileInputStream em vez de Files.readAllBytes() para
+    // arquivos grandes para evitar carregar todo o arquivo na memória
+    public byte[] lerArquivoGrande(String caminho) throws IOException {
+        try (FileInputStream fis = new FileInputStream(caminho)) {
+            // Lê o arquivo em chunks de 8KB para otimizar memória
+            byte[] buffer = new byte[8192];
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            int bytesLidos;
+            while ((bytesLidos = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesLidos);
+            }
+
+            return baos.toByteArray();
+        }
+    }
+
+    // Usamos StringBuilder em vez de concatenação de String para
+    // melhor performance em loops grandes
+    public String construirCaminho(String... partes) {
+        StringBuilder caminho = new StringBuilder();
+
+        for (String parte : partes) {
+            if (parte != null && !parte.trim().isEmpty()) {
+                caminho.append(parte).append(File.separator);
+            }
+        }
+
+        return caminho.toString();
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Adicionar Comentários
+
+**Objetivo**: Adicionar comentários apropriados a um código existente.
+
+**Enunciado**: Adicione comentários JavaDoc e comentários explicativos ao seguinte código:
+
+```java
+public class CalculadoraEstatistica {
+    public double calcularMedia(double[] numeros) {
+        double soma = 0;
+        for (double numero : numeros) {
+            soma += numero;
+        }
+        return soma / numeros.length;
+    }
+
+    public double calcularDesvioPadrao(double[] numeros) {
+        double media = calcularMedia(numeros);
+        double somaQuadrados = 0;
+        for (double numero : numeros) {
+            somaQuadrados += Math.pow(numero - media, 2);
+        }
+        return Math.sqrt(somaQuadrados / numeros.length);
+    }
+}
+```
+
+**Resolução**:
+
+```java
+/**
+ * Classe para cálculos estatísticos básicos.
+ * Fornece métodos para calcular média e desvio padrão.
+ *
+ * @author João Silva
+ * @version 1.0
+ */
+public class CalculadoraEstatistica {
+
+    /**
+     * Calcula a média aritmética de um array de números.
+     *
+     * @param numeros array de números para calcular a média
+     * @return a média dos números
+     * @throws IllegalArgumentException se o array estiver vazio
+     */
+    public double calcularMedia(double[] numeros) {
+        // Verifica se o array não está vazio
+        if (numeros == null || numeros.length == 0) {
+            throw new IllegalArgumentException("Array não pode ser nulo ou vazio");
+        }
+
+        // Soma todos os números
+        double soma = 0;
+        for (double numero : numeros) {
+            soma += numero;
+        }
+
+        // Retorna a média (soma dividida pela quantidade)
+        return soma / numeros.length;
+    }
+
+    /**
+     * Calcula o desvio padrão de um array de números.
+     *
+     * @param numeros array de números para calcular o desvio padrão
+     * @return o desvio padrão dos números
+     * @throws IllegalArgumentException se o array estiver vazio
+     */
+    public double calcularDesvioPadrao(double[] numeros) {
+        // Verifica se o array não está vazio
+        if (numeros == null || numeros.length == 0) {
+            throw new IllegalArgumentException("Array não pode ser nulo ou vazio");
+        }
+
+        // Calcula a média dos números
+        double media = calcularMedia(numeros);
+
+        // Calcula a soma dos quadrados das diferenças
+        double somaQuadrados = 0;
+        for (double numero : numeros) {
+            // Diferença entre cada número e a média, elevada ao quadrado
+            somaQuadrados += Math.pow(numero - media, 2);
+        }
+
+        // Retorna a raiz quadrada da média dos quadrados
+        return Math.sqrt(somaQuadrados / numeros.length);
+    }
+}
+```
+
+### Exercício 2: Criar Documentação JavaDoc
+
+**Objetivo**: Criar uma classe com documentação JavaDoc completa.
+
+**Enunciado**: Crie uma classe `GerenciadorContatos` com documentação JavaDoc completa.
+
+**Resolução**:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Classe para gerenciar uma lista de contatos.
+ * Permite adicionar, remover, buscar e listar contatos.
+ *
+ * @author Maria Santos
+ * @version 2.0
+ * @since 2024
+ */
+public class GerenciadorContatos {
+
+    /** Lista de contatos armazenados */
+    private List<Contato> contatos;
+
+    /**
+     * Construtor padrão que inicializa a lista de contatos.
+     */
+    public GerenciadorContatos() {
+        this.contatos = new ArrayList<>();
+    }
+
+    /**
+     * Adiciona um novo contato à lista.
+     *
+     * @param contato o contato a ser adicionado
+     * @throws IllegalArgumentException se o contato for nulo
+     */
+    public void adicionarContato(Contato contato) {
+        if (contato == null) {
+            throw new IllegalArgumentException("Contato não pode ser nulo");
+        }
+
+        // Verifica se o contato já existe
+        if (!contatos.contains(contato)) {
+            contatos.add(contato);
+        }
+    }
+
+    /**
+     * Remove um contato da lista pelo nome.
+     *
+     * @param nome nome do contato a ser removido
+     * @return true se o contato foi removido, false caso contrário
+     */
+    public boolean removerContato(String nome) {
+        return contatos.removeIf(contato -> contato.getNome().equals(nome));
+    }
+
+    /**
+     * Busca um contato pelo nome.
+     *
+     * @param nome nome do contato a ser buscado
+     * @return o contato encontrado ou null se não encontrado
+     */
+    public Contato buscarContato(String nome) {
+        return contatos.stream()
+                      .filter(contato -> contato.getNome().equals(nome))
+                      .findFirst()
+                      .orElse(null);
+    }
+
+    /**
+     * Retorna todos os contatos.
+     *
+     * @return lista de todos os contatos
+     */
+    public List<Contato> listarContatos() {
+        return new ArrayList<>(contatos);
+    }
+
+    /**
+     * Retorna o número total de contatos.
+     *
+     * @return quantidade de contatos na lista
+     */
+    public int getQuantidadeContatos() {
+        return contatos.size();
+    }
+
+    /**
+     * Limpa todos os contatos da lista.
+     */
+    public void limparContatos() {
+        contatos.clear();
+    }
+}
+
+/**
+ * Classe que representa um contato.
+ *
+ * @author Maria Santos
+ * @version 1.0
+ */
+class Contato {
+    private String nome;
+    private String telefone;
+    private String email;
+
+    /**
+     * Construtor para criar um novo contato.
+     *
+     * @param nome nome do contato
+     * @param telefone telefone do contato
+     * @param email email do contato
+     */
+    public Contato(String nome, String telefone, String email) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
+    // Getters e Setters com documentação
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    @Override
+    public String toString() {
+        return "Contato{nome='" + nome + "', telefone='" + telefone + "', email='" + email + "'}";
+    }
+}
+```
+
+### Exercício 3: Comentários em Algoritmos Complexos
+
+**Objetivo**: Adicionar comentários explicativos a um algoritmo complexo.
+
+**Enunciado**: Adicione comentários detalhados ao algoritmo de ordenação por inserção.
+
+**Resolução**:
+
+```java
+/**
+ * Classe que implementa algoritmos de ordenação.
+ *
+ * @author Carlos Oliveira
+ * @version 1.0
+ */
+public class AlgoritmosOrdenacao {
+
+    /**
+     * Ordena um array usando o algoritmo de ordenação por inserção.
+     * Complexidade: O(n²) no pior caso, O(n) no melhor caso.
+     *
+     * @param array array a ser ordenado
+     */
+    public static void ordenacaoInsercao(int[] array) {
+        // Percorre o array a partir do segundo elemento
+        for (int i = 1; i < array.length; i++) {
+            // Guarda o elemento atual para inserção
+            int elementoAtual = array[i];
+
+            // Índice para comparar com elementos anteriores
+            int j = i - 1;
+
+            // Move elementos maiores que o elemento atual uma posição à direita
+            // até encontrar a posição correta para inserção
+            while (j >= 0 && array[j] > elementoAtual) {
+                array[j + 1] = array[j];
+                j--;
+            }
+
+            // Insere o elemento na posição correta
+            array[j + 1] = elementoAtual;
+        }
+    }
+
+    /**
+     * Ordena um array usando o algoritmo de ordenação por seleção.
+     * Complexidade: O(n²) em todos os casos.
+     *
+     * @param array array a ser ordenado
+     */
+    public static void ordenacaoSelecao(int[] array) {
+        // Percorre o array para encontrar o menor elemento
+        for (int i = 0; i < array.length - 1; i++) {
+            // Assume que o elemento atual é o menor
+            int indiceMenor = i;
+
+            // Procura o menor elemento na parte não ordenada
+            for (int j = i + 1; j < array.length; j++) {
+                if (array[j] < array[indiceMenor]) {
+                    indiceMenor = j;
+                }
+            }
+
+            // Troca o menor elemento encontrado com o elemento atual
+            if (indiceMenor != i) {
+                int temp = array[i];
+                array[i] = array[indiceMenor];
+                array[indiceMenor] = temp;
+            }
+        }
+    }
+
+    /**
+     * Ordena um array usando o algoritmo de ordenação por bolha.
+     * Complexidade: O(n²) no pior caso, O(n) no melhor caso.
+     *
+     * @param array array a ser ordenado
+     */
+    public static void ordenacaoBolha(int[] array) {
+        // Flag para otimização - se nenhuma troca ocorrer, o array está ordenado
+        boolean trocou;
+
+        // Percorre o array múltiplas vezes
+        for (int i = 0; i < array.length - 1; i++) {
+            trocou = false;
+
+            // Compara elementos adjacentes e troca se necessário
+            for (int j = 0; j < array.length - 1 - i; j++) {
+                // Se o elemento atual é maior que o próximo, troca-os
+                if (array[j] > array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                    trocou = true;
+                }
+            }
+
+            // Se não houve trocas, o array está ordenado
+            if (!trocou) {
+                break;
+            }
+        }
+    }
+}
+```
+
+## Conclusão
+
+Comentários são essenciais em programação Java para:
+
+- **Explicar lógica complexa**: Algoritmos e decisões de design
+- **Documentar APIs**: JavaDoc para documentação automática
+- **Facilitar manutenção**: Código mais legível e compreensível
+- **Comunicar intenções**: Explicar o "porquê" do código
+
+**Boas práticas**:
+
+- Comente o "porquê", não o "como"
+- Use JavaDoc para APIs públicas
+- Mantenha comentários atualizados
+- Evite comentários óbvios ou desnecessários
+- Use comentários para explicar algoritmos complexos
+
+Lembre-se: código bem escrito é autoexplicativo, mas comentários bem feitos podem tornar o código ainda mais claro e profissional.

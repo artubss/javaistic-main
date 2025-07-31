@@ -1,219 +1,530 @@
 ---
-title: Java switch Statement
-description: In this tutorial, you will learn to use the switch statement in Java to control the flow of your program’s execution with the help of examples.
+title: "Instrução switch em Java"
+description: "Neste tutorial, você aprenderá a usar a instrução switch em Java para controlar o fluxo de execução do seu programa com exemplos práticos"
+difficulty: "Básico"
+category: "Controle de Fluxo"
 ---
 
-The `switch` statement allows us to execute a block of code among many alternatives.
+## Instrução switch em Java
 
-The syntax of the `switch` statement in Java is:
+A instrução `switch` nos permite executar um bloco de código entre muitas alternativas.
+
+A sintaxe da instrução `switch` em Java é:
 
 ```java
-switch (expression) {
+switch (expressao) {
 
-  case value1:
-    // code
+  case valor1:
+    // código
     break;
 
-  case value2:
-    // code
+  case valor2:
+    // código
     break;
 
   ...
   ...
 
   default:
-    // default statements
+    // instruções padrão
   }
 ```
-## How does the switch-case statement work?
 
-The `expression` is evaluated once and compared with the values of each case.
+## Como funciona a instrução switch-case?
 
-- If `expression` matches with `value1`, the code of `case value1` are executed. Similarly, the code of `case value2` is executed if `expression` matches with `value2`.
-- If there is no match, the code of the **default case** is executed.
+A `expressao` é avaliada uma vez e comparada com os valores de cada case.
+
+- Se `expressao` corresponder a `valor1`, o código de `case valor1` é executado. Da mesma forma, o código de `case valor2` é executado se `expressao` corresponder a `valor2`.
+- Se não houver correspondência, o código do **case padrão** é executado.
 
 <Callout>
 
-**Note:** The working of the switch-case statement is similar to the [Java if...else...if ladder](/docs/if-else-statement#3-java-if-else-if-statement). However, the syntax of the `switch` statement is cleaner and much easier to read and write.
+**Nota**: O funcionamento da instrução switch-case é similar à [escada Java if...else...if](/docs/if-else-statement#3-java-if-else-if-statement). No entanto, a sintaxe da instrução `switch` é mais limpa e muito mais fácil de ler e escrever.
 
 </Callout>
 
-### Example: Java switch Statement
+### Exemplo: Instrução Java switch
 
-#### Input
+#### Entrada
 
 ```java
-// Java Program to check the size
-// using the switch...case statement
+// Programa Java para verificar o tamanho
+// usando a instrução switch...case
 
-class Main {
-  public static void main(String[] args) {
+public class Main {
+    public static void main(String[] args) {
+        int numero = 44;
+        String tamanho;
 
-    int number = 44;
-    String size;
+        // instrução switch para verificar tamanho
+        switch (numero) {
+            case 29:
+                tamanho = "Pequeno";
+                break;
 
-    // switch statement to check size
-    switch (number) {
+            case 42:
+                tamanho = "Médio";
+                break;
 
-      case 29:
-        size = "Small";
-        break;
+            // corresponder ao valor da semana
+            case 44:
+                tamanho = "Grande";
+                break;
 
-      case 42:
-        size = "Medium";
-        break;
+            case 48:
+                tamanho = "Extra Grande";
+                break;
 
-      // match the value of week
-      case 44:
-        size = "Large";
-        break;
-
-      case 48:
-        size = "Extra Large";
-        break;
-
-      default:
-        size = "Unknown";
-        break;
-
+            default:
+                tamanho = "Desconhecido";
+                break;
+        }
+        System.out.println("Tamanho: " + tamanho);
     }
-    System.out.println("Size: " + size);
-  }
 }
 ```
-#### Output:
+
+#### Saída:
 
 ```plaintext
-Size: Large
+Tamanho: Grande
 ```
-In the above example, we have used the switch statement to find the size. Here, we have a variable `number`. The variable is compared with the value of each case statement.
 
-Since the value matches with **44**, the code of `case 44` is executed.
+No exemplo acima, usamos a instrução switch para encontrar o tamanho. Aqui, temos uma variável `numero`. A variável é comparada com o valor de cada instrução case.
+
+Como o valor corresponde a **44**, o código de `case 44` é executado.
 
 ```java
-size = "Large";
+tamanho = "Grande";
 break;
 ```
-Here, the `size` variable is assigned with the value `Large`.
 
+Aqui, a variável `tamanho` é atribuída com o valor `Grande`.
 
-## Flowchart of switch Statement
+## Fluxograma da Instrução switch
 
-<div className="items-center">
+<div>
 
-![Working of Java if statement](/img/docs/switch-case-flowchart.svg)
+![Fluxograma da instrução switch](/img/docs/switch-statement-flowchart.svg)
 
-<p align="center" className="text-base text-gray-600 font-medium">Flow chart of the Java switch statement</p>
+<p align="center" className="text-base text-gray-600 font-medium">
+  Fluxograma da instrução switch
+</p>
 
 </div>
 
-## break statement in Java switch...case
+## Tipos de Dados Suportados
 
-Notice that we have been using break in each case block.
+A partir do Java 7, a instrução switch suporta:
 
-```java
- ...
-case 29:
-  size = "Small";
-  break;
-...
-```
-The `break` statement is used to terminate the **switch-case** statement. If `break` is not used, all the cases after the matching case are also executed. For example,
+- **Tipos primitivos**: `byte`, `short`, `char`, `int`
+- **Tipos wrapper**: `Byte`, `Short`, `Character`, `Integer`
+- **String**: A partir do Java 7
+- **Enum**: A partir do Java 5
 
-#### Input
+### Exemplo 1: Switch com String
 
 ```java
-class Main {
-  public static void main(String[] args) {
+public class SwitchString {
+    public static void main(String[] args) {
+        String dia = "Segunda";
+        String mensagem;
 
-    int expression = 2;
+        switch (dia) {
+            case "Segunda":
+                mensagem = "Início da semana";
+                break;
+            case "Terça":
+                mensagem = "Segundo dia";
+                break;
+            case "Quarta":
+                mensagem = "Meio da semana";
+                break;
+            case "Quinta":
+                mensagem = "Quase fim da semana";
+                break;
+            case "Sexta":
+                mensagem = "Último dia útil";
+                break;
+            case "Sábado":
+            case "Domingo":
+                mensagem = "Fim de semana";
+                break;
+            default:
+                mensagem = "Dia inválido";
+                break;
+        }
 
-    // switch statement to check size
-    switch (expression) {
-      case 1:
-        System.out.println("Case 1");
-
-        // matching case
-      case 2:
-        System.out.println("Case 2");
-
-      case 3:
-        System.out.println("Case 3");
-
-      default:
-        System.out.println("Default case");
+        System.out.println("Dia: " + dia);
+        System.out.println("Mensagem: " + mensagem);
     }
-  }
 }
 ```
 
-#### Output
-
-```plaintext
-Case 2
-Case 3
-Default case
-```
-In the above example, `expression` matches with `case 2`. Here, we haven't used the break statement after each case.
-
-Hence, all the cases after `case 2` are also executed.
-
-This is why the `break` statement is needed to terminate the **switch-case** statement after the matching case. To learn more, visit Java break Statement.
-
-## default case in Java switch-case
-
-The switch statement also includes an **optional default case**. It is executed when the expression doesn't match any of the cases. For example,
-
-#### Input
+### Exemplo 2: Switch com Enum
 
 ```java
-class Main {
-  public static void main(String[] args) {
-
-    int expression = 9;
-
-    switch(expression) {
-
-      case 2:
-        System.out.println("Small Size");
-        break;
-
-      case 3:
-        System.out.println("Large Size");
-        break;
-
-      // default case
-      default:
-        System.out.println("Unknown Size");
+public class SwitchEnum {
+    enum DiaSemana {
+        SEGUNDA, TERCA, QUARTA, QUINTA, SEXTA, SABADO, DOMINGO
     }
-  }
+
+    public static void main(String[] args) {
+        DiaSemana dia = DiaSemana.QUARTA;
+        String atividade;
+
+        switch (dia) {
+            case SEGUNDA:
+                atividade = "Reunião de equipe";
+                break;
+            case TERCA:
+                atividade = "Desenvolvimento";
+                break;
+            case QUARTA:
+                atividade = "Code review";
+                break;
+            case QUINTA:
+                atividade = "Testes";
+                break;
+            case SEXTA:
+                atividade = "Deploy";
+                break;
+            case SABADO:
+            case DOMINGO:
+                atividade = "Descanso";
+                break;
+            default:
+                atividade = "Atividade não definida";
+                break;
+        }
+
+        System.out.println("Dia: " + dia);
+        System.out.println("Atividade: " + atividade);
+    }
 }
 ```
-#### Output
 
-```plaintext
-Unknown Size
-```
+## Exemplos Práticos
 
-In the above example, we have created a **switch-case** statement. Here, the value of `expression` doesn't match with any of the cases.
-
-Hence, the code inside the **default case** is executed.
+### Exemplo 1: Calculadora Simples
 
 ```java
-default:
-  System.out.println("Unknown Size);
+public class CalculadoraSwitch {
+    public static void main(String[] args) {
+        double num1 = 10.0;
+        double num2 = 5.0;
+        char operacao = '+';
+        double resultado = 0.0;
+
+        switch (operacao) {
+            case '+':
+                resultado = num1 + num2;
+                break;
+            case '-':
+                resultado = num1 - num2;
+                break;
+            case '*':
+                resultado = num1 * num2;
+                break;
+            case '/':
+                if (num2 != 0) {
+                    resultado = num1 / num2;
+                } else {
+                    System.out.println("Erro: Divisão por zero!");
+                    return;
+                }
+                break;
+            case '%':
+                resultado = num1 % num2;
+                break;
+            default:
+                System.out.println("Operação inválida!");
+                return;
+        }
+
+        System.out.println(num1 + " " + operacao + " " + num2 + " = " + resultado);
+    }
+}
 ```
-<br/>
 
-<Callout>
+### Exemplo 2: Sistema de Notas
 
-**Note:** The Java switch statement only works with:
+```java
+public class SistemaNotas {
+    public static void main(String[] args) {
+        char nota = 'B';
+        String descricao;
 
-<ul>
-<li> <a href="/docs/variables-primitive-data-types"><b>Primitive data types:</b></a> byte, short, char, and int </li>
-<li> <b>Enumerated types</b> </li>
-<li> <b>String Class</b> </li>
-<li> <b>Wrapper Classes:</b> Character, Byte, Short, and Integer.</li>
-</ul>
+        switch (nota) {
+            case 'A':
+                descricao = "Excelente";
+                break;
+            case 'B':
+                descricao = "Bom";
+                break;
+            case 'C':
+                descricao = "Satisfatório";
+                break;
+            case 'D':
+                descricao = "Precisa melhorar";
+                break;
+            case 'F':
+                descricao = "Reprovado";
+                break;
+            default:
+                descricao = "Nota inválida";
+                break;
+        }
 
-</Callout>
+        System.out.println("Nota: " + nota);
+        System.out.println("Descrição: " + descricao);
+    }
+}
+```
+
+### Exemplo 3: Menu de Opções
+
+```java
+public class MenuOpcoes {
+    public static void main(String[] args) {
+        int opcao = 3;
+        String acao;
+
+        switch (opcao) {
+            case 1:
+                acao = "Criar novo arquivo";
+                break;
+            case 2:
+                acao = "Abrir arquivo existente";
+                break;
+            case 3:
+                acao = "Salvar arquivo";
+                break;
+            case 4:
+                acao = "Fechar aplicação";
+                break;
+            case 5:
+                acao = "Configurações";
+                break;
+            default:
+                acao = "Opção inválida";
+                break;
+        }
+
+        System.out.println("Opção selecionada: " + opcao);
+        System.out.println("Ação: " + acao);
+    }
+}
+```
+
+### Exemplo 4: Conversor de Temperatura
+
+```java
+public class ConversorTemperatura {
+    public static void main(String[] args) {
+        String unidadeOrigem = "Celsius";
+        String unidadeDestino = "Fahrenheit";
+        double temperatura = 25.0;
+        double resultado = 0.0;
+
+        String combinacao = unidadeOrigem + "_" + unidadeDestino;
+
+        switch (combinacao) {
+            case "Celsius_Fahrenheit":
+                resultado = (temperatura * 9/5) + 32;
+                break;
+            case "Fahrenheit_Celsius":
+                resultado = (temperatura - 32) * 5/9;
+                break;
+            case "Celsius_Kelvin":
+                resultado = temperatura + 273.15;
+                break;
+            case "Kelvin_Celsius":
+                resultado = temperatura - 273.15;
+                break;
+            case "Fahrenheit_Kelvin":
+                resultado = (temperatura - 32) * 5/9 + 273.15;
+                break;
+            case "Kelvin_Fahrenheit":
+                resultado = (temperatura - 273.15) * 9/5 + 32;
+                break;
+            default:
+                System.out.println("Conversão não suportada!");
+                return;
+        }
+
+        System.out.printf("%.1f %s = %.1f %s\n",
+                         temperatura, unidadeOrigem, resultado, unidadeDestino);
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de IMC
+
+**Objetivo**: Usar switch para classificar IMC.
+
+**Enunciado**: Crie um programa que classifique o IMC usando switch.
+
+**Resolução**:
+
+```java
+public class CalculadoraIMC {
+    public static void main(String[] args) {
+        double imc = 24.5;
+        String classificacao;
+
+        // Converter IMC para faixa para usar no switch
+        int faixa = (int) (imc / 5); // Agrupa em faixas de 5
+
+        switch (faixa) {
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                classificacao = "Abaixo do peso";
+                break;
+            case 4:
+                classificacao = "Peso normal";
+                break;
+            case 5:
+                classificacao = "Sobrepeso";
+                break;
+            case 6:
+                classificacao = "Obesidade grau 1";
+                break;
+            case 7:
+                classificacao = "Obesidade grau 2";
+                break;
+            default:
+                classificacao = "Obesidade grau 3";
+                break;
+        }
+
+        System.out.printf("IMC: %.1f\n", imc);
+        System.out.println("Classificação: " + classificacao);
+    }
+}
+```
+
+### Exercício 2: Sistema de Pagamento
+
+**Objetivo**: Criar um sistema de pagamento com diferentes métodos.
+
+**Enunciado**: Crie um programa que processe diferentes métodos de pagamento.
+
+**Resolução**:
+
+```java
+public class SistemaPagamento {
+    public static void main(String[] args) {
+        String metodoPagamento = "Cartão de Crédito";
+        double valor = 150.0;
+        String processamento;
+
+        switch (metodoPagamento) {
+            case "Dinheiro":
+                processamento = "Pagamento em dinheiro - R$ " + valor;
+                break;
+            case "Cartão de Débito":
+                processamento = "Pagamento com débito - R$ " + valor;
+                break;
+            case "Cartão de Crédito":
+                processamento = "Pagamento com crédito - R$ " + valor;
+                break;
+            case "PIX":
+                processamento = "Pagamento via PIX - R$ " + valor;
+                break;
+            case "Boleto":
+                processamento = "Boleto gerado - R$ " + valor;
+                break;
+            case "Transferência":
+                processamento = "Transferência bancária - R$ " + valor;
+                break;
+            default:
+                processamento = "Método de pagamento não suportado";
+                break;
+        }
+
+        System.out.println("Método: " + metodoPagamento);
+        System.out.println("Processamento: " + processamento);
+    }
+}
+```
+
+### Exercício 3: Validador de CPF
+
+**Objetivo**: Usar switch para validar diferentes aspectos do CPF.
+
+**Enunciado**: Crie um programa que valide CPF usando switch.
+
+**Resolução**:
+
+```java
+public class ValidadorCPF {
+    public static void main(String[] args) {
+        String cpf = "12345678909";
+        String tipoValidacao = "comprimento";
+        String resultado;
+
+        switch (tipoValidacao) {
+            case "comprimento":
+                if (cpf.length() == 11) {
+                    resultado = "Comprimento válido";
+                } else {
+                    resultado = "Comprimento inválido";
+                }
+                break;
+            case "digitos":
+                if (cpf.matches("\\d+")) {
+                    resultado = "Apenas dígitos";
+                } else {
+                    resultado = "Contém caracteres não numéricos";
+                }
+                break;
+            case "iguais":
+                if (cpf.matches("(\\d)\\1{10}")) {
+                    resultado = "Todos os dígitos iguais";
+                } else {
+                    resultado = "Dígitos diferentes";
+                }
+                break;
+            case "completo":
+                // Validação completa seria mais complexa
+                if (cpf.length() == 11 && cpf.matches("\\d+")) {
+                    resultado = "CPF válido";
+                } else {
+                    resultado = "CPF inválido";
+                }
+                break;
+            default:
+                resultado = "Tipo de validação não suportado";
+                break;
+        }
+
+        System.out.println("CPF: " + cpf);
+        System.out.println("Tipo de validação: " + tipoValidacao);
+        System.out.println("Resultado: " + resultado);
+    }
+}
+```
+
+## Conclusão
+
+A instrução `switch` é uma ferramenta poderosa em Java para:
+
+- **Múltiplas condições**: Substituir longas cadeias de if-else
+- **Código limpo**: Sintaxe mais clara e legível
+- **Performance**: Mais eficiente que if-else para múltiplas condições
+- **Manutenibilidade**: Fácil de adicionar ou remover casos
+
+**Boas práticas**:
+
+- Sempre use `break` para evitar fall-through
+- Use `default` para casos não cobertos
+- Agrupe cases relacionados
+- Use switch para múltiplas condições simples
+- Considere usar if-else para condições complexas
+
+Lembre-se de escolher entre switch e if-else baseado na complexidade das condições e na legibilidade do código.
