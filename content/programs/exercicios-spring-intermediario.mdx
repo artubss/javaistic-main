@@ -1,0 +1,956 @@
+---
+title: "Exercícios Intermediários - Spring Framework"
+description: "Exercícios práticos para aprender Spring Framework - Nível Intermediário"
+difficulty: "Intermediário"
+category: "Spring Framework"
+---
+
+## Exercícios Intermediários - Spring Framework
+
+### Área: Transações
+
+#### Exercício 1: Sistema de Transferência Bancária
+**Objetivo**: Implementar um sistema de transferência bancária com controle de transações.
+
+**Enunciado**: Crie um sistema de transferência bancária onde a transferência deve ser atômica (ou tudo ou nada). Implemente validações de saldo e registro de transações.
+
+**Resolução**:
+
+```java
+// Modelo de Conta
+@Entity
+@Table(name = "contas")
+public class Conta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(unique = true, nullable = false)
+    private String numero;
+    
+    @Column(nullable = false)
+    private BigDecimal saldo;
+    
+    @Column(nullable = false)
+    private String titular;
+    
+    @Column(nullable = false)
+    private boolean ativa;
+    
+    // Construtores
+    public Conta() {}
+    
+    public Conta(String numero, String titular, BigDecimal saldoInicial) {
+        this.numero = numero;
+        this.titular = titular;
+        this.saldo = saldoInicial;
+        this.ativa = true;
+    }
+    
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public String getNumero() { return numero; }
+    public void setNumero(String numero) { this.numero = numero; }
+    
+    public BigDecimal getSaldo() { return saldo; }
+    public void setSaldo(BigDecimal saldo) { this.saldo = saldo; }
+    
+    public String getTitular() { return titular; }
+    public void setTitular(String titular) { this.titular = titular; }
+    
+    public boolean isAtiva() { return ativa; }
+    public void setAtiva(boolean ativa) { this.ativa = ativa; }
+}
+
+// Modelo de Transação
+@Entity
+@Table(name = "transacoes")
+public class Transacao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false)
+    private Long contaOrigemId;
+    
+    @Column(nullable = false)
+    private Long contaDestinoId;
+    
+    @Column(nullable = false)
+    private BigDecimal valor;
+    
+    @Column(nullable = false)
+    private LocalDateTime dataTransacao;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusTransacao status;
+    
+    // Construtores
+    public Transacao() {}
+    
+    public Transacao(Long contaOrigemId, Long contaDestinoId, BigDecimal valor) {
+        this.contaOrigemId = contaOrigemId;
+        this.contaDestinoId = contaDestinoId;
+        this.valor = valor;
+        this.dataTransacao = LocalDateTime.now();
+        this.status = StatusTransacao.PENDENTE;
+    }
+    
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public Long getContaOrigemId() { return contaOrigemId; }
+    public void setContaOrigemId(Long contaOrigemId) { this.contaOrigemId = contaOrigemId; }
+    
+    public Long getContaDestinoId() { return contaDestinoId; }
+    public void setContaDestinoId(Long contaDestinoId) { this.contaDestinoId = contaDestinoId; }
+    
+    public BigDecimal getValor() { return valor; }
+    public void setValor(BigDecimal valor) { this.valor = valor; }
+    
+    public LocalDateTime getDataTransacao() { return dataTransacao; }
+    public void setDataTransacao(LocalDateTime dataTransacao) { this.dataTransacao = dataTransacao; }
+    
+    public StatusTransacao getStatus() { return status; }
+    public void setStatus(StatusTransacao status) { this.status = status; }
+}
+
+// Enum de Status
+public enum StatusTransacao {
+    PENDENTE, CONCLUIDA, FALHOU
+}
+
+// Repositórios
+@Repository
+public interface RepositorioConta extends JpaRepository<Conta, Long> {
+    Optional<Conta> findByNumero(String numero);
+    List<Conta> findByTitular(String titular);
+    List<Conta> findByAtivaTrue();
+}
+
+@Repository
+public interface RepositorioTransacao extends JpaRepository<Transacao, Long> {
+    List<Transacao> findByContaOrigemIdOrContaDestinoId(Long contaOrigemId, Long contaDestinoId);
+    List<Transacao> findByStatus(StatusTransacao status);
+    List<Transacao> findByDataTransacaoBetween(LocalDateTime inicio, LocalDateTime fim);
+}
+
+// Serviço de Transferência
+@Service
+@Transactional
+public class ServicoTransferencia {
+    private final RepositorioConta repositorioConta;
+    private final RepositorioTransacao repositorioTransacao;
+    private final Logger logger = LoggerFactory.getLogger(ServicoTransferencia.class);
+    
+    @Autowired
+    public ServicoTransferencia(RepositorioConta repositorioConta,
+                               RepositorioTransacao repositorioTransacao) {
+        this.repositorioConta = repositorioConta;
+        this.repositorioTransacao = repositorioTransacao;
+    }
+    
+    @Transactional
+    public Transacao transferir(Long contaOrigemId, Long contaDestinoId, BigDecimal valor) {
+        // Validações básicas
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor deve ser maior que zero");
+        }
+        
+        if (contaOrigemId.equals(contaDestinoId)) {
+            throw new IllegalArgumentException("Conta origem e destino não podem ser iguais");
+        }
+        
+        // Buscar contas
+        Conta origem = repositorioConta.findById(contaOrigemId)
+            .orElseThrow(() -> new IllegalArgumentException("Conta origem não encontrada"));
+        
+        Conta destino = repositorioConta.findById(contaDestinoId)
+            .orElseThrow(() -> new IllegalArgumentException("Conta destino não encontrada"));
+        
+        // Validações de negócio
+        if (!origem.isAtiva()) {
+            throw new IllegalArgumentException("Conta origem está inativa");
+        }
+        
+        if (!destino.isAtiva()) {
+            throw new IllegalArgumentException("Conta destino está inativa");
+        }
+        
+        if (origem.getSaldo().compareTo(valor) < 0) {
+            throw new IllegalArgumentException("Saldo insuficiente na conta origem");
+        }
+        
+        // Criar transação
+        Transacao transacao = new Transacao(contaOrigemId, contaDestinoId, valor);
+        transacao = repositorioTransacao.save(transacao);
+        
+        try {
+            // Debitar da conta origem
+            origem.setSaldo(origem.getSaldo().subtract(valor));
+            repositorioConta.save(origem);
+            
+            // Creditar na conta destino
+            destino.setSaldo(destino.getSaldo().add(valor));
+            repositorioConta.save(destino);
+            
+            // Marcar transação como concluída
+            transacao.setStatus(StatusTransacao.CONCLUIDA);
+            repositorioTransacao.save(transacao);
+            
+            logger.info("Transferência realizada: {} -> {} = {}", 
+                       origem.getNumero(), destino.getNumero(), valor);
+            
+            return transacao;
+            
+        } catch (Exception e) {
+            // Marcar transação como falhada
+            transacao.setStatus(StatusTransacao.FALHOU);
+            repositorioTransacao.save(transacao);
+            
+            logger.error("Erro na transferência: {}", e.getMessage());
+            throw new RuntimeException("Erro ao realizar transferência", e);
+        }
+    }
+    
+    @Transactional(readOnly = true)
+    public BigDecimal consultarSaldo(Long contaId) {
+        Conta conta = repositorioConta.findById(contaId)
+            .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada"));
+        
+        return conta.getSaldo();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Transacao> buscarTransacoes(Long contaId) {
+        return repositorioTransacao.findByContaOrigemIdOrContaDestinoId(contaId, contaId);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Transacao> buscarTransacoesPorPeriodo(LocalDateTime inicio, LocalDateTime fim) {
+        return repositorioTransacao.findByDataTransacaoBetween(inicio, fim);
+    }
+    
+    @Transactional
+    public void reverterTransacao(Long transacaoId) {
+        Transacao transacao = repositorioTransacao.findById(transacaoId)
+            .orElseThrow(() -> new IllegalArgumentException("Transação não encontrada"));
+        
+        if (transacao.getStatus() != StatusTransacao.CONCLUIDA) {
+            throw new IllegalArgumentException("Apenas transações concluídas podem ser revertidas");
+        }
+        
+        // Buscar contas
+        Conta origem = repositorioConta.findById(transacao.getContaOrigemId())
+            .orElseThrow(() -> new IllegalArgumentException("Conta origem não encontrada"));
+        
+        Conta destino = repositorioConta.findById(transacao.getContaDestinoId())
+            .orElseThrow(() -> new IllegalArgumentException("Conta destino não encontrada"));
+        
+        // Reverter valores
+        origem.setSaldo(origem.getSaldo().add(transacao.getValor()));
+        repositorioConta.save(origem);
+        
+        destino.setSaldo(destino.getSaldo().subtract(transacao.getValor()));
+        repositorioConta.save(destino);
+        
+        // Criar transação de reversão
+        Transacao reversao = new Transacao(
+            transacao.getContaDestinoId(), 
+            transacao.getContaOrigemId(), 
+            transacao.getValor()
+        );
+        reversao.setStatus(StatusTransacao.CONCLUIDA);
+        repositorioTransacao.save(reversao);
+        
+        logger.info("Transação revertida: {}", transacaoId);
+    }
+}
+```
+
+### Área: AOP (Aspect-Oriented Programming)
+
+#### Exercício 2: Sistema de Logging e Monitoramento
+**Objetivo**: Implementar aspectos para logging, monitoramento de performance e tratamento de exceções.
+
+**Enunciado**: Crie um sistema de aspectos que registre o tempo de execução de métodos, logue erros e implemente cache para métodos específicos.
+
+**Resolução**:
+
+```java
+// Aspecto de Logging
+@Aspect
+@Component
+public class LoggingAspect {
+    private final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
+    
+    @Around("execution(* com.exemplo.*.Servico.*(..))")
+    public Object medirTempoExecucao(ProceedingJoinPoint joinPoint) throws Throwable {
+        long inicio = System.currentTimeMillis();
+        String metodo = joinPoint.getSignature().getName();
+        String classe = joinPoint.getTarget().getClass().getSimpleName();
+        
+        try {
+            Object resultado = joinPoint.proceed();
+            long tempo = System.currentTimeMillis() - inicio;
+            
+            if (tempo > 1000) { // Log de warning para métodos lentos
+                logger.warn("Método {}.{} executado em {}ms (LENTO)", classe, metodo, tempo);
+            } else {
+                logger.info("Método {}.{} executado em {}ms", classe, metodo, tempo);
+            }
+            
+            return resultado;
+        } catch (Throwable e) {
+            long tempo = System.currentTimeMillis() - inicio;
+            logger.error("Método {}.{} falhou após {}ms com erro: {}", 
+                        classe, metodo, tempo, e.getMessage());
+            throw e;
+        }
+    }
+    
+    @Before("execution(* com.exemplo.*.Servico.*(..))")
+    public void logAntesDoMetodo(JoinPoint joinPoint) {
+        String metodo = joinPoint.getSignature().getName();
+        String classe = joinPoint.getTarget().getClass().getSimpleName();
+        Object[] args = joinPoint.getArgs();
+        
+        logger.debug("Executando {}.{} com argumentos: {}", classe, metodo, Arrays.toString(args));
+    }
+    
+    @AfterReturning(pointcut = "execution(* com.exemplo.*.Servico.*(..))",
+                    returning = "resultado")
+    public void logAposSucesso(JoinPoint joinPoint, Object resultado) {
+        String metodo = joinPoint.getSignature().getName();
+        String classe = joinPoint.getTarget().getClass().getSimpleName();
+        
+        logger.debug("Método {}.{} executado com sucesso. Retorno: {}", 
+                    classe, metodo, resultado);
+    }
+    
+    @AfterThrowing(pointcut = "execution(* com.exemplo.*.*(..))",
+                   throwing = "erro")
+    public void logErro(JoinPoint joinPoint, Throwable erro) {
+        String metodo = joinPoint.getSignature().getName();
+        String classe = joinPoint.getTarget().getClass().getSimpleName();
+        
+        logger.error("Erro no método {}.{}: {}", classe, metodo, erro.getMessage(), erro);
+    }
+}
+
+// Aspecto de Cache
+@Aspect
+@Component
+public class CacheAspect {
+    private final Map<String, Object> cache = new ConcurrentHashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(CacheAspect.class);
+    
+    @Around("@annotation(Cacheable)")
+    public Object cachearResultado(ProceedingJoinPoint joinPoint) throws Throwable {
+        String chave = gerarChaveCache(joinPoint);
+        
+        // Verificar se existe no cache
+        if (cache.containsKey(chave)) {
+            logger.debug("Cache hit para chave: {}", chave);
+            return cache.get(chave);
+        }
+        
+        // Executar método e armazenar no cache
+        Object resultado = joinPoint.proceed();
+        cache.put(chave, resultado);
+        
+        logger.debug("Cache miss para chave: {}. Resultado armazenado.", chave);
+        return resultado;
+    }
+    
+    @Around("@annotation(CacheEvict)")
+    public Object limparCache(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object resultado = joinPoint.proceed();
+        
+        // Limpar cache após execução
+        cache.clear();
+        logger.debug("Cache limpo após execução do método: {}", 
+                    joinPoint.getSignature().getName());
+        
+        return resultado;
+    }
+    
+    private String gerarChaveCache(ProceedingJoinPoint joinPoint) {
+        String metodo = joinPoint.getSignature().getName();
+        String classe = joinPoint.getTarget().getClass().getSimpleName();
+        Object[] args = joinPoint.getArgs();
+        
+        return String.format("%s.%s.%s", classe, metodo, Arrays.hashCode(args));
+    }
+}
+
+// Anotações customizadas
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Cacheable {}
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface CacheEvict {}
+
+// Aspecto de Monitoramento
+@Aspect
+@Component
+public class MonitoramentoAspect {
+    private final Map<String, AtomicLong> contadores = new ConcurrentHashMap<>();
+    private final Map<String, AtomicLong> temposMedios = new ConcurrentHashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(MonitoramentoAspect.class);
+    
+    @Around("execution(* com.exemplo.*.Servico.*(..))")
+    public Object monitorarMetodo(ProceedingJoinPoint joinPoint) throws Throwable {
+        String chave = joinPoint.getSignature().getName();
+        long inicio = System.currentTimeMillis();
+        
+        // Incrementar contador
+        contadores.computeIfAbsent(chave, k -> new AtomicLong(0)).incrementAndGet();
+        
+        try {
+            Object resultado = joinPoint.proceed();
+            long tempo = System.currentTimeMillis() - inicio;
+            
+            // Atualizar tempo médio
+            AtomicLong tempoMedio = temposMedios.computeIfAbsent(chave, k -> new AtomicLong(0));
+            long mediaAtual = tempoMedio.get();
+            long novaMedia = (mediaAtual + tempo) / 2;
+            tempoMedio.set(novaMedia);
+            
+            // Log de métricas a cada 100 execuções
+            long contador = contadores.get(chave).get();
+            if (contador % 100 == 0) {
+                logger.info("Métricas do método {}: {} execuções, tempo médio: {}ms", 
+                           chave, contador, novaMedia);
+            }
+            
+            return resultado;
+        } catch (Throwable e) {
+            long tempo = System.currentTimeMillis() - inicio;
+            logger.error("Método {} falhou após {}ms", chave, tempo);
+            throw e;
+        }
+    }
+    
+    // Método para obter métricas
+    public Map<String, Object> obterMetricas() {
+        Map<String, Object> metricas = new HashMap<>();
+        
+        contadores.forEach((metodo, contador) -> {
+            Map<String, Object> metrica = new HashMap<>();
+            metrica.put("execucoes", contador.get());
+            metrica.put("tempoMedio", temposMedios.getOrDefault(metodo, new AtomicLong(0)).get());
+            metricas.put(metodo, metrica);
+        });
+        
+        return metricas;
+    }
+}
+
+// Serviço com cache
+@Service
+public class ServicoProdutoComCache {
+    private final RepositorioProduto repositorio;
+    
+    @Autowired
+    public ServicoProdutoComCache(RepositorioProduto repositorio) {
+        this.repositorio = repositorio;
+    }
+    
+    @Cacheable
+    public List<Produto> buscarTodos() {
+        // Simular processamento lento
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return repositorio.buscarTodos();
+    }
+    
+    @Cacheable
+    public Produto buscarPorId(Long id) {
+        return repositorio.buscarPorId(id);
+    }
+    
+    @CacheEvict
+    public void salvarProduto(Produto produto) {
+        repositorio.salvar(produto);
+    }
+    
+    @CacheEvict
+    public void deletarProduto(Long id) {
+        repositorio.deletar(id);
+    }
+}
+```
+
+### Área: Eventos e Listeners
+
+#### Exercício 3: Sistema de Eventos
+**Objetivo**: Implementar um sistema de eventos para notificar mudanças no sistema.
+
+**Enunciado**: Crie um sistema de eventos que notifique quando um usuário é criado, atualizado ou deletado, enviando emails e registrando logs.
+
+**Resolução**:
+
+```java
+// Eventos customizados
+public class UsuarioCriadoEvent extends ApplicationEvent {
+    private final Usuario usuario;
+    
+    public UsuarioCriadoEvent(Object source, Usuario usuario) {
+        super(source);
+        this.usuario = usuario;
+    }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
+}
+
+public class UsuarioAtualizadoEvent extends ApplicationEvent {
+    private final Usuario usuario;
+    private final Map<String, Object> mudancas;
+    
+    public UsuarioAtualizadoEvent(Object source, Usuario usuario, Map<String, Object> mudancas) {
+        super(source);
+        this.usuario = usuario;
+        this.mudancas = mudancas;
+    }
+    
+    public Usuario getUsuario() {
+        return usuario;
+    }
+    
+    public Map<String, Object> getMudancas() {
+        return mudancas;
+    }
+}
+
+public class UsuarioDeletadoEvent extends ApplicationEvent {
+    private final Long usuarioId;
+    private final String email;
+    
+    public UsuarioDeletadoEvent(Object source, Long usuarioId, String email) {
+        super(source);
+        this.usuarioId = usuarioId;
+        this.email = email;
+    }
+    
+    public Long getUsuarioId() {
+        return usuarioId;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+}
+
+// Listeners
+@Component
+public class UsuarioEventListener {
+    private final Logger logger = LoggerFactory.getLogger(UsuarioEventListener.class);
+    private final ServicoEmail servicoEmail;
+    private final ServicoAuditoria servicoAuditoria;
+    
+    @Autowired
+    public UsuarioEventListener(ServicoEmail servicoEmail, ServicoAuditoria servicoAuditoria) {
+        this.servicoEmail = servicoEmail;
+        this.servicoAuditoria = servicoAuditoria;
+    }
+    
+    @EventListener
+    @Async
+    public void handleUsuarioCriado(UsuarioCriadoEvent event) {
+        Usuario usuario = event.getUsuario();
+        
+        logger.info("Usuário criado: {} ({})", usuario.getNome(), usuario.getEmail());
+        
+        // Enviar email de boas-vindas
+        servicoEmail.enviarEmailBoasVindas(usuario.getEmail(), usuario.getNome());
+        
+        // Registrar auditoria
+        servicoAuditoria.registrarAcao("USUARIO_CRIADO", usuario.getId(), 
+                                       "Usuário criado: " + usuario.getNome());
+    }
+    
+    @EventListener
+    @Async
+    public void handleUsuarioAtualizado(UsuarioAtualizadoEvent event) {
+        Usuario usuario = event.getUsuario();
+        Map<String, Object> mudancas = event.getMudancas();
+        
+        logger.info("Usuário atualizado: {} ({})", usuario.getNome(), usuario.getEmail());
+        logger.info("Mudanças: {}", mudancas);
+        
+        // Enviar email de confirmação
+        servicoEmail.enviarEmailConfirmacao(usuario.getEmail(), usuario.getNome());
+        
+        // Registrar auditoria
+        servicoAuditoria.registrarAcao("USUARIO_ATUALIZADO", usuario.getId(), 
+                                       "Mudanças: " + mudancas);
+    }
+    
+    @EventListener
+    @Async
+    public void handleUsuarioDeletado(UsuarioDeletadoEvent event) {
+        logger.info("Usuário deletado: ID={}, Email={}", event.getUsuarioId(), event.getEmail());
+        
+        // Enviar email de despedida
+        servicoEmail.enviarEmailDespedida(event.getEmail());
+        
+        // Registrar auditoria
+        servicoAuditoria.registrarAcao("USUARIO_DELETADO", event.getUsuarioId(), 
+                                       "Usuário deletado");
+    }
+}
+
+// Serviço de Auditoria
+@Service
+public class ServicoAuditoria {
+    private final Logger logger = LoggerFactory.getLogger(ServicoAuditoria.class);
+    
+    public void registrarAcao(String acao, Long usuarioId, String detalhes) {
+        String log = String.format("[AUDITORIA] %s - Usuario: %d - %s - %s", 
+                                  LocalDateTime.now(), usuarioId, acao, detalhes);
+        logger.info(log);
+        
+        // Aqui você poderia salvar no banco de dados
+        // ou enviar para um sistema de auditoria externo
+    }
+}
+
+// Serviço de Email atualizado
+@Service
+public class ServicoEmail {
+    private final Logger logger = LoggerFactory.getLogger(ServicoEmail.class);
+    
+    public void enviarEmailBoasVindas(String email, String nome) {
+        String assunto = "Bem-vindo ao nosso sistema!";
+        String mensagem = String.format("Olá %s! Seja bem-vindo ao nosso sistema.", nome);
+        
+        logger.info("Enviando email de boas-vindas para: {} - {}", email, assunto);
+        // Implementação real de envio de email
+    }
+    
+    public void enviarEmailConfirmacao(String email, String nome) {
+        String assunto = "Dados atualizados com sucesso";
+        String mensagem = String.format("Olá %s! Seus dados foram atualizados com sucesso.", nome);
+        
+        logger.info("Enviando email de confirmação para: {} - {}", email, assunto);
+        // Implementação real de envio de email
+    }
+    
+    public void enviarEmailDespedida(String email) {
+        String assunto = "Conta removida";
+        String mensagem = "Sua conta foi removida do nosso sistema. Obrigado por usar nossos serviços.";
+        
+        logger.info("Enviando email de despedida para: {} - {}", email, assunto);
+        // Implementação real de envio de email
+    }
+}
+
+// Serviço de Usuário atualizado
+@Service
+@Transactional
+public class ServicoUsuarioComEventos {
+    private final RepositorioUsuario repositorio;
+    private final ApplicationEventPublisher eventPublisher;
+    
+    @Autowired
+    public ServicoUsuarioComEventos(RepositorioUsuario repositorio,
+                                   ApplicationEventPublisher eventPublisher) {
+        this.repositorio = repositorio;
+        this.eventPublisher = eventPublisher;
+    }
+    
+    public Usuario criarUsuario(Usuario usuario) {
+        // Validações...
+        repositorio.salvar(usuario);
+        
+        // Publicar evento
+        eventPublisher.publishEvent(new UsuarioCriadoEvent(this, usuario));
+        
+        return usuario;
+    }
+    
+    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
+        Usuario usuarioExistente = buscarPorId(id);
+        Map<String, Object> mudancas = detectarMudancas(usuarioExistente, usuarioAtualizado);
+        
+        // Aplicar mudanças
+        if (usuarioAtualizado.getNome() != null) {
+            usuarioExistente.setNome(usuarioAtualizado.getNome());
+        }
+        if (usuarioAtualizado.getEmail() != null) {
+            usuarioExistente.setEmail(usuarioAtualizado.getEmail());
+        }
+        // Outras atualizações...
+        
+        repositorio.atualizar(usuarioExistente);
+        
+        // Publicar evento
+        eventPublisher.publishEvent(new UsuarioAtualizadoEvent(this, usuarioExistente, mudancas));
+        
+        return usuarioExistente;
+    }
+    
+    public void deletarUsuario(Long id) {
+        Usuario usuario = buscarPorId(id);
+        String email = usuario.getEmail();
+        
+        repositorio.deletar(id);
+        
+        // Publicar evento
+        eventPublisher.publishEvent(new UsuarioDeletadoEvent(this, id, email));
+    }
+    
+    private Map<String, Object> detectarMudancas(Usuario original, Usuario atualizado) {
+        Map<String, Object> mudancas = new HashMap<>();
+        
+        if (atualizado.getNome() != null && !atualizado.getNome().equals(original.getNome())) {
+            mudancas.put("nome", atualizado.getNome());
+        }
+        
+        if (atualizado.getEmail() != null && !atualizado.getEmail().equals(original.getEmail())) {
+            mudancas.put("email", atualizado.getEmail());
+        }
+        
+        return mudancas;
+    }
+    
+    private Usuario buscarPorId(Long id) {
+        Usuario usuario = repositorio.buscarPorId(id);
+        if (usuario == null) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        return usuario;
+    }
+}
+```
+
+### Área: Configuração Avançada
+
+#### Exercício 4: Configuração Condicional e Perfis
+**Objetivo**: Criar configurações condicionais baseadas em perfis e propriedades.
+
+**Enunciado**: Implemente um sistema que use diferentes configurações para desenvolvimento, produção e testes, incluindo diferentes tipos de notificação e configurações de banco de dados.
+
+**Resolução**:
+
+```java
+// Configurações por perfil
+@Configuration
+@Profile("dev")
+public class ConfiguracaoDev {
+    
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+            .url("jdbc:h2:mem:devdb")
+            .username("sa")
+            .password("")
+            .build();
+    }
+    
+    @Bean
+    public NotificacaoService notificacaoService() {
+        return new EmailNotificacaoService();
+    }
+    
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager();
+    }
+    
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(4);
+        executor.setQueueCapacity(10);
+        executor.setThreadNamePrefix("dev-");
+        executor.initialize();
+        return executor;
+    }
+}
+
+@Configuration
+@Profile("prod")
+public class ConfiguracaoProd {
+    
+    @Bean
+    @ConfigurationProperties("spring.datasource")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().build();
+    }
+    
+    @Bean
+    public NotificacaoService notificacaoService() {
+        return new SmsNotificacaoService();
+    }
+    
+    @Bean
+    public CacheManager cacheManager() {
+        RedisCacheManager cacheManager = RedisCacheManager.builder(redisConnectionFactory())
+            .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(30)))
+            .build();
+        return cacheManager;
+    }
+    
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory();
+    }
+    
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(10);
+        executor.setMaxPoolSize(20);
+        executor.setQueueCapacity(100);
+        executor.setThreadNamePrefix("prod-");
+        executor.initialize();
+        return executor;
+    }
+}
+
+@Configuration
+@Profile("test")
+public class ConfiguracaoTest {
+    
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+            .url("jdbc:h2:mem:testdb")
+            .username("sa")
+            .password("")
+            .build();
+    }
+    
+    @Bean
+    public NotificacaoService notificacaoService() {
+        return new MockNotificacaoService();
+    }
+    
+    @Bean
+    public CacheManager cacheManager() {
+        return new NoOpCacheManager();
+    }
+    
+    @Bean
+    public TaskExecutor taskExecutor() {
+        return new SyncTaskExecutor();
+    }
+}
+
+// Configuração condicional
+@Configuration
+@ConditionalOnProperty(name = "app.feature.cache.enabled", havingValue = "true")
+public class ConfiguracaoCache {
+    
+    @Bean
+    public CacheManager cacheManager() {
+        return new ConcurrentMapCacheManager();
+    }
+}
+
+@Configuration
+@ConditionalOnProperty(name = "app.feature.async.enabled", havingValue = "true")
+public class ConfiguracaoAsync {
+    
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(10);
+        executor.setQueueCapacity(25);
+        executor.setThreadNamePrefix("async-");
+        executor.initialize();
+        return executor;
+    }
+}
+
+// Configuração de propriedades
+@Configuration
+@ConfigurationProperties(prefix = "app")
+@Data
+public class ConfiguracaoApp {
+    private String nome;
+    private String versao;
+    private FeatureConfig feature = new FeatureConfig();
+    
+    @Data
+    public static class FeatureConfig {
+        private boolean cache = true;
+        private boolean async = true;
+        private boolean auditoria = true;
+    }
+}
+
+// Serviço configurável
+@Service
+public class ServicoConfiguravel {
+    private final NotificacaoService notificacaoService;
+    private final CacheManager cacheManager;
+    private final TaskExecutor taskExecutor;
+    private final ConfiguracaoApp configuracao;
+    
+    @Autowired
+    public ServicoConfiguravel(NotificacaoService notificacaoService,
+                               CacheManager cacheManager,
+                               TaskExecutor taskExecutor,
+                               ConfiguracaoApp configuracao) {
+        this.notificacaoService = notificacaoService;
+        this.cacheManager = cacheManager;
+        this.taskExecutor = taskExecutor;
+        this.configuracao = configuracao;
+    }
+    
+    public void processarComNotificacao(String destinatario, String mensagem) {
+        if (configuracao.getFeature().isAsync()) {
+            taskExecutor.execute(() -> {
+                notificacaoService.enviarNotificacao(destinatario, mensagem);
+            });
+        } else {
+            notificacaoService.enviarNotificacao(destinatario, mensagem);
+        }
+    }
+    
+    public Object buscarComCache(String chave, Supplier<Object> fornecedor) {
+        if (configuracao.getFeature().isCache()) {
+            Cache cache = cacheManager.getCache("default");
+            Cache.ValueWrapper cached = cache.get(chave);
+            
+            if (cached != null) {
+                return cached.get();
+            }
+            
+            Object resultado = fornecedor.get();
+            cache.put(chave, resultado);
+            return resultado;
+        } else {
+            return fornecedor.get();
+        }
+    }
+}
+```
+
+### Conclusão
+
+Estes exercícios intermediários cobrem conceitos avançados do Spring Framework:
+- Gerenciamento de transações
+- Programação orientada a aspectos (AOP)
+- Sistema de eventos
+- Configurações condicionais e perfis
+- Cache e processamento assíncrono
+
+Para praticar mais, tente implementar variações destes exercícios e explore outros recursos avançados do Spring Framework. 

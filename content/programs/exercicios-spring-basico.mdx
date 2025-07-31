@@ -1,0 +1,514 @@
+---
+title: "Exercícios Básicos - Spring Framework"
+description: "Exercícios práticos para aprender Spring Framework - Nível Básico"
+difficulty: "Básico"
+category: "Spring Framework"
+---
+
+## Exercícios Básicos - Spring Framework
+
+### Área: Configuração e IoC
+
+#### Exercício 1: Configuração Básica
+**Objetivo**: Criar uma aplicação Spring simples com IoC e DI.
+
+**Enunciado**: Crie uma aplicação que tenha:
+- Uma classe `Produto` com id, nome, preço e categoria
+- Um repositório para gerenciar produtos
+- Um serviço que implementa lógica de negócio
+- Um controlador REST para operações CRUD
+
+**Resolução**:
+
+```java
+// Modelo
+public class Produto {
+    private Long id;
+    private String nome;
+    private BigDecimal preco;
+    private String categoria;
+    
+    // Construtores
+    public Produto() {}
+    
+    public Produto(String nome, BigDecimal preco, String categoria) {
+        this.nome = nome;
+        this.preco = preco;
+        this.categoria = categoria;
+    }
+    
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    
+    public BigDecimal getPreco() { return preco; }
+    public void setPreco(BigDecimal preco) { this.preco = preco; }
+    
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+}
+
+// Interface do Repositório
+public interface RepositorioProduto {
+    Produto buscarPorId(Long id);
+    List<Produto> buscarTodos();
+    void salvar(Produto produto);
+    void deletar(Long id);
+}
+
+// Implementação do Repositório
+@Repository
+public class RepositorioProdutoImpl implements RepositorioProduto {
+    private final Map<Long, Produto> produtos = new HashMap<>();
+    private Long proximoId = 1L;
+    
+    @Override
+    public Produto buscarPorId(Long id) {
+        return produtos.get(id);
+    }
+    
+    @Override
+    public List<Produto> buscarTodos() {
+        return new ArrayList<>(produtos.values());
+    }
+    
+    @Override
+    public void salvar(Produto produto) {
+        if (produto.getId() == null) {
+            produto.setId(proximoId++);
+        }
+        produtos.put(produto.getId(), produto);
+    }
+    
+    @Override
+    public void deletar(Long id) {
+        produtos.remove(id);
+    }
+}
+
+// Serviço
+@Service
+public class ServicoProduto {
+    private final RepositorioProduto repositorio;
+    
+    @Autowired
+    public ServicoProduto(RepositorioProduto repositorio) {
+        this.repositorio = repositorio;
+    }
+    
+    public Produto criarProduto(Produto produto) {
+        if (produto.getNome() == null || produto.getNome().trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome é obrigatório");
+        }
+        if (produto.getPreco() == null || produto.getPreco().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Preço deve ser maior que zero");
+        }
+        
+        repositorio.salvar(produto);
+        return produto;
+    }
+    
+    public Produto buscarPorId(Long id) {
+        Produto produto = repositorio.buscarPorId(id);
+        if (produto == null) {
+            throw new IllegalArgumentException("Produto não encontrado");
+        }
+        return produto;
+    }
+    
+    public List<Produto> buscarTodos() {
+        return repositorio.buscarTodos();
+    }
+    
+    public void deletarProduto(Long id) {
+        buscarPorId(id); // Valida se existe
+        repositorio.deletar(id);
+    }
+}
+
+// Controlador
+@RestController
+@RequestMapping("/api/produtos")
+public class ProdutoController {
+    private final ServicoProduto servicoProduto;
+    
+    @Autowired
+    public ProdutoController(ServicoProduto servicoProduto) {
+        this.servicoProduto = servicoProduto;
+    }
+    
+    @PostMapping
+    public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto) {
+        try {
+            Produto produtoCriado = servicoProduto.criarProduto(produto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(produtoCriado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Produto> buscarProduto(@PathVariable Long id) {
+        try {
+            Produto produto = servicoProduto.buscarPorId(id);
+            return ResponseEntity.ok(produto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<Produto>> buscarTodos() {
+        List<Produto> produtos = servicoProduto.buscarTodos();
+        return ResponseEntity.ok(produtos);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
+        try {
+            servicoProduto.deletarProduto(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
+```
+
+#### Exercício 2: Injeção de Dependência
+**Objetivo**: Implementar diferentes tipos de injeção de dependência.
+
+**Enunciado**: Crie um sistema de notificações com diferentes tipos de notificação (email, SMS, push). Use injeção de dependência para escolher o tipo de notificação.
+
+**Resolução**:
+
+```java
+// Interface de notificação
+public interface NotificacaoService {
+    void enviarNotificacao(String destinatario, String mensagem);
+}
+
+// Implementações
+@Service
+public class EmailNotificacaoService implements NotificacaoService {
+    @Override
+    public void enviarNotificacao(String destinatario, String mensagem) {
+        System.out.println("Enviando email para " + destinatario + ": " + mensagem);
+    }
+}
+
+@Service
+public class SmsNotificacaoService implements NotificacaoService {
+    @Override
+    public void enviarNotificacao(String destinatario, String mensagem) {
+        System.out.println("Enviando SMS para " + destinatario + ": " + mensagem);
+    }
+}
+
+@Service
+public class PushNotificacaoService implements NotificacaoService {
+    @Override
+    public void enviarNotificacao(String destinatario, String mensagem) {
+        System.out.println("Enviando push para " + destinatario + ": " + mensagem);
+    }
+}
+
+// Serviço principal
+@Service
+public class ServicoNotificacao {
+    private final NotificacaoService emailService;
+    private final NotificacaoService smsService;
+    private final NotificacaoService pushService;
+    
+    @Autowired
+    public ServicoNotificacao(@Qualifier("emailNotificacaoService") NotificacaoService emailService,
+                             @Qualifier("smsNotificacaoService") NotificacaoService smsService,
+                             @Qualifier("pushNotificacaoService") NotificacaoService pushService) {
+        this.emailService = emailService;
+        this.smsService = smsService;
+        this.pushService = pushService;
+    }
+    
+    public void enviarNotificacao(String destinatario, String mensagem, String tipo) {
+        switch (tipo.toLowerCase()) {
+            case "email":
+                emailService.enviarNotificacao(destinatario, mensagem);
+                break;
+            case "sms":
+                smsService.enviarNotificacao(destinatario, mensagem);
+                break;
+            case "push":
+                pushService.enviarNotificacao(destinatario, mensagem);
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de notificação inválido");
+        }
+    }
+}
+```
+
+### Área: Configuração e Beans
+
+#### Exercício 3: Configuração de Beans
+**Objetivo**: Criar configurações customizadas de beans.
+
+**Enunciado**: Crie uma configuração que defina diferentes tipos de conexão de banco de dados baseado no ambiente (dev, prod, test).
+
+**Resolução**:
+
+```java
+@Configuration
+@Profile("dev")
+public class ConfiguracaoDev {
+    
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+            .url("jdbc:h2:mem:devdb")
+            .username("sa")
+            .password("")
+            .build();
+    }
+    
+    @Bean
+    public NotificacaoService notificacaoService() {
+        return new EmailNotificacaoService();
+    }
+}
+
+@Configuration
+@Profile("prod")
+public class ConfiguracaoProd {
+    
+    @Bean
+    @ConfigurationProperties("spring.datasource")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create().build();
+    }
+    
+    @Bean
+    public NotificacaoService notificacaoService() {
+        return new SmsNotificacaoService();
+    }
+}
+
+@Configuration
+@Profile("test")
+public class ConfiguracaoTest {
+    
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+            .url("jdbc:h2:mem:testdb")
+            .username("sa")
+            .password("")
+            .build();
+    }
+    
+    @Bean
+    public NotificacaoService notificacaoService() {
+        return new MockNotificacaoService();
+    }
+}
+```
+
+### Área: Validação e Tratamento de Erros
+
+#### Exercício 4: Validação de Dados
+**Objetivo**: Implementar validação de dados com Bean Validation.
+
+**Enunciado**: Crie um sistema de cadastro de usuários com validações completas usando anotações de validação.
+
+**Resolução**:
+
+```java
+// Modelo com validações
+public class Usuario {
+    private Long id;
+    
+    @NotBlank(message = "Nome é obrigatório")
+    @Size(min = 2, max = 100, message = "Nome deve ter entre 2 e 100 caracteres")
+    private String nome;
+    
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email deve ser válido")
+    private String email;
+    
+    @NotBlank(message = "Senha é obrigatória")
+    @Size(min = 6, message = "Senha deve ter pelo menos 6 caracteres")
+    private String senha;
+    
+    @NotNull(message = "Data de nascimento é obrigatória")
+    @Past(message = "Data de nascimento deve ser no passado")
+    private LocalDate dataNascimento;
+    
+    // Construtores, getters, setters...
+}
+
+// Controlador com tratamento de erros
+@RestController
+@RequestMapping("/api/usuarios")
+public class UsuarioController {
+    private final ServicoUsuario servicoUsuario;
+    
+    @Autowired
+    public UsuarioController(ServicoUsuario servicoUsuario) {
+        this.servicoUsuario = servicoUsuario;
+    }
+    
+    @PostMapping
+    public ResponseEntity<?> criarUsuario(@Valid @RequestBody Usuario usuario,
+                                        BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> erros = bindingResult.getFieldErrors()
+                .stream()
+                .map(FieldError::getDefaultMessage)
+                .collect(Collectors.toList());
+            
+            return ResponseEntity.badRequest()
+                .body(new ErrorResponse("Erro de validação", erros));
+        }
+        
+        try {
+            Usuario usuarioCriado = servicoUsuario.criarUsuario(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+}
+
+// Classe para resposta de erro
+public class ErrorResponse {
+    private String message;
+    private List<String> details;
+    
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+    
+    public ErrorResponse(String message, List<String> details) {
+        this.message = message;
+        this.details = details;
+    }
+    
+    // Getters e setters...
+}
+```
+
+### Área: Testes
+
+#### Exercício 5: Testes Unitários
+**Objetivo**: Criar testes unitários para serviços Spring.
+
+**Enunciado**: Crie testes unitários para o ServicoProduto usando Mockito.
+
+**Resolução**:
+
+```java
+@ExtendWith(MockitoExtension.class)
+class ServicoProdutoTest {
+    
+    @Mock
+    private RepositorioProduto repositorioProduto;
+    
+    @InjectMocks
+    private ServicoProduto servicoProduto;
+    
+    @Test
+    void deveCriarProdutoComSucesso() {
+        // Given
+        Produto produto = new Produto("Notebook", new BigDecimal("2500.00"), "Eletrônicos");
+        Produto produtoSalvo = new Produto("Notebook", new BigDecimal("2500.00"), "Eletrônicos");
+        produtoSalvo.setId(1L);
+        
+        when(repositorioProduto.salvar(any(Produto.class))).thenAnswer(invocation -> {
+            Produto p = invocation.getArgument(0);
+            p.setId(1L);
+            return p;
+        });
+        
+        // When
+        Produto resultado = servicoProduto.criarProduto(produto);
+        
+        // Then
+        assertThat(resultado.getId()).isEqualTo(1L);
+        assertThat(resultado.getNome()).isEqualTo("Notebook");
+        assertThat(resultado.getPreco()).isEqualTo(new BigDecimal("2500.00"));
+        
+        verify(repositorioProduto).salvar(produto);
+    }
+    
+    @Test
+    void deveFalharQuandoNomeEstaVazio() {
+        // Given
+        Produto produto = new Produto("", new BigDecimal("2500.00"), "Eletrônicos");
+        
+        // When & Then
+        assertThatThrownBy(() -> servicoProduto.criarProduto(produto))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Nome é obrigatório");
+        
+        verify(repositorioProduto, never()).salvar(any());
+    }
+    
+    @Test
+    void deveFalharQuandoPrecoEhZero() {
+        // Given
+        Produto produto = new Produto("Notebook", BigDecimal.ZERO, "Eletrônicos");
+        
+        // When & Then
+        assertThatThrownBy(() -> servicoProduto.criarProduto(produto))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Preço deve ser maior que zero");
+        
+        verify(repositorioProduto, never()).salvar(any());
+    }
+    
+    @Test
+    void deveBuscarProdutoPorId() {
+        // Given
+        Long id = 1L;
+        Produto produto = new Produto("Notebook", new BigDecimal("2500.00"), "Eletrônicos");
+        produto.setId(id);
+        
+        when(repositorioProduto.buscarPorId(id)).thenReturn(produto);
+        
+        // When
+        Produto resultado = servicoProduto.buscarPorId(id);
+        
+        // Then
+        assertThat(resultado).isEqualTo(produto);
+        verify(repositorioProduto).buscarPorId(id);
+    }
+    
+    @Test
+    void deveFalharQuandoProdutoNaoExiste() {
+        // Given
+        Long id = 1L;
+        when(repositorioProduto.buscarPorId(id)).thenReturn(null);
+        
+        // When & Then
+        assertThatThrownBy(() -> servicoProduto.buscarPorId(id))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("Produto não encontrado");
+        
+        verify(repositorioProduto).buscarPorId(id);
+    }
+}
+```
+
+### Conclusão
+
+Estes exercícios básicos cobrem os conceitos fundamentais do Spring Framework:
+- Inversão de Controle (IoC)
+- Injeção de Dependência (DI)
+- Configuração de beans
+- Validação de dados
+- Testes unitários
+
+Para praticar mais, tente implementar variações destes exercícios e explore outros recursos do Spring Framework. 
