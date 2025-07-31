@@ -1,181 +1,738 @@
 ---
-title: Java Methods
-description: In this tutorial, we will learn how to implements methods or functions in Java.
+title: "Métodos em Java"
+description: "Neste tutorial, aprenderemos como implementar métodos ou funções em Java com exemplos práticos"
+difficulty: "Básico"
+category: "Programação Orientada a Objetos"
 ---
 
+## O que é um Método em Java?
 
-## What is a Method in Java?
+Em Java, um método é uma coleção de instruções projetadas para realizar tarefas específicas e, opcionalmente, retornar um resultado para o chamador. Um método Java também pode executar uma tarefa sem retornar nenhum valor. Os métodos permitem reutilização de código eliminando a necessidade de reescrever código. Importante: em Java, todo método deve pertencer a uma classe.
 
-In Java, a method is a collection of statements designed to perform specific tasks and, optionally, return a result to the caller. A Java method can also execute a task without returning any value. Methods enable code reuse by eliminating the need to retype code. Importantly, in Java, every method must belong to a class.
+## Tipos de Métodos em Java
 
-## Types of Methods in Java
+- **Métodos Definidos pelo Usuário**: Métodos personalizados criados pelo programador com base em requisitos específicos.
+- **Métodos da Biblioteca Padrão**: Métodos integrados fornecidos pelo Java, prontos para uso imediato.
 
-- `User-defined Methods`: Custom methods created by the programmer based on specific requirements.
-- `Standard Library Methods`: Built-in methods provided by Java, ready for immediate use.
+## Declarando um Método Java
 
-## Declaring a Java Method
-
-The basic syntax for a method declaration is:
+A sintaxe básica para declaração de um método é:
 
 ```java
-returnType methodName() {
-  // method body
+tipoRetorno nomeDoMetodo() {
+  // corpo do método
 }
 ```
-1. **returnType:** Specifies the type of value returned by the method. If it doesn’t return a value, the return type is void.
-2. **methodName:** The identifier used to call the method.
-3. **method body:** Code inside `{ }` that defines the task to be performed.
 
-### Example 1:
+1. **tipoRetorno**: Especifica o tipo de valor retornado pelo método. Se não retornar um valor, o tipo de retorno é `void`.
+2. **nomeDoMetodo**: O identificador usado para chamar o método.
+3. **corpo do método**: Código dentro de `{ }` que define a tarefa a ser executada.
+
+### Exemplo 1:
 
 ```java
-int addNumbers() {
-  // code
+int somarNumeros() {
+  // código
 }
 ```
-In this example, `addNumbers()` is the method name, and its return type is `int`.
 
-### For a more detailed declaration:
+Neste exemplo, `somarNumeros()` é o nome do método, e seu tipo de retorno é `int`.
+
+### Para uma declaração mais detalhada:
 
 ```java
-modifier static returnType methodName(parameter1, parameter2, ...) {
-  // method body
+modificador static tipoRetorno nomeDoMetodo(parametro1, parametro2, ...) {
+  // corpo do método
 }
 ```
-1. **modifier:** Defines access type (e.g., public, private).
-2. **static:** If included, the method can be called without creating an object.
-3. **parameter1, parameter2, ...parameterN:** Values passed to the method.
 
-### Example 2:
-The `sqrt()` method in the Math class is static, so it can be accessed as `Math.sqrt()` without creating an instance of Math.
+1. **modificador**: Define o tipo de acesso (ex: public, private).
+2. **static**: Se incluído, o método pode ser chamado sem criar um objeto.
+3. **parametro1, parametro2, ...parametroN**: Valores passados para o método.
 
-## Calling a Method in Java
-To use a method, call it by name followed by parentheses.
+### Exemplo 2:
 
-### Java Method Call Example
+O método `sqrt()` na classe Math é estático, então pode ser acessado como `Math.sqrt()` sem criar uma instância de Math.
+
+## Chamando um Método em Java
+
+Para usar um método, chame-o pelo nome seguido de parênteses.
+
+### Exemplo de Chamada de Método Java
 
 ```java
-class Main {
-  public int addNumbers(int a, int b) {
+public class Main {
+  public int somarNumeros(int a, int b) {
     return a + b;
   }
 
   public static void main(String[] args) {
     int num1 = 25, num2 = 15;
-    Main obj = new Main(); // Create object of Main class
-    int result = obj.addNumbers(num1, num2);
-    System.out.println("Sum is: " + result);
+    Main obj = new Main(); // Criar objeto da classe Main
+    int resultado = obj.somarNumeros(num1, num2);
+    System.out.println("Soma é: " + resultado);
   }
 }
 ```
 
-### Output
+### Saída
 
 ```bash
-Sum is: 40
+Soma é: 40
 ```
 
-Here, the `addNumbers()` method takes two parameters and returns their sum. Since it's not static, it requires an object to be called.
+Aqui, o método `somarNumeros()` recebe dois parâmetros e retorna sua soma. Como não é estático, requer um objeto para ser chamado.
 
-## Method Return Types
-A method may or may not return a value. The return statement is used to return a value.
+## Tipos de Retorno de Métodos
 
-### Example 1: Method returns integer value
+Um método pode ou não retornar um valor. A instrução `return` é usada para retornar um valor.
+
+### Exemplo 1: Método retorna valor inteiro
 
 ```java
-public static int square(int num) {
+public static int quadrado(int num) {
   return num * num;
 }
 ```
 
-### Example 2: Method does not return any value
+### Exemplo 2: Método não retorna nenhum valor
 
 ```java
-// void keyword is used as function does not return any value
-public void printSquare(int num) {
+// palavra-chave void é usada quando a função não retorna nenhum valor
+public void imprimirQuadrado(int num) {
   System.out.println(num * num);
 }
 ```
 
-## Method Parameters
-Methods can accept parameters, which are values passed to the method.
+## Parâmetros de Métodos
 
-### Examples
-- **With Parameters:** `int addNumbers(int a, int b)`
-- **Without Parameters:** `int addNumbers()`
+Os parâmetros são valores que são passados para um método quando ele é chamado. Eles permitem que o método trabalhe com dados específicos.
 
-When calling a method with parameters, you must provide values for each parameter.
+### Exemplo 3: Método com múltiplos parâmetros
 
-### Example of Method Parameters
 ```java
-class Main {
-  public void display1() {
-    System.out.println("Method without parameter");
-  }
-
-  public void display2(int a) {
-    System.out.println("Method with a single parameter: " + a);
-  }
-
-  public static void main(String[] args) {
-    Main obj = new Main();
-    obj.display1();          // No parameters
-    obj.display2(24);        // Single parameter
-  }
+public static double calcularMedia(double num1, double num2, double num3) {
+  return (num1 + num2 + num3) / 3.0;
 }
 ```
-### Output
 
-```bash
-Method without parameter
-Method with a single parameter: 24
-```
+## Tipos de Métodos
 
-<Callout>
+### 1. Métodos Estáticos
 
-**Note:** *Java requires that argument types match the parameter types.*
-
-</Callout>
-
-## Standard Library Methods
-Java includes built-in methods available in the Java Class Library (JCL), which comes with the [JVM and JRE](/docs/jvm-jre-jdk).
-
-### Example
 ```java
-public class Main {
-  public static void main(String[] args) {
-    System.out.println("Square root of 4 is: " + Math.sqrt(4));
-  }
+public class Calculadora {
+    public static int somar(int a, int b) {
+        return a + b;
+    }
+
+    public static double multiplicar(double a, double b) {
+        return a * b;
+    }
+
+    public static void imprimirResultado(String operacao, double resultado) {
+        System.out.println(operacao + ": " + resultado);
+    }
+}
+
+public class TesteCalculadora {
+    public static void main(String[] args) {
+        // Chamar métodos estáticos sem criar objeto
+        int soma = Calculadora.somar(10, 20);
+        double produto = Calculadora.multiplicar(5.5, 3.0);
+
+        Calculadora.imprimirResultado("Soma", soma);
+        Calculadora.imprimirResultado("Produto", produto);
+    }
 }
 ```
-### Output
-```bash
-Square root of 4 is: 2.0
-```
 
-## Advantages of Using Methods
-### 1. Code Reusability
-Define once, use multiple times.
+### 2. Métodos de Instância
 
- ```java
-private static int getSquare(int x) {
-  return x * x;
+```java
+public class Pessoa {
+    private String nome;
+    private int idade;
+
+    public Pessoa(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+
+    public void apresentar() {
+        System.out.println("Olá, sou " + nome + " e tenho " + idade + " anos.");
+    }
+
+    public boolean ehMaiorDeIdade() {
+        return idade >= 18;
+    }
+
+    public void fazerAniversario() {
+        idade++;
+        System.out.println("Feliz aniversário! Agora tenho " + idade + " anos.");
+    }
 }
-public static void main(String[] args) {
-  for (int i = 1; i <= 5; i++) {
-    System.out.println("Square of " + i + " is: " + getSquare(i));
-  }
+
+public class TestePessoa {
+    public static void main(String[] args) {
+        Pessoa pessoa1 = new Pessoa("João", 25);
+        Pessoa pessoa2 = new Pessoa("Maria", 16);
+
+        pessoa1.apresentar();
+        System.out.println("É maior de idade: " + pessoa1.ehMaiorDeIdade());
+
+        pessoa2.apresentar();
+        pessoa2.fazerAniversario();
+    }
 }
 ```
-### Output:
 
-```bash
-Square of 1 is: 1
-Square of 2 is: 4
-Square of 3 is: 9
-Square of 4 is: 16
-Square of 5 is: 25
+### 3. Métodos com Sobrecarga (Overloading)
+
+```java
+public class CalculadoraAvancada {
+    // Método para somar dois inteiros
+    public static int somar(int a, int b) {
+        return a + b;
+    }
+
+    // Método para somar três inteiros
+    public static int somar(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Método para somar dois doubles
+    public static double somar(double a, double b) {
+        return a + b;
+    }
+
+    // Método para somar array de inteiros
+    public static int somar(int[] numeros) {
+        int soma = 0;
+        for (int num : numeros) {
+            soma += num;
+        }
+        return soma;
+    }
+}
+
+public class TesteCalculadoraAvancada {
+    public static void main(String[] args) {
+        System.out.println("Soma de 2 inteiros: " + CalculadoraAvancada.somar(5, 3));
+        System.out.println("Soma de 3 inteiros: " + CalculadoraAvancada.somar(5, 3, 2));
+        System.out.println("Soma de 2 doubles: " + CalculadoraAvancada.somar(5.5, 3.3));
+
+        int[] numeros = {1, 2, 3, 4, 5};
+        System.out.println("Soma do array: " + CalculadoraAvancada.somar(numeros));
+    }
+}
 ```
 
-### 2. Improved Readability
-Grouping code into methods makes it easier to read and debug.
+## Exemplos Práticos
+
+### Exemplo 1: Validador de Dados
+
+```java
+public class Validador {
+    public static boolean ehNumeroPositivo(int numero) {
+        return numero > 0;
+    }
+
+    public static boolean ehEmailValido(String email) {
+        return email != null && email.contains("@") && email.contains(".");
+    }
+
+    public static boolean ehSenhaForte(String senha) {
+        if (senha == null || senha.length() < 8) {
+            return false;
+        }
+
+        boolean temMaiuscula = false;
+        boolean temMinuscula = false;
+        boolean temNumero = false;
+
+        for (char c : senha.toCharArray()) {
+            if (Character.isUpperCase(c)) temMaiuscula = true;
+            if (Character.isLowerCase(c)) temMinuscula = true;
+            if (Character.isDigit(c)) temNumero = true;
+        }
+
+        return temMaiuscula && temMinuscula && temNumero;
+    }
+
+    public static void validarDados(String email, String senha, int idade) {
+        System.out.println("=== Validação de Dados ===");
+        System.out.println("Email válido: " + ehEmailValido(email));
+        System.out.println("Senha forte: " + ehSenhaForte(senha));
+        System.out.println("Idade positiva: " + ehNumeroPositivo(idade));
+    }
+}
+
+public class TesteValidador {
+    public static void main(String[] args) {
+        Validador.validarDados("usuario@email.com", "Senha123", 25);
+        System.out.println();
+        Validador.validarDados("email_invalido", "123", -5);
+    }
+}
+```
+
+### Exemplo 2: Conversor de Unidades
+
+```java
+public class ConversorUnidades {
+    public static double celsiusParaFahrenheit(double celsius) {
+        return (celsius * 9/5) + 32;
+    }
+
+    public static double fahrenheitParaCelsius(double fahrenheit) {
+        return (fahrenheit - 32) * 5/9;
+    }
+
+    public static double quilometrosParaMilhas(double km) {
+        return km * 0.621371;
+    }
+
+    public static double milhasParaQuilometros(double milhas) {
+        return milhas * 1.60934;
+    }
+
+    public static double quilogramasParaLibras(double kg) {
+        return kg * 2.20462;
+    }
+
+    public static double librasParaQuilogramas(double libras) {
+        return libras * 0.453592;
+    }
+
+    public static void exibirConversao(String tipo, double valor, double resultado) {
+        System.out.printf("%s: %.2f → %.2f%n", tipo, valor, resultado);
+    }
+}
+
+public class TesteConversor {
+    public static void main(String[] args) {
+        System.out.println("=== Conversões ===");
+
+        double celsius = 25.0;
+        double fahrenheit = ConversorUnidades.celsiusParaFahrenheit(celsius);
+        ConversorUnidades.exibirConversao("Celsius para Fahrenheit", celsius, fahrenheit);
+
+        double km = 100.0;
+        double milhas = ConversorUnidades.quilometrosParaMilhas(km);
+        ConversorUnidades.exibirConversao("Quilômetros para Milhas", km, milhas);
+
+        double kg = 70.0;
+        double libras = ConversorUnidades.quilogramasParaLibras(kg);
+        ConversorUnidades.exibirConversao("Quilogramas para Libras", kg, libras);
+    }
+}
+```
+
+### Exemplo 3: Gerador de Sequências
+
+```java
+public class GeradorSequencias {
+    public static void gerarFibonacci(int n) {
+        System.out.println("Sequência de Fibonacci (primeiros " + n + " números):");
+        int a = 0, b = 1;
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(a + " ");
+            int temp = a + b;
+            a = b;
+            b = temp;
+        }
+        System.out.println();
+    }
+
+    public static void gerarPares(int n) {
+        System.out.println("Primeiros " + n + " números pares:");
+        for (int i = 0; i < n; i++) {
+            System.out.print((i * 2) + " ");
+        }
+        System.out.println();
+    }
+
+    public static void gerarImpares(int n) {
+        System.out.println("Primeiros " + n + " números ímpares:");
+        for (int i = 0; i < n; i++) {
+            System.out.print((i * 2 + 1) + " ");
+        }
+        System.out.println();
+    }
+
+    public static void gerarMultiplos(int numero, int quantidade) {
+        System.out.println("Primeiros " + quantidade + " múltiplos de " + numero + ":");
+        for (int i = 1; i <= quantidade; i++) {
+            System.out.print((numero * i) + " ");
+        }
+        System.out.println();
+    }
+}
+
+public class TesteGerador {
+    public static void main(String[] args) {
+        GeradorSequencias.gerarFibonacci(10);
+        GeradorSequencias.gerarPares(8);
+        GeradorSequencias.gerarImpares(8);
+        GeradorSequencias.gerarMultiplos(7, 5);
+    }
+}
+```
+
+### Exemplo 4: Calculadora de Estatísticas
+
+```java
+public class CalculadoraEstatisticas {
+    public static double calcularMedia(double[] numeros) {
+        if (numeros.length == 0) return 0;
+
+        double soma = 0;
+        for (double num : numeros) {
+            soma += num;
+        }
+        return soma / numeros.length;
+    }
+
+    public static double encontrarMaximo(double[] numeros) {
+        if (numeros.length == 0) return 0;
+
+        double maximo = numeros[0];
+        for (double num : numeros) {
+            if (num > maximo) {
+                maximo = num;
+            }
+        }
+        return maximo;
+    }
+
+    public static double encontrarMinimo(double[] numeros) {
+        if (numeros.length == 0) return 0;
+
+        double minimo = numeros[0];
+        for (double num : numeros) {
+            if (num < minimo) {
+                minimo = num;
+            }
+        }
+        return minimo;
+    }
+
+    public static double calcularDesvioPadrao(double[] numeros) {
+        if (numeros.length == 0) return 0;
+
+        double media = calcularMedia(numeros);
+        double somaQuadrados = 0;
+
+        for (double num : numeros) {
+            somaQuadrados += Math.pow(num - media, 2);
+        }
+
+        return Math.sqrt(somaQuadrados / numeros.length);
+    }
+
+    public static void exibirEstatisticas(double[] numeros) {
+        System.out.println("=== Estatísticas ===");
+        System.out.println("Média: " + calcularMedia(numeros));
+        System.out.println("Máximo: " + encontrarMaximo(numeros));
+        System.out.println("Mínimo: " + encontrarMinimo(numeros));
+        System.out.println("Desvio Padrão: " + calcularDesvioPadrao(numeros));
+    }
+}
+
+public class TesteEstatisticas {
+    public static void main(String[] args) {
+        double[] dados = {85.5, 92.0, 78.3, 96.7, 88.2, 91.1, 82.5};
+        CalculadoraEstatisticas.exibirEstatisticas(dados);
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Verificador de Palíndromo
+
+**Objetivo**: Criar métodos para verificar palíndromos.
+
+**Enunciado**: Crie métodos para verificar se uma string é palíndromo.
+
+**Resolução**:
+
+```java
+public class VerificadorPalindromo {
+    public static boolean ehPalindromo(String texto) {
+        if (texto == null) return false;
+
+        // Remover espaços e converter para minúsculas
+        String limpo = texto.replaceAll("\\s", "").toLowerCase();
+
+        int inicio = 0;
+        int fim = limpo.length() - 1;
+
+        while (inicio < fim) {
+            if (limpo.charAt(inicio) != limpo.charAt(fim)) {
+                return false;
+            }
+            inicio++;
+            fim--;
+        }
+        return true;
+    }
+
+    public static boolean ehPalindromoRecursivo(String texto) {
+        if (texto == null) return false;
+
+        String limpo = texto.replaceAll("\\s", "").toLowerCase();
+        return ehPalindromoRecursivoAux(limpo, 0, limpo.length() - 1);
+    }
+
+    private static boolean ehPalindromoRecursivoAux(String texto, int inicio, int fim) {
+        if (inicio >= fim) return true;
+
+        if (texto.charAt(inicio) != texto.charAt(fim)) {
+            return false;
+        }
+
+        return ehPalindromoRecursivoAux(texto, inicio + 1, fim - 1);
+    }
+
+    public static void testarPalindromos() {
+        String[] testes = {"arara", "ovo", "radar", "java", "ana", "casa"};
+
+        System.out.println("=== Teste de Palíndromos ===");
+        for (String teste : testes) {
+            boolean resultado = ehPalindromo(teste);
+            System.out.println("'" + teste + "' é palíndromo: " + resultado);
+        }
+    }
+}
+
+public class TestePalindromo {
+    public static void main(String[] args) {
+        VerificadorPalindromo.testarPalindromos();
+    }
+}
+```
+
+### Exercício 2: Calculadora de Fatorial
+
+**Objetivo**: Criar métodos para calcular fatorial.
+
+**Enunciado**: Crie métodos para calcular fatorial de forma iterativa e recursiva.
+
+**Resolução**:
+
+```java
+public class CalculadoraFatorial {
+    public static long fatorialIterativo(int n) {
+        if (n < 0) return -1; // Erro
+        if (n == 0 || n == 1) return 1;
+
+        long resultado = 1;
+        for (int i = 2; i <= n; i++) {
+            resultado *= i;
+        }
+        return resultado;
+    }
+
+    public static long fatorialRecursivo(int n) {
+        if (n < 0) return -1; // Erro
+        if (n == 0 || n == 1) return 1;
+
+        return n * fatorialRecursivo(n - 1);
+    }
+
+    public static void compararMetodos(int n) {
+        System.out.println("=== Comparação de Métodos ===");
+        System.out.println("Calculando fatorial de " + n);
+
+        long inicio = System.currentTimeMillis();
+        long resultadoIterativo = fatorialIterativo(n);
+        long tempoIterativo = System.currentTimeMillis() - inicio;
+
+        inicio = System.currentTimeMillis();
+        long resultadoRecursivo = fatorialRecursivo(n);
+        long tempoRecursivo = System.currentTimeMillis() - inicio;
+
+        System.out.println("Resultado Iterativo: " + resultadoIterativo);
+        System.out.println("Tempo Iterativo: " + tempoIterativo + "ms");
+        System.out.println("Resultado Recursivo: " + resultadoRecursivo);
+        System.out.println("Tempo Recursivo: " + tempoRecursivo + "ms");
+    }
+}
+
+public class TesteFatorial {
+    public static void main(String[] args) {
+        CalculadoraFatorial.compararMetodos(10);
+    }
+}
+```
+
+### Exercício 3: Verificador de Números Primos
+
+**Objetivo**: Criar métodos para verificar números primos.
+
+**Enunciado**: Crie métodos para verificar se um número é primo.
+
+**Resolução**:
+
+```java
+public class VerificadorPrimos {
+    public static boolean ehPrimo(int numero) {
+        if (numero <= 1) return false;
+        if (numero <= 3) return true;
+        if (numero % 2 == 0 || numero % 3 == 0) return false;
+
+        for (int i = 5; i * i <= numero; i += 6) {
+            if (numero % i == 0 || numero % (i + 2) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int contarPrimos(int inicio, int fim) {
+        int contador = 0;
+        for (int i = inicio; i <= fim; i++) {
+            if (ehPrimo(i)) {
+                contador++;
+            }
+        }
+        return contador;
+    }
+
+    public static void listarPrimos(int inicio, int fim) {
+        System.out.println("Números primos entre " + inicio + " e " + fim + ":");
+        for (int i = inicio; i <= fim; i++) {
+            if (ehPrimo(i)) {
+                System.out.print(i + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    public static void analisarPrimos(int maximo) {
+        System.out.println("=== Análise de Números Primos ===");
+        System.out.println("Verificando números de 1 a " + maximo);
+
+        int totalPrimos = contarPrimos(1, maximo);
+        System.out.println("Total de primos encontrados: " + totalPrimos);
+
+        listarPrimos(1, maximo);
+    }
+}
+
+public class TestePrimos {
+    public static void main(String[] args) {
+        VerificadorPrimos.analisarPrimos(50);
+    }
+}
+```
+
+### Exercício 4: Gerador de Senhas
+
+**Objetivo**: Criar métodos para gerar senhas seguras.
+
+**Enunciado**: Crie métodos para gerar senhas com diferentes critérios.
+
+**Resolução**:
+
+```java
+import java.util.Random;
+
+public class GeradorSenhas {
+    private static final String LETRAS_MAIUSCULAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String LETRAS_MINUSCULAS = "abcdefghijklmnopqrstuvwxyz";
+    private static final String NUMEROS = "0123456789";
+    private static final String CARACTERES_ESPECIAIS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    public static String gerarSenhaSimples(int tamanho) {
+        String caracteres = LETRAS_MINUSCULAS + NUMEROS;
+        return gerarSenha(caracteres, tamanho);
+    }
+
+    public static String gerarSenhaForte(int tamanho) {
+        String caracteres = LETRAS_MAIUSCULAS + LETRAS_MINUSCULAS + NUMEROS + CARACTERES_ESPECIAIS;
+        return gerarSenha(caracteres, tamanho);
+    }
+
+    public static String gerarSenhaCompleta(int tamanho) {
+        Random random = new Random();
+        StringBuilder senha = new StringBuilder();
+
+        // Garantir pelo menos um de cada tipo
+        senha.append(LETRAS_MAIUSCULAS.charAt(random.nextInt(LETRAS_MAIUSCULAS.length())));
+        senha.append(LETRAS_MINUSCULAS.charAt(random.nextInt(LETRAS_MINUSCULAS.length())));
+        senha.append(NUMEROS.charAt(random.nextInt(NUMEROS.length())));
+        senha.append(CARACTERES_ESPECIAIS.charAt(random.nextInt(CARACTERES_ESPECIAIS.length())));
+
+        // Completar o resto
+        String todosCaracteres = LETRAS_MAIUSCULAS + LETRAS_MINUSCULAS + NUMEROS + CARACTERES_ESPECIAIS;
+        for (int i = 4; i < tamanho; i++) {
+            senha.append(todosCaracteres.charAt(random.nextInt(todosCaracteres.length())));
+        }
+
+        // Embaralhar a senha
+        return embaralharString(senha.toString());
+    }
+
+    private static String gerarSenha(String caracteres, int tamanho) {
+        Random random = new Random();
+        StringBuilder senha = new StringBuilder();
+
+        for (int i = 0; i < tamanho; i++) {
+            senha.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+
+        return senha.toString();
+    }
+
+    private static String embaralharString(String texto) {
+        char[] caracteres = texto.toCharArray();
+        Random random = new Random();
+
+        for (int i = caracteres.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char temp = caracteres[i];
+            caracteres[i] = caracteres[j];
+            caracteres[j] = temp;
+        }
+
+        return new String(caracteres);
+    }
+
+    public static void testarGeradores() {
+        System.out.println("=== Gerador de Senhas ===");
+        System.out.println("Senha Simples (8 chars): " + gerarSenhaSimples(8));
+        System.out.println("Senha Forte (12 chars): " + gerarSenhaForte(12));
+        System.out.println("Senha Completa (16 chars): " + gerarSenhaCompleta(16));
+    }
+}
+
+public class TesteSenhas {
+    public static void main(String[] args) {
+        GeradorSenhas.testarGeradores();
+    }
+}
+```
+
+## Conclusão
+
+Métodos são fundamentais na programação Java para:
+
+- **Reutilização de código**: Evitar repetição de código
+- **Organização**: Dividir problemas complexos em partes menores
+- **Manutenibilidade**: Facilitar a manutenção e atualização do código
+- **Testabilidade**: Facilitar testes unitários
+
+**Boas práticas**:
+
+- Use nomes descritivos para métodos
+- Mantenha métodos pequenos e focados em uma única responsabilidade
+- Use modificadores de acesso apropriados
+- Documente métodos complexos
+- Considere usar métodos estáticos para utilitários
+- Evite métodos muito longos (máximo 20-30 linhas)
+
+Lembre-se de que métodos bem projetados tornam o código mais legível, reutilizável e fácil de manter.

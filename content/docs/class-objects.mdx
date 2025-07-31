@@ -114,10 +114,10 @@ public class Main {
   public static void main(String[] args) {
     // criar objeto
     Bicicleta bicicleta1 = new Bicicleta();
-    
+
     // acessar campo
     System.out.println("Marcha: " + bicicleta1.marcha);
-    
+
     // chamar método
     bicicleta1.frear();
   }
@@ -135,7 +135,7 @@ class Carro {
     private String modelo;
     private int ano;
     private double velocidade;
-    
+
     // Construtor
     public Carro(String marca, String modelo, int ano) {
         this.marca = marca;
@@ -143,13 +143,13 @@ class Carro {
         this.ano = ano;
         this.velocidade = 0.0;
     }
-    
+
     // Métodos (comportamentos)
     public void acelerar(double quantidade) {
         velocidade += quantidade;
         System.out.println("Acelerando... Velocidade atual: " + velocidade + " km/h");
     }
-    
+
     public void frear(double quantidade) {
         if (velocidade >= quantidade) {
             velocidade -= quantidade;
@@ -158,23 +158,23 @@ class Carro {
         }
         System.out.println("Freando... Velocidade atual: " + velocidade + " km/h");
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("Marca: " + marca);
         System.out.println("Modelo: " + modelo);
         System.out.println("Ano: " + ano);
         System.out.println("Velocidade: " + velocidade + " km/h");
     }
-    
+
     // Getters e Setters
     public String getMarca() {
         return marca;
     }
-    
+
     public void setMarca(String marca) {
         this.marca = marca;
     }
-    
+
     public double getVelocidade() {
         return velocidade;
     }
@@ -185,14 +185,14 @@ public class ExemploCarro {
         // Criar objetos
         Carro carro1 = new Carro("Toyota", "Corolla", 2020);
         Carro carro2 = new Carro("Honda", "Civic", 2021);
-        
+
         // Usar métodos
         carro1.acelerar(50);
         carro1.frear(20);
         carro1.exibirInformacoes();
-        
+
         System.out.println();
-        
+
         carro2.acelerar(80);
         carro2.exibirInformacoes();
     }
@@ -208,7 +208,7 @@ class Estudante {
     private int idade;
     private String curso;
     private double[] notas;
-    
+
     // Construtor
     public Estudante(String nome, int idade, String curso) {
         this.nome = nome;
@@ -216,14 +216,14 @@ class Estudante {
         this.curso = curso;
         this.notas = new double[4]; // 4 disciplinas
     }
-    
+
     // Métodos
     public void adicionarNota(int disciplina, double nota) {
         if (disciplina >= 0 && disciplina < notas.length) {
             notas[disciplina] = nota;
         }
     }
-    
+
     public double calcularMedia() {
         double soma = 0;
         for (double nota : notas) {
@@ -231,11 +231,11 @@ class Estudante {
         }
         return soma / notas.length;
     }
-    
+
     public boolean estaAprovado() {
         return calcularMedia() >= 7.0;
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("Nome: " + nome);
         System.out.println("Idade: " + idade);
@@ -250,18 +250,18 @@ public class ExemploEstudante {
         // Criar estudantes
         Estudante estudante1 = new Estudante("João", 20, "Engenharia");
         Estudante estudante2 = new Estudante("Maria", 19, "Medicina");
-        
+
         // Adicionar notas
         estudante1.adicionarNota(0, 8.5);
         estudante1.adicionarNota(1, 7.2);
         estudante1.adicionarNota(2, 9.0);
         estudante1.adicionarNota(3, 6.8);
-        
+
         estudante2.adicionarNota(0, 9.5);
         estudante2.adicionarNota(1, 8.8);
         estudante2.adicionarNota(2, 9.2);
         estudante2.adicionarNota(3, 8.9);
-        
+
         // Exibir informações
         estudante1.exibirInformacoes();
         System.out.println();
@@ -279,7 +279,7 @@ class ContaBancaria {
     private String numeroConta;
     private double saldo;
     private String tipoConta;
-    
+
     // Construtor
     public ContaBancaria(String titular, String numeroConta, String tipoConta) {
         this.titular = titular;
@@ -287,7 +287,7 @@ class ContaBancaria {
         this.tipoConta = tipoConta;
         this.saldo = 0.0;
     }
-    
+
     // Métodos
     public void depositar(double valor) {
         if (valor > 0) {
@@ -298,7 +298,7 @@ class ContaBancaria {
             System.out.println("Valor inválido para depósito.");
         }
     }
-    
+
     public boolean sacar(double valor) {
         if (valor > 0 && valor <= saldo) {
             saldo -= valor;
@@ -310,14 +310,14 @@ class ContaBancaria {
             return false;
         }
     }
-    
+
     public void transferir(ContaBancaria destino, double valor) {
         if (this.sacar(valor)) {
             destino.depositar(valor);
             System.out.println("Transferência de R$ " + valor + " realizada com sucesso.");
         }
     }
-    
+
     public void exibirExtrato() {
         System.out.println("=== Extrato Bancário ===");
         System.out.println("Titular: " + titular);
@@ -332,12 +332,12 @@ public class ExemploContaBancaria {
         // Criar contas
         ContaBancaria conta1 = new ContaBancaria("João Silva", "12345-6", "Corrente");
         ContaBancaria conta2 = new ContaBancaria("Maria Santos", "67890-1", "Poupança");
-        
+
         // Realizar operações
         conta1.depositar(1000.0);
         conta1.sacar(300.0);
         conta1.transferir(conta2, 200.0);
-        
+
         System.out.println();
         conta1.exibirExtrato();
         System.out.println();
@@ -355,7 +355,7 @@ class Produto {
     private String codigo;
     private double preco;
     private int quantidadeEstoque;
-    
+
     // Construtor
     public Produto(String nome, String codigo, double preco, int quantidadeEstoque) {
         this.nome = nome;
@@ -363,7 +363,7 @@ class Produto {
         this.preco = preco;
         this.quantidadeEstoque = quantidadeEstoque;
     }
-    
+
     // Métodos
     public void adicionarEstoque(int quantidade) {
         if (quantidade > 0) {
@@ -371,7 +371,7 @@ class Produto {
             System.out.println(quantidade + " unidades adicionadas ao estoque.");
         }
     }
-    
+
     public boolean vender(int quantidade) {
         if (quantidade > 0 && quantidade <= quantidadeEstoque) {
             quantidadeEstoque -= quantidade;
@@ -382,15 +382,15 @@ class Produto {
             return false;
         }
     }
-    
+
     public double calcularValorTotal() {
         return preco * quantidadeEstoque;
     }
-    
+
     public boolean temEstoque() {
         return quantidadeEstoque > 0;
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("=== Informações do Produto ===");
         System.out.println("Nome: " + nome);
@@ -407,12 +407,12 @@ public class ExemploProduto {
         // Criar produtos
         Produto produto1 = new Produto("Laptop", "LAP001", 2500.0, 10);
         Produto produto2 = new Produto("Mouse", "MOU001", 50.0, 50);
-        
+
         // Realizar operações
         produto1.vender(3);
         produto1.adicionarEstoque(5);
         produto2.vender(10);
-        
+
         System.out.println();
         produto1.exibirInformacoes();
         System.out.println();
@@ -424,6 +424,7 @@ public class ExemploProduto {
 ## Exercícios Práticos
 
 ### Exercício 1: Classe Retângulo
+
 **Objetivo**: Criar uma classe para representar um retângulo.
 
 **Enunciado**: Crie uma classe `Retangulo` com métodos para calcular área e perímetro.
@@ -434,24 +435,24 @@ public class ExemploProduto {
 class Retangulo {
     private double largura;
     private double altura;
-    
+
     public Retangulo(double largura, double altura) {
         this.largura = largura;
         this.altura = altura;
     }
-    
+
     public double calcularArea() {
         return largura * altura;
     }
-    
+
     public double calcularPerimetro() {
         return 2 * (largura + altura);
     }
-    
+
     public boolean ehQuadrado() {
         return largura == altura;
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("Largura: " + largura);
         System.out.println("Altura: " + altura);
@@ -465,10 +466,10 @@ public class TesteRetangulo {
     public static void main(String[] args) {
         Retangulo retangulo1 = new Retangulo(5.0, 3.0);
         Retangulo retangulo2 = new Retangulo(4.0, 4.0);
-        
+
         System.out.println("Retângulo 1:");
         retangulo1.exibirInformacoes();
-        
+
         System.out.println("\nRetângulo 2:");
         retangulo2.exibirInformacoes();
     }
@@ -476,6 +477,7 @@ public class TesteRetangulo {
 ```
 
 ### Exercício 2: Classe Calculadora
+
 **Objetivo**: Criar uma classe calculadora com operações básicas.
 
 **Enunciado**: Crie uma classe `Calculadora` com métodos para operações matemáticas.
@@ -485,26 +487,26 @@ public class TesteRetangulo {
 ```java
 class Calculadora {
     private double resultado;
-    
+
     public Calculadora() {
         this.resultado = 0.0;
     }
-    
+
     public void somar(double valor) {
         resultado += valor;
         System.out.println("Soma: " + resultado);
     }
-    
+
     public void subtrair(double valor) {
         resultado -= valor;
         System.out.println("Subtração: " + resultado);
     }
-    
+
     public void multiplicar(double valor) {
         resultado *= valor;
         System.out.println("Multiplicação: " + resultado);
     }
-    
+
     public void dividir(double valor) {
         if (valor != 0) {
             resultado /= valor;
@@ -513,12 +515,12 @@ class Calculadora {
             System.out.println("Erro: Divisão por zero!");
         }
     }
-    
+
     public void limpar() {
         resultado = 0.0;
         System.out.println("Calculadora limpa. Resultado: " + resultado);
     }
-    
+
     public double getResultado() {
         return resultado;
     }
@@ -527,7 +529,7 @@ class Calculadora {
 public class TesteCalculadora {
     public static void main(String[] args) {
         Calculadora calc = new Calculadora();
-        
+
         calc.somar(10);
         calc.multiplicar(5);
         calc.subtrair(15);
@@ -538,6 +540,7 @@ public class TesteCalculadora {
 ```
 
 ### Exercício 3: Classe Livro
+
 **Objetivo**: Criar uma classe para representar um livro.
 
 **Enunciado**: Crie uma classe `Livro` com informações básicas e métodos para gerenciar o status.
@@ -551,7 +554,7 @@ class Livro {
     private int anoPublicacao;
     private boolean emprestado;
     private String genero;
-    
+
     public Livro(String titulo, String autor, int anoPublicacao, String genero) {
         this.titulo = titulo;
         this.autor = autor;
@@ -559,7 +562,7 @@ class Livro {
         this.genero = genero;
         this.emprestado = false;
     }
-    
+
     public void emprestar() {
         if (!emprestado) {
             emprestado = true;
@@ -568,7 +571,7 @@ class Livro {
             System.out.println("Livro '" + titulo + "' já está emprestado.");
         }
     }
-    
+
     public void devolver() {
         if (emprestado) {
             emprestado = false;
@@ -577,11 +580,11 @@ class Livro {
             System.out.println("Livro '" + titulo + "' não estava emprestado.");
         }
     }
-    
+
     public boolean estaDisponivel() {
         return !emprestado;
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("=== Informações do Livro ===");
         System.out.println("Título: " + titulo);
@@ -596,12 +599,12 @@ public class TesteLivro {
     public static void main(String[] args) {
         Livro livro1 = new Livro("O Senhor dos Anéis", "J.R.R. Tolkien", 1954, "Fantasia");
         Livro livro2 = new Livro("1984", "George Orwell", 1949, "Ficção Científica");
-        
+
         livro1.exibirInformacoes();
         livro1.emprestar();
         livro1.emprestar();
         livro1.devolver();
-        
+
         System.out.println();
         livro2.exibirInformacoes();
     }
@@ -609,6 +612,7 @@ public class TesteLivro {
 ```
 
 ### Exercício 4: Classe Pessoa
+
 **Objetivo**: Criar uma classe para representar uma pessoa.
 
 **Enunciado**: Crie uma classe `Pessoa` com informações pessoais e métodos para calcular idade.
@@ -624,24 +628,24 @@ class Pessoa {
     private String cpf;
     private LocalDate dataNascimento;
     private String endereco;
-    
+
     public Pessoa(String nome, String cpf, LocalDate dataNascimento, String endereco) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;
     }
-    
+
     public int calcularIdade() {
         LocalDate hoje = LocalDate.now();
         Period periodo = Period.between(dataNascimento, hoje);
         return periodo.getYears();
     }
-    
+
     public boolean ehMaiorDeIdade() {
         return calcularIdade() >= 18;
     }
-    
+
     public String obterCategoriaIdade() {
         int idade = calcularIdade();
         if (idade < 12) return "Criança";
@@ -649,7 +653,7 @@ class Pessoa {
         else if (idade < 60) return "Adulto";
         else return "Idoso";
     }
-    
+
     public void exibirInformacoes() {
         System.out.println("=== Informações da Pessoa ===");
         System.out.println("Nome: " + nome);
@@ -664,11 +668,11 @@ class Pessoa {
 
 public class TestePessoa {
     public static void main(String[] args) {
-        Pessoa pessoa1 = new Pessoa("João Silva", "123.456.789-00", 
+        Pessoa pessoa1 = new Pessoa("João Silva", "123.456.789-00",
                                    LocalDate.of(1990, 5, 15), "Rua A, 123");
-        Pessoa pessoa2 = new Pessoa("Maria Santos", "987.654.321-00", 
+        Pessoa pessoa2 = new Pessoa("Maria Santos", "987.654.321-00",
                                    LocalDate.of(2010, 8, 20), "Rua B, 456");
-        
+
         pessoa1.exibirInformacoes();
         System.out.println();
         pessoa2.exibirInformacoes();
@@ -686,6 +690,7 @@ Classes e objetos são fundamentais na programação orientada a objetos em Java
 - **Reutilização**: Múltiplos objetos podem ser criados a partir de uma classe
 
 **Boas práticas**:
+
 - Use nomes descritivos para classes e objetos
 - Encapsule dados usando modificadores de acesso apropriados
 - Crie construtores para inicializar objetos

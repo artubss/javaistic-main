@@ -92,27 +92,27 @@ Soma = 19
 
 No programa acima, a execução do loop for-each se parece com:
 
-| Iteração |	Variáveis |
-|----------|----------|
-|1|	`numero` = 3  `soma` = 0 + 3 = 3|
-|2|	`numero` = 4  `soma` = 3 + 4 = 7|
-|3|	`numero` = 5  `soma` = 7 + 5 = 12|
-|4|	`numero` = -5  `soma` = 12 + (-5) = 7|
-|5|	`numero` = 0  `soma` = 7 + 0 = 7|
-|6| `numero` = 12  `soma` = 7 + 12 = 19|
+| Iteração | Variáveis                            |
+| -------- | ------------------------------------ |
+| 1        | `numero` = 3 `soma` = 0 + 3 = 3      |
+| 2        | `numero` = 4 `soma` = 3 + 4 = 7      |
+| 3        | `numero` = 5 `soma` = 7 + 5 = 12     |
+| 4        | `numero` = -5 `soma` = 12 + (-5) = 7 |
+| 5        | `numero` = 0 `soma` = 7 + 0 = 7      |
+| 6        | `numero` = 12 `soma` = 7 + 12 = 19   |
 
 Como podemos ver, adicionamos cada elemento do array `numeros` à variável `soma` em cada iteração do loop.
 
 ## Loop for vs Loop for-each
 
-| Aspecto | Loop for | Loop for-each |
-|---------|----------|---------------|
-| **Sintaxe** | `for(int i = 0; i < array.length; i++)` | `for(int item : array)` |
-| **Controle** | Controle total sobre índice | Sem acesso ao índice |
-| **Modificação** | Pode modificar elementos | Não pode modificar elementos |
-| **Legibilidade** | Mais verboso | Mais limpo e legível |
-| **Performance** | Ligeiramente mais rápido | Ligeiramente mais lento |
-| **Uso** | Quando precisa do índice | Quando só precisa dos valores |
+| Aspecto          | Loop for                                | Loop for-each                 |
+| ---------------- | --------------------------------------- | ----------------------------- |
+| **Sintaxe**      | `for(int i = 0; i < array.length; i++)` | `for(int item : array)`       |
+| **Controle**     | Controle total sobre índice             | Sem acesso ao índice          |
+| **Modificação**  | Pode modificar elementos                | Não pode modificar elementos  |
+| **Legibilidade** | Mais verboso                            | Mais limpo e legível          |
+| **Performance**  | Ligeiramente mais rápido                | Ligeiramente mais lento       |
+| **Uso**          | Quando precisa do índice                | Quando só precisa dos valores |
 
 ### Exemplo 3: Comparação entre for e for-each
 
@@ -120,13 +120,13 @@ Como podemos ver, adicionamos cada elemento do array `numeros` à variável `som
 public class ComparacaoLoops {
     public static void main(String[] args) {
         String[] frutas = {"maçã", "banana", "laranja", "uva"};
-        
+
         // Loop for tradicional
         System.out.println("Loop for tradicional:");
         for (int i = 0; i < frutas.length; i++) {
             System.out.println("Índice " + i + ": " + frutas[i]);
         }
-        
+
         // Loop for-each
         System.out.println("\nLoop for-each:");
         for (String fruta : frutas) {
@@ -178,7 +178,7 @@ public class ExemploColecoes {
         nomes.add("João");
         nomes.add("Maria");
         nomes.add("Pedro");
-        
+
         // Loop for-each funciona com List
         for (String nome : nomes) {
             System.out.println("Nome: " + nome);
@@ -195,7 +195,7 @@ public class ExemploColecoes {
 public class ProcessamentoArrays {
     public static void main(String[] args) {
         int[] numeros = {10, 20, 30, 40, 50};
-        
+
         // Encontrar o maior número
         int maior = numeros[0];
         for (int numero : numeros) {
@@ -203,9 +203,9 @@ public class ProcessamentoArrays {
                 maior = numero;
             }
         }
-        
+
         System.out.println("Maior número: " + maior);
-        
+
         // Contar números pares
         int pares = 0;
         for (int numero : numeros) {
@@ -213,7 +213,7 @@ public class ProcessamentoArrays {
                 pares++;
             }
         }
-        
+
         System.out.println("Números pares: " + pares);
     }
 }
@@ -225,7 +225,7 @@ public class ProcessamentoArrays {
 public class ProcessamentoStrings {
     public static void main(String[] args) {
         String[] palavras = {"Java", "Python", "JavaScript", "C++", "Ruby"};
-        
+
         // Encontrar palavras com mais de 4 letras
         System.out.println("Palavras com mais de 4 letras:");
         for (String palavra : palavras) {
@@ -233,13 +233,13 @@ public class ProcessamentoStrings {
                 System.out.println(palavra);
             }
         }
-        
+
         // Contar total de caracteres
         int totalCaracteres = 0;
         for (String palavra : palavras) {
             totalCaracteres += palavra.length();
         }
-        
+
         System.out.println("Total de caracteres: " + totalCaracteres);
     }
 }
@@ -252,13 +252,13 @@ public class ProcessamentoObjetos {
     static class Produto {
         String nome;
         double preco;
-        
+
         Produto(String nome, double preco) {
             this.nome = nome;
             this.preco = preco;
         }
     }
-    
+
     public static void main(String[] args) {
         Produto[] produtos = {
             new Produto("Laptop", 2500.0),
@@ -266,15 +266,15 @@ public class ProcessamentoObjetos {
             new Produto("Teclado", 100.0),
             new Produto("Monitor", 800.0)
         };
-        
+
         // Calcular valor total
         double valorTotal = 0;
         for (Produto produto : produtos) {
             valorTotal += produto.preco;
         }
-        
+
         System.out.println("Valor total: R$ " + valorTotal);
-        
+
         // Listar produtos caros (> R$ 500)
         System.out.println("Produtos caros:");
         for (Produto produto : produtos) {
@@ -296,7 +296,7 @@ public class ArraysMultidimensionais {
             {4, 5, 6},
             {7, 8, 9}
         };
-        
+
         // Soma de cada linha
         for (int[] linha : matriz) {
             int somaLinha = 0;
@@ -312,6 +312,7 @@ public class ArraysMultidimensionais {
 ## Exercícios Práticos
 
 ### Exercício 1: Calculadora de Estatísticas
+
 **Objetivo**: Calcular estatísticas de um array usando for-each.
 
 **Enunciado**: Crie um programa que calcule média, máximo e mínimo de um array.
@@ -322,25 +323,25 @@ public class ArraysMultidimensionais {
 public class CalculadoraEstatisticas {
     public static void main(String[] args) {
         double[] numeros = {85.5, 92.0, 78.3, 96.7, 88.2, 91.1};
-        
+
         double soma = 0;
         double maximo = numeros[0];
         double minimo = numeros[0];
-        
+
         for (double numero : numeros) {
             soma += numero;
-            
+
             if (numero > maximo) {
                 maximo = numero;
             }
-            
+
             if (numero < minimo) {
                 minimo = numero;
             }
         }
-        
+
         double media = soma / numeros.length;
-        
+
         System.out.println("Estatísticas:");
         System.out.println("Média: " + media);
         System.out.println("Máximo: " + maximo);
@@ -350,6 +351,7 @@ public class CalculadoraEstatisticas {
 ```
 
 ### Exercício 2: Validador de Senhas
+
 **Objetivo**: Validar uma lista de senhas usando for-each.
 
 **Enunciado**: Crie um programa que valide uma lista de senhas.
@@ -360,15 +362,15 @@ public class CalculadoraEstatisticas {
 public class ValidadorSenhas {
     public static void main(String[] args) {
         String[] senhas = {"abc123", "senha123", "123456", "MinhaSenha123", "qwerty"};
-        
+
         System.out.println("Validação de senhas:");
-        
+
         for (String senha : senhas) {
             boolean temMaiuscula = false;
             boolean temMinuscula = false;
             boolean temNumero = false;
             boolean temComprimento = senha.length() >= 8;
-            
+
             for (char caractere : senha.toCharArray()) {
                 if (Character.isUpperCase(caractere)) {
                     temMaiuscula = true;
@@ -380,9 +382,9 @@ public class ValidadorSenhas {
                     temNumero = true;
                 }
             }
-            
+
             boolean senhaValida = temMaiuscula && temMinuscula && temNumero && temComprimento;
-            
+
             System.out.println("'" + senha + "': " + (senhaValida ? "Válida" : "Inválida"));
         }
     }
@@ -390,6 +392,7 @@ public class ValidadorSenhas {
 ```
 
 ### Exercício 3: Processador de Texto
+
 **Objetivo**: Processar um array de textos usando for-each.
 
 **Enunciado**: Crie um programa que processe um array de textos.
@@ -405,24 +408,24 @@ public class ProcessadorTexto {
             "JavaScript é usado na web",
             "C++ é uma linguagem poderosa"
         };
-        
+
         int totalPalavras = 0;
         String textoMaisLongo = "";
-        
+
         for (String texto : textos) {
             // Contar palavras
             String[] palavras = texto.split("\\s+");
             totalPalavras += palavras.length;
-            
+
             // Encontrar texto mais longo
             if (texto.length() > textoMaisLongo.length()) {
                 textoMaisLongo = texto;
             }
         }
-        
+
         System.out.println("Total de palavras: " + totalPalavras);
         System.out.println("Texto mais longo: " + textoMaisLongo);
-        
+
         // Listar textos que contêm "Java"
         System.out.println("Textos que contêm 'Java':");
         for (String texto : textos) {
@@ -444,6 +447,7 @@ O loop **for-each** é uma ferramenta poderosa em Java para:
 - **Compatibilidade**: Funciona com arrays e coleções
 
 **Boas práticas**:
+
 - Use for-each quando não precisa do índice
 - Use for tradicional quando precisa modificar elementos ou acessar índices
 - For-each é ideal para leitura de dados

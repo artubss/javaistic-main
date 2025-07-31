@@ -1,13 +1,15 @@
 ---
-title: Java Method Overloading
-description: In this tutorial, we will learn how to implements methods overloading or function overloading in Java.
+title: "Sobrecarga de Métodos em Java"
+description: "Neste tutorial, aprenderemos como implementar sobrecarga de métodos ou funções em Java com exemplos práticos"
+difficulty: "Intermediário"
+category: "Programação Orientada a Objetos"
 ---
 
+## O que é Sobrecarga de Métodos em Java?
 
-## What is Method Overloading in Java?
-In Java, method overloading allows multiple methods with the same name but different parameter lists to coexist in the same class. This can involve variations in the number or types of parameters, or both. Overloaded methods provide flexibility by offering different ways to call a method, depending on the parameters passed.
+Em Java, a sobrecarga de métodos permite que múltiplos métodos com o mesmo nome, mas listas de parâmetros diferentes, coexistam na mesma classe. Isso pode envolver variações no número ou tipos de parâmetros, ou ambos. Métodos sobrecarregados fornecem flexibilidade oferecendo diferentes maneiras de chamar um método, dependendo dos parâmetros passados.
 
-### Example:
+### Exemplo:
 
 ```java
 void func() {}
@@ -15,108 +17,599 @@ void func(int a) {}
 float func(double a) {}
 float func(int a, float b) {}
 ```
-In this example, the `func()` method is overloaded with different parameter configurations. While the return types differ, this does not affect method overloading; overloading is purely based on parameters.
 
-## Why Use Method Overloading?
-Consider the scenario where you need to sum numbers but could have different parameter requirements (e.g., 2 or 3 numbers). You could create separate methods like `sum2(int, int)` and `sum3(int, int, int)`. However, using method overloading allows a more readable approach by keeping the method name the same:
+Neste exemplo, o método `func()` é sobrecarregado com diferentes configurações de parâmetros. Embora os tipos de retorno sejam diferentes, isso não afeta a sobrecarga de métodos; a sobrecarga é baseada puramente nos parâmetros.
+
+## Por que Usar Sobrecarga de Métodos?
+
+Considere o cenário onde você precisa somar números, mas pode ter diferentes requisitos de parâmetros (ex: 2 ou 3 números). Você poderia criar métodos separados como `soma2(int, int)` e `soma3(int, int, int)`. No entanto, usar sobrecarga de métodos permite uma abordagem mais legível mantendo o nome do método igual:
 
 ```java
-int sum(int a, int b) { ... }
-int sum(int a, int b, int c) { ... }
+int soma(int a, int b) { ... }
+int soma(int a, int b, int c) { ... }
 ```
-Here, `sum()` is overloaded to handle different numbers of arguments.
 
-## Performing Method Overloading in Java
-Method overloading can be achieved in two main ways:
+Aqui, `soma()` é sobrecarregado para lidar com diferentes números de argumentos.
 
-### 1. Changing the Number of Parameters
+## Realizando Sobrecarga de Métodos em Java
+
+A sobrecarga de métodos pode ser alcançada de duas maneiras principais:
+
+### 1. Alterando o Número de Parâmetros
 
 ```java
-class MethodOverloading {
-    private static void display(int a) {
-        System.out.println("Argument: " + a);
+public class SobrecargaMetodos {
+    private static void exibir(int a) {
+        System.out.println("Argumento: " + a);
     }
 
-    private static void display(int a, int b) {
-        System.out.println("Arguments: " + a + " and " + b);
+    private static void exibir(int a, int b) {
+        System.out.println("Argumentos: " + a + " e " + b);
     }
 
     public static void main(String[] args) {
-        display(1);
-        display(1, 4);
+        exibir(1);
+        exibir(1, 4);
     }
 }
 ```
-### Output
+
+### Saída
 
 ```bash
-Argument: 1
-Arguments: 1 and 4
+Argumento: 1
+Argumentos: 1 e 4
 ```
 
-### 2. Changing the Parameter Data Type
+### 2. Alterando o Tipo de Dados do Parâmetro
 
 ```java
-class MethodOverloading {
-    private static void display(int a) {
-        System.out.println("Got Integer data.");
+public class SobrecargaMetodos {
+    private static void exibir(int a) {
+        System.out.println("Recebeu dados Integer.");
     }
 
-    private static void display(String a) {
-        System.out.println("Got String object.");
+    private static void exibir(String a) {
+        System.out.println("Recebeu objeto String.");
     }
 
     public static void main(String[] args) {
-        display(1);
-        display("Hello");
+        exibir(1);
+        exibir("Olá");
     }
 }
 ```
-### Output
+
+### Saída
 
 ```bash
-Got Integer data.
-Got String object.
+Recebeu dados Integer.
+Recebeu objeto String.
 ```
-## Real-World Example
-In a utility class, you might use overloading to format numbers:
+
+## Exemplo do Mundo Real
+
+Em uma classe utilitária, você pode usar sobrecarga para formatar números:
 
 ```java
-class HelperService {
-    private String formatNumber(int value) {
-        return String.format("%d", value);
+public class ServicoHelper {
+    private String formatarNumero(int valor) {
+        return String.format("%d", valor);
     }
 
-    private String formatNumber(double value) {
-        return String.format("%.3f", value);
+    private String formatarNumero(double valor) {
+        return String.format("%.3f", valor);
     }
 
-    private String formatNumber(String value) {
-        return String.format("%.2f", Double.parseDouble(value));
+    private String formatarNumero(String valor) {
+        return String.format("%.2f", Double.parseDouble(valor));
     }
 
     public static void main(String[] args) {
-        HelperService hs = new HelperService();
-        System.out.println(hs.formatNumber(500));
-        System.out.println(hs.formatNumber(89.9934));
-        System.out.println(hs.formatNumber("550"));
+        ServicoHelper sh = new ServicoHelper();
+        System.out.println(sh.formatarNumero(500));
+        System.out.println(sh.formatarNumero(500.123));
+        System.out.println(sh.formatarNumero("500.456"));
     }
 }
 ```
-### Output
-```bash
-500
-89.993
-550.00
+
+## Tipos de Sobrecarga
+
+### 1. Sobrecarga por Número de Parâmetros
+
+```java
+public class Calculadora {
+    public static int somar(int a, int b) {
+        return a + b;
+    }
+
+    public static int somar(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    public static int somar(int a, int b, int c, int d) {
+        return a + b + c + d;
+    }
+
+    public static void testarSoma() {
+        System.out.println("Soma de 2 números: " + somar(10, 20));
+        System.out.println("Soma de 3 números: " + somar(10, 20, 30));
+        System.out.println("Soma de 4 números: " + somar(10, 20, 30, 40));
+    }
+}
 ```
 
-## Important Points
-- Method overloading requires methods with different parameters within the same class.
-- Overloading is achieved by varying either the number or type of parameters.
-- Changing only the return type does not constitute overloading; there must be a parameter difference.
+### 2. Sobrecarga por Tipo de Parâmetros
 
-<Callout>
+```java
+public class Conversor {
+    public static String converter(int numero) {
+        return "Inteiro: " + numero;
+    }
 
-**Tip:** *Constructor overloading in Java works similarly to method overloading.*
+    public static String converter(double numero) {
+        return "Double: " + numero;
+    }
 
-</Callout>
+    public static String converter(String texto) {
+        return "String: " + texto;
+    }
+
+    public static String converter(boolean valor) {
+        return "Boolean: " + valor;
+    }
+
+    public static void testarConversao() {
+        System.out.println(converter(42));
+        System.out.println(converter(42.5));
+        System.out.println(converter("Java"));
+        System.out.println(converter(true));
+    }
+}
+```
+
+### 3. Sobrecarga por Ordem de Parâmetros
+
+```java
+public class Pessoa {
+    private String nome;
+    private int idade;
+
+    public Pessoa(String nome, int idade) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+
+    public Pessoa(int idade, String nome) {
+        this.nome = nome;
+        this.idade = idade;
+    }
+
+    public void exibirInfo() {
+        System.out.println("Nome: " + nome + ", Idade: " + idade);
+    }
+
+    public static void testarConstrutores() {
+        Pessoa p1 = new Pessoa("João", 25);
+        Pessoa p2 = new Pessoa(30, "Maria");
+
+        p1.exibirInfo();
+        p2.exibirInfo();
+    }
+}
+```
+
+## Exemplos Práticos
+
+### Exemplo 1: Calculadora Avançada
+
+```java
+public class CalculadoraAvancada {
+    // Soma de inteiros
+    public static int somar(int a, int b) {
+        return a + b;
+    }
+
+    // Soma de doubles
+    public static double somar(double a, double b) {
+        return a + b;
+    }
+
+    // Soma de arrays
+    public static int somar(int[] numeros) {
+        int soma = 0;
+        for (int num : numeros) {
+            soma += num;
+        }
+        return soma;
+    }
+
+    // Soma de múltiplos inteiros
+    public static int somar(int... numeros) {
+        int soma = 0;
+        for (int num : numeros) {
+            soma += num;
+        }
+        return soma;
+    }
+
+    public static void testarCalculadora() {
+        System.out.println("Soma de inteiros: " + somar(5, 3));
+        System.out.println("Soma de doubles: " + somar(5.5, 3.3));
+
+        int[] array = {1, 2, 3, 4, 5};
+        System.out.println("Soma do array: " + somar(array));
+
+        System.out.println("Soma de múltiplos: " + somar(1, 2, 3, 4, 5));
+    }
+}
+```
+
+### Exemplo 2: Validador de Dados
+
+```java
+public class Validador {
+    public static boolean validar(int numero) {
+        return numero > 0;
+    }
+
+    public static boolean validar(String texto) {
+        return texto != null && !texto.trim().isEmpty();
+    }
+
+    public static boolean validar(double numero) {
+        return numero >= 0.0;
+    }
+
+    public static boolean validar(int[] numeros) {
+        if (numeros == null || numeros.length == 0) {
+            return false;
+        }
+        for (int num : numeros) {
+            if (num <= 0) return false;
+        }
+        return true;
+    }
+
+    public static void testarValidacao() {
+        System.out.println("Validar inteiro: " + validar(10));
+        System.out.println("Validar string: " + validar("Java"));
+        System.out.println("Validar double: " + validar(15.5));
+
+        int[] numeros = {1, 2, 3, 4, 5};
+        System.out.println("Validar array: " + validar(numeros));
+    }
+}
+```
+
+### Exemplo 3: Formatador de Texto
+
+```java
+public class Formatador {
+    public static String formatar(String texto) {
+        return texto.toUpperCase();
+    }
+
+    public static String formatar(String texto, boolean maiusculo) {
+        return maiusculo ? texto.toUpperCase() : texto.toLowerCase();
+    }
+
+    public static String formatar(String texto, int largura) {
+        return String.format("%-" + largura + "s", texto);
+    }
+
+    public static String formatar(String texto, String prefixo, String sufixo) {
+        return prefixo + texto + sufixo;
+    }
+
+    public static void testarFormatacao() {
+        System.out.println("Formatação simples: " + formatar("java"));
+        System.out.println("Formatação com flag: " + formatar("JAVA", false));
+        System.out.println("Formatação com largura: '" + formatar("Java", 10) + "'");
+        System.out.println("Formatação com prefixo/sufixo: " + formatar("Java", ">>> ", " <<<"));
+    }
+}
+```
+
+### Exemplo 4: Construtor de Objetos
+
+```java
+public class Produto {
+    private String nome;
+    private double preco;
+    private int quantidade;
+
+    // Construtor básico
+    public Produto(String nome) {
+        this.nome = nome;
+        this.preco = 0.0;
+        this.quantidade = 0;
+    }
+
+    // Construtor com nome e preço
+    public Produto(String nome, double preco) {
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = 1;
+    }
+
+    // Construtor completo
+    public Produto(String nome, double preco, int quantidade) {
+        this.nome = nome;
+        this.preco = preco;
+        this.quantidade = quantidade;
+    }
+
+    public void exibirInfo() {
+        System.out.println("Nome: " + nome);
+        System.out.println("Preço: R$ " + preco);
+        System.out.println("Quantidade: " + quantidade);
+        System.out.println("Valor Total: R$ " + (preco * quantidade));
+        System.out.println("---");
+    }
+
+    public static void testarConstrutores() {
+        Produto p1 = new Produto("Laptop");
+        Produto p2 = new Produto("Mouse", 50.0);
+        Produto p3 = new Produto("Teclado", 100.0, 3);
+
+        p1.exibirInfo();
+        p2.exibirInfo();
+        p3.exibirInfo();
+    }
+}
+```
+
+## Exercícios Práticos
+
+### Exercício 1: Calculadora de Áreas
+
+**Objetivo**: Criar métodos sobrecarregados para calcular áreas.
+
+**Enunciado**: Crie métodos sobrecarregados para calcular áreas de diferentes formas geométricas.
+
+**Resolução**:
+
+```java
+public class CalculadoraAreas {
+    // Área do quadrado
+    public static double calcularArea(double lado) {
+        return lado * lado;
+    }
+
+    // Área do retângulo
+    public static double calcularArea(double largura, double altura) {
+        return largura * altura;
+    }
+
+    // Área do círculo
+    public static double calcularArea(double raio, String tipo) {
+        if ("circulo".equalsIgnoreCase(tipo)) {
+            return Math.PI * raio * raio;
+        }
+        return 0;
+    }
+
+    // Área do triângulo
+    public static double calcularArea(double base, double altura, String tipo) {
+        if ("triangulo".equalsIgnoreCase(tipo)) {
+            return (base * altura) / 2;
+        }
+        return 0;
+    }
+
+    public static void testarAreas() {
+        System.out.println("=== Cálculo de Áreas ===");
+        System.out.println("Área do quadrado (lado 5): " + calcularArea(5.0));
+        System.out.println("Área do retângulo (4x6): " + calcularArea(4.0, 6.0));
+        System.out.println("Área do círculo (raio 3): " + calcularArea(3.0, "circulo"));
+        System.out.println("Área do triângulo (base 4, altura 3): " + calcularArea(4.0, 3.0, "triangulo"));
+    }
+}
+```
+
+### Exercício 2: Validador de CPF
+
+**Objetivo**: Criar métodos sobrecarregados para validar CPF.
+
+**Enunciado**: Crie métodos sobrecarregados para validar CPF em diferentes formatos.
+
+**Resolução**:
+
+```java
+public class ValidadorCPF {
+    // Validar CPF como string simples
+    public static boolean validarCPF(String cpf) {
+        if (cpf == null || cpf.length() != 11) {
+            return false;
+        }
+
+        // Verificar se todos os dígitos são iguais
+        boolean todosIguais = true;
+        for (int i = 1; i < cpf.length(); i++) {
+            if (cpf.charAt(i) != cpf.charAt(0)) {
+                todosIguais = false;
+                break;
+            }
+        }
+
+        return !todosIguais;
+    }
+
+    // Validar CPF formatado (xxx.xxx.xxx-xx)
+    public static boolean validarCPF(String cpf, boolean formatado) {
+        if (!formatado) {
+            return validarCPF(cpf);
+        }
+
+        // Remover formatação
+        String cpfLimpo = cpf.replaceAll("[.-]", "");
+        return validarCPF(cpfLimpo);
+    }
+
+    // Validar CPF como array de dígitos
+    public static boolean validarCPF(int[] digitos) {
+        if (digitos == null || digitos.length != 11) {
+            return false;
+        }
+
+        StringBuilder cpf = new StringBuilder();
+        for (int digito : digitos) {
+            cpf.append(digito);
+        }
+
+        return validarCPF(cpf.toString());
+    }
+
+    public static void testarValidacao() {
+        System.out.println("=== Validação de CPF ===");
+        System.out.println("CPF simples: " + validarCPF("12345678909"));
+        System.out.println("CPF formatado: " + validarCPF("123.456.789-09", true));
+
+        int[] digitos = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 9};
+        System.out.println("CPF como array: " + validarCPF(digitos));
+    }
+}
+```
+
+### Exercício 3: Gerador de Senhas
+
+**Objetivo**: Criar métodos sobrecarregados para gerar senhas.
+
+**Enunciado**: Crie métodos sobrecarregados para gerar senhas com diferentes critérios.
+
+**Resolução**:
+
+```java
+import java.util.Random;
+
+public class GeradorSenhas {
+    private static final String LETRAS = "abcdefghijklmnopqrstuvwxyz";
+    private static final String NUMEROS = "0123456789";
+    private static final String ESPECIAIS = "!@#$%^&*()";
+
+    // Gerar senha simples (apenas letras)
+    public static String gerarSenha(int tamanho) {
+        return gerarSenha(tamanho, false, false);
+    }
+
+    // Gerar senha com números
+    public static String gerarSenha(int tamanho, boolean incluirNumeros) {
+        return gerarSenha(tamanho, incluirNumeros, false);
+    }
+
+    // Gerar senha completa
+    public static String gerarSenha(int tamanho, boolean incluirNumeros, boolean incluirEspeciais) {
+        Random random = new Random();
+        StringBuilder senha = new StringBuilder();
+
+        String caracteres = LETRAS;
+        if (incluirNumeros) caracteres += NUMEROS;
+        if (incluirEspeciais) caracteres += ESPECIAIS;
+
+        for (int i = 0; i < tamanho; i++) {
+            senha.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        }
+
+        return senha.toString();
+    }
+
+    // Gerar senha com tipo específico
+    public static String gerarSenha(String tipo) {
+        switch (tipo.toLowerCase()) {
+            case "simples":
+                return gerarSenha(8);
+            case "media":
+                return gerarSenha(12, true);
+            case "forte":
+                return gerarSenha(16, true, true);
+            default:
+                return gerarSenha(8);
+        }
+    }
+
+    public static void testarGerador() {
+        System.out.println("=== Gerador de Senhas ===");
+        System.out.println("Senha simples: " + gerarSenha(8));
+        System.out.println("Senha com números: " + gerarSenha(10, true));
+        System.out.println("Senha forte: " + gerarSenha(12, true, true));
+        System.out.println("Senha por tipo (forte): " + gerarSenha("forte"));
+    }
+}
+```
+
+### Exercício 4: Conversor de Temperatura
+
+**Objetivo**: Criar métodos sobrecarregados para conversão de temperatura.
+
+**Enunciado**: Crie métodos sobrecarregados para converter temperaturas entre diferentes escalas.
+
+**Resolução**:
+
+```java
+public class ConversorTemperatura {
+    // Converter Celsius para Fahrenheit
+    public static double converter(double celsius) {
+        return (celsius * 9/5) + 32;
+    }
+
+    // Converter Fahrenheit para Celsius
+    public static double converter(double fahrenheit, String de) {
+        if ("fahrenheit".equalsIgnoreCase(de)) {
+            return (fahrenheit - 32) * 5/9;
+        }
+        return fahrenheit; // Retorna o valor original se não for fahrenheit
+    }
+
+    // Converter para Kelvin
+    public static double converter(double temperatura, String de, String para) {
+        double celsius;
+
+        // Converter para Celsius primeiro
+        if ("fahrenheit".equalsIgnoreCase(de)) {
+            celsius = (temperatura - 32) * 5/9;
+        } else if ("celsius".equalsIgnoreCase(de)) {
+            celsius = temperatura;
+        } else {
+            return temperatura; // Retorna original se escala não reconhecida
+        }
+
+        // Converter de Celsius para a escala desejada
+        if ("kelvin".equalsIgnoreCase(para)) {
+            return celsius + 273.15;
+        } else if ("fahrenheit".equalsIgnoreCase(para)) {
+            return (celsius * 9/5) + 32;
+        } else {
+            return celsius; // Retorna em Celsius se escala não reconhecida
+        }
+    }
+
+    public static void testarConversao() {
+        System.out.println("=== Conversor de Temperatura ===");
+        System.out.println("25°C para Fahrenheit: " + converter(25) + "°F");
+        System.out.println("77°F para Celsius: " + converter(77, "fahrenheit") + "°C");
+        System.out.println("25°C para Kelvin: " + converter(25, "celsius", "kelvin") + "K");
+        System.out.println("100°F para Kelvin: " + converter(100, "fahrenheit", "kelvin") + "K");
+    }
+}
+```
+
+## Conclusão
+
+A sobrecarga de métodos é uma técnica poderosa em Java que oferece:
+
+- **Flexibilidade**: Múltiplas formas de chamar métodos com o mesmo nome
+- **Legibilidade**: Código mais limpo e intuitivo
+- **Manutenibilidade**: Facilita a manutenção e extensão do código
+- **Reutilização**: Permite reutilizar nomes de métodos para funcionalidades relacionadas
+
+**Boas práticas**:
+
+- Use sobrecarga para métodos com funcionalidades relacionadas
+- Mantenha a consistência nos nomes dos métodos
+- Evite sobrecarga excessiva que pode confundir
+- Documente as diferenças entre métodos sobrecarregados
+- Considere usar métodos com nomes diferentes para funcionalidades muito diferentes
+
+Lembre-se de que a sobrecarga é baseada apenas nos parâmetros, não no tipo de retorno.
